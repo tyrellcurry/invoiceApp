@@ -5,6 +5,10 @@
  * Used for headings and basic text elements
  *
  * @param tag - element's HTML tag
+ * @param variant - element's styling
+ * @param className - element's custom classes
+ * @param children - nested ReactNodes
+ *
  * @returns {JSX.Element}
  */
 
