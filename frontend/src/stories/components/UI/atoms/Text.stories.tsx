@@ -6,9 +6,6 @@ const meta = {
   title: 'Atoms/Text',
   component: Text,
   tags: ['autodocs'],
-  argTypes: {
-    backgroundColor: { control: 'color' },
-  },
 };
 
 export default meta;
