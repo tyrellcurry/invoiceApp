@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Text Component renders correctly with a custom tag and variant 1`] = `
+<div>
+  <h1
+    class="text--h1 custom-class"
+  >
+    Heading Text
+  </h1>
+</div>
+`;
+
+exports[`Text Component renders correctly with custom children 1`] = `
+<div>
+  <div
+    class="text--body"
+  >
+    Custom Children Content
+  </div>
+</div>
+`;
+
+exports[`Text Component renders correctly with default props 1`] = `
+<div>
+  <div
+    class="text--body"
+  >
+    Default Text
+  </div>
+</div>
+`;
+
+exports[`Text Component renders correctly with kicker variant 1`] = `
+<div>
+  <div
+    class="text--kicker"
+  >
+    Kicker Text
+  </div>
+</div>
+`;
