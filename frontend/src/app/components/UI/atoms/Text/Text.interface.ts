@@ -1,7 +1,7 @@
 type TextVariants = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'body' | 'body-alt' | 'kicker' | 'custom';
-export type TTextProps<T extends React.ElementType> = {
+export interface ITextProps {
   children: React.ReactNode;
   className?: string;
-  tag?: T;
+  tag?: React.ElementType;
   variant?: TextVariants;
-} & React.ComponentPropsWithoutRef<T>;
+}

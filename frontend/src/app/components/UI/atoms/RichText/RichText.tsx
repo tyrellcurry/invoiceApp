@@ -14,7 +14,7 @@ import { JSX } from 'react';
 import { IRichTextProps } from './RichText.interface';
 import classNames from 'classnames';
 
-const RichText = (props: IRichTextProps & React.HTMLAttributes<HTMLDivElement>): JSX.Element => {
+const RichText = (props: IRichTextProps): JSX.Element => {
   const { className: propsClassName, value, ...rest } = props;
   const className = classNames('text text--rich', propsClassName);
   return (

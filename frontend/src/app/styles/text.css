@@ -14,13 +14,13 @@
       @apply font-bold leading-[15px] text-[15px] tracking-[-0.25px];
     }
     &--body {
-      @apply font-medium leading-[18px] text-[13px] tracking-[-0.1px];
+      @apply font-medium text-[18px] tracking-[-0.1px];
     }
     &--body-alt {
-      @apply font-medium leading-[15px] text-[13px] tracking-[-0.1px];
+      @apply font-medium leading-[20px] text-[18px] tracking-[-0.1px];
     }
     &--rich {
-      @apply font-medium leading-[18px] text-[13px] tracking-[-0.1px];
+      @apply text-[18px] tracking-[-0.1px];
     }
   }
 }

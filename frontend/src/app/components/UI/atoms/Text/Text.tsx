@@ -13,7 +13,7 @@
  */
 
 import { JSX } from 'react';
-import { TTextProps } from './Text.type';
+import { ITextProps } from './Text.interface';
 import classNames from 'classnames';
 
 const textVariants = {
@@ -28,7 +28,7 @@ const textVariants = {
   custom: 'text--custom',
 };
 
-const Text = <T extends React.ElementType = 'div'>(props: TTextProps<T>): JSX.Element => {
+const Text = (props: ITextProps): JSX.Element => {
   const { tag, variant = 'body', className: propsClassName, children, ...rest } = props;
   const TagName = tag || 'div';
   const className = classNames('text', textVariants[variant], propsClassName);
