@@ -23,6 +23,7 @@ const textVariants = {
   h4: 'text--h4',
   h5: 'text--h5',
   body: 'text--body',
+  'body-alt': 'text--body-alt',
   kicker: 'text--kicker',
   custom: 'text--custom',
 };
@@ -30,7 +31,7 @@ const textVariants = {
 const Text = <T extends React.ElementType = 'div'>(props: TTextProps<T>): JSX.Element => {
   const { tag, variant = 'body', className: propsClassName, children, ...rest } = props;
   const TagName = tag || 'div';
-  const className = classNames(textVariants[variant], propsClassName);
+  const className = classNames('text', textVariants[variant], propsClassName);
   return (
     <TagName {...rest} {...{ className }}>
       {children}

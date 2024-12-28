@@ -3,7 +3,7 @@
 exports[`Text Component renders correctly with a custom tag and variant 1`] = `
 <div>
   <h1
-    class="text--h1 custom-class"
+    class="text text--h1 custom-class"
   >
     Heading Text
   </h1>
@@ -13,7 +13,7 @@ exports[`Text Component renders correctly with a custom tag and variant 1`] = `
 exports[`Text Component renders correctly with custom children 1`] = `
 <div>
   <div
-    class="text--body"
+    class="text text--body"
   >
     Custom Children Content
   </div>
@@ -23,7 +23,7 @@ exports[`Text Component renders correctly with custom children 1`] = `
 exports[`Text Component renders correctly with default props 1`] = `
 <div>
   <div
-    class="text--body"
+    class="text text--body"
   >
     Default Text
   </div>
@@ -33,7 +33,7 @@ exports[`Text Component renders correctly with default props 1`] = `
 exports[`Text Component renders correctly with kicker variant 1`] = `
 <div>
   <div
-    class="text--kicker"
+    class="text text--kicker"
   >
     Kicker Text
   </div>

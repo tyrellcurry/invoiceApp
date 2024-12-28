@@ -3,7 +3,7 @@
 exports[`RichText Component renders correctly with HTML passed as a value 1`] = `
 <div>
   <div
-    class="text--rich"
+    class="text text--rich"
   >
     <p>
       Hello World
@@ -15,7 +15,7 @@ exports[`RichText Component renders correctly with HTML passed as a value 1`] = 
 exports[`RichText Component renders correctly with default props 1`] = `
 <div>
   <div
-    class="text--rich"
+    class="text text--rich"
   />
 </div>
 `;

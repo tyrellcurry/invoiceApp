@@ -1,7 +1,9 @@
+import Text from './components/UI/atoms/Text/Text';
+
 export default function Home() {
   return (
     <div>
-      <h1 className="text-blue-200 text-4xl font-bold">Invoice App</h1>
+      <Text variant="h1">Invoice App</Text>
     </div>
   );
 }

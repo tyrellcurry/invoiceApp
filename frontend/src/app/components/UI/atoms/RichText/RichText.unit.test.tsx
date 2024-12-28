@@ -10,7 +10,7 @@ describe('Text Component - Unit Tests', () => {
     const element = screen.getByTestId(testId);
     expect(element).toBeInTheDocument();
     expect(element.tagName).toBe('DIV');
-    expect(element).toHaveClass('text--rich');
+    expect(element).toHaveClass('text text--rich');
   });
 
   it('applies valid attributes when passed', () => {

@@ -9,7 +9,7 @@ describe('Text Component - Unit Tests', () => {
     render(<Text data-testid={testId}>Default Text</Text>);
     const element = screen.getByTestId(testId);
     expect(element.tagName).toBe('DIV');
-    expect(element).toHaveClass('text--body');
+    expect(element).toHaveClass('text text--body');
     const content = screen.getByText('Default Text');
     expect(content).toBeInTheDocument();
   });

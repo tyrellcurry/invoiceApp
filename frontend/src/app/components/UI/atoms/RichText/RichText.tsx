@@ -16,7 +16,7 @@ import classNames from 'classnames';
 
 const RichText = (props: IRichTextProps & React.HTMLAttributes<HTMLDivElement>): JSX.Element => {
   const { className: propsClassName, value, ...rest } = props;
-  const className = classNames('text--rich', propsClassName);
+  const className = classNames('text text--rich', propsClassName);
   return (
     <div {...rest} {...{ className }}>
       {value}
