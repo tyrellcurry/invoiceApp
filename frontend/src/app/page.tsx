@@ -1,3 +1,7 @@
 export default function Home() {
-  return <div>Invoice App</div>;
+  return (
+    <div>
+      <h1>Invoice App</h1>
+    </div>
+  );
 }
