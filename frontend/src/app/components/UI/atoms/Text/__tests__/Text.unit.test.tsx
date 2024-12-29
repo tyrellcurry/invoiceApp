@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Text from '../Text';
+import Text from '@/app/components/UI/atoms/Text/Text';
 
 describe('Text Component - Unit Tests', () => {
   const testId = 'text-test-id';

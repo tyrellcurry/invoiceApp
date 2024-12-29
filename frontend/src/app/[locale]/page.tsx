@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import Text from '../components/UI/atoms/Text/Text';
+import Text from '@/app/components/UI/atoms/Text/Text';
 
 export default function Home() {
   const t = useTranslations('HomePage');

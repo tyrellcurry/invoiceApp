@@ -16,6 +16,8 @@ exports[`RichText Component renders correctly with default props 1`] = `
 <div>
   <div
     class="text text--rich"
-  />
+  >
+    Hello, World!
+  </div>
 </div>
 `;

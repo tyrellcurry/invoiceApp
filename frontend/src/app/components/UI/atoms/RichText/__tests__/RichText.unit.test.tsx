@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import RichText from './RichText';
+import RichText from '@/app/components/UI/atoms/RichText/RichText';
 
 describe('Text Component - Unit Tests', () => {
   const testId = 'richtext-test-id';
