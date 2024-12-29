@@ -12,6 +12,7 @@
  * @returns {JSX.Element}
  */
 
+import React from 'react';
 import { JSX } from 'react';
 import { ITextProps } from './Text.interface';
 import classNames from 'classnames';
