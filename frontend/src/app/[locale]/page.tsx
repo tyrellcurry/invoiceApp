@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslations } from 'next-intl';
 import Text from '../components/UI/atoms/Text/Text';
 
