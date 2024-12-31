@@ -11,7 +11,7 @@
  */
 
 import { JSX } from 'react';
-import { IRichTextProps } from './RichText.interface';
+import { IRichTextProps } from '@/app/components/UI/atoms/RichText/RichText.interface';
 import classNames from 'classnames';
 
 const RichText = (props: IRichTextProps): JSX.Element => {

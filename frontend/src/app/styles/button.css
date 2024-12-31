@@ -1,0 +1,25 @@
+@layer components {
+  .base {
+    @apply rounded-full py-[18px] px-[24px] text-[18px] font-bold leading-normal flex items-center;
+  }
+  .btn {
+    .icon {
+      @apply max-w-full;
+    }
+    span {
+      @apply w-full inline-block leading-none;
+    }
+    &--primary {
+      @apply text-white bg-blue-01 hover:bg-blue-02;
+    }
+    &--secondary {
+      @apply text-gray-07 bg-gray-05b hover:bg-gray-05;
+    }
+    &--dark {
+      @apply text-gray-06 bg-gray-09 hover:bg-gray-08;
+    }
+    &--danger {
+      @apply text-white bg-red-08 hover:bg-red-10;
+    }
+  }
+}

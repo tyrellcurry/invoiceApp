@@ -1,10 +1,10 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import RichText from '../RichText';
+import RichText from '@/app/components/UI/atoms/RichText/RichText';
 
 describe('RichText Component', () => {
   it('renders correctly with default props', () => {
-    const { container } = render(<RichText />);
+    const { container } = render(<RichText value="Hello, World!" />);
     expect(container).toMatchSnapshot();
   });
 

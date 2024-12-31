@@ -14,7 +14,7 @@
 
 import React from 'react';
 import { JSX } from 'react';
-import { ITextProps } from './Text.interface';
+import { ITextProps } from '@/app/components/UI/atoms/Text/Text.interface';
 import classNames from 'classnames';
 
 const textVariants = {
