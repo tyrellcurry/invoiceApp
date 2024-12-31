@@ -8,6 +8,8 @@ import '@/app/app.css';
 
 import { League_Spartan } from 'next/font/google';
 
+export const dynamic = 'force-dynamic';
+
 const leagueSpartan = League_Spartan({
   subsets: ['latin'],
   display: 'swap',
