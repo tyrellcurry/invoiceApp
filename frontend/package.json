@@ -15,6 +15,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@newhighsco/storybook-addon-svgr": "^2.0.39",
     "next": "15.1.3",
     "next-intl": "^3.26.3",
     "react": "^19.0.0",
@@ -26,10 +27,12 @@
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-interactions": "^8.4.7",
     "@storybook/addon-onboarding": "^8.4.7",
+    "@storybook/addon-postcss": "^2.0.0",
     "@storybook/addon-styling-webpack": "^1.0.1",
     "@storybook/blocks": "^8.4.7",
     "@storybook/nextjs": "^8.4.7",
     "@storybook/react": "^8.4.7",
+    "@storybook/react-webpack5": "^8.4.7",
     "@storybook/test": "^8.4.7",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
@@ -40,6 +43,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/webpack": "^5.28.5",
     "autoprefixer": "^10.4.20",
     "classnames": "^2.5.1",
     "eslint": "^9",
