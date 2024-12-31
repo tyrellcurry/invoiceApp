@@ -5,7 +5,7 @@ import { routing, type Locale } from '@/i18n/routing';
 import type { Metadata } from 'next';
 import React from 'react';
 import '@/app/app.css';
-
+import { Provider as ThemeProvider } from '@/app/ThemeProvider';
 import { League_Spartan } from 'next/font/google';
 
 export const dynamic = 'force-dynamic';
@@ -28,20 +28,20 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const { locale } = await params;
-  // Ensure that the incoming `locale` is valid
+  const { locale } = params;
+
   if (!routing.locales.includes(locale as Locale)) {
     notFound();
   }
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${leagueSpartan.variable} font-sans`}>
-      <body>
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+    <html lang={locale} className={`${leagueSpartan.variable} font-sans`} suppressHydrationWarning>
+      <body className="bg-neutral-11 dark:bg-gray-12">
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider>{children}</ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

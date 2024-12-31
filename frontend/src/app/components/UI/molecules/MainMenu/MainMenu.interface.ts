@@ -1,6 +1,6 @@
 export interface IMainMenuProps {
-  darkmode: boolean;
-  darkmodeToggle: React.Dispatch<React.SetStateAction<boolean>>;
-  profileImage: string;
+  darkmode: string | undefined;
+  darkmodeToggle: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  profileImage?: string;
   profileImageAlt: string;
 }

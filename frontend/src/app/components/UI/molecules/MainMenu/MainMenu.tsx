@@ -15,10 +15,10 @@ const MainMenu = (props: IMainMenuProps): JSX.Element => {
       <div className="flex gap-5 px-6 md:gap-8 md:px-8 lg:flex-col lg:gap-5 lg:px-0 lg:py-6">
         <Button
           className="h-fit self-center"
-          iconLeft={darkmode ? 'dm-sun' : 'dm-moon'}
+          iconLeft={darkmode === 'dark' ? 'dm-sun' : 'dm-moon'}
           iconLeftClassName="w-8 h-8 fill-gray-07 hover:fill-gray-05"
           variant="custom"
-          onClick={() => darkmodeToggle}
+          onClick={darkmodeToggle}
         />
         <hr className="border-none w-0.5 h-full bg-gray-04 self-stretch lg:w-full lg:h-0.5" />
         <Button className="h-fit self-center relative" variant="custom">

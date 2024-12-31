@@ -1,28 +1,16 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/lib/store'; // Adjust the path as needed
-import { setDarkmode, selectDarkmode } from '@/lib/features/darkmodeSlice';
+'use client';
+import { useTheme } from 'next-themes';
 
 export const useDarkMode = () => {
-  const dispatch = useAppDispatch();
-  const darkmode = useAppSelector(selectDarkmode);
+  const { theme, setTheme } = useTheme();
 
-  useEffect(() => {
-    // Retrieve user preference from localStorage
-    const userPrefersDark = localStorage.getItem('darkMode') === 'true';
-    dispatch(setDarkmode(userPrefersDark));
-  }, [dispatch]);
-
-  useEffect(() => {
-    // Toggle dark mode class on the body element
-    document.body.classList.toggle('dark', darkmode);
-    // Save user preference to localStorage
-    localStorage.setItem('darkMode', darkmode);
-  }, [darkmode]);
-
-  // Function to toggle dark mode
-  const toggleDarkMode = () => {
-    dispatch(setDarkmode(!darkmode));
+  const toggleDarkMode = (isDarkMode: boolean) => {
+    setTheme(isDarkMode ? 'dark' : 'light');
   };
 
-  return { darkmode, toggleDarkMode };
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  return { theme, toggleDarkMode, toggleTheme };
 };
