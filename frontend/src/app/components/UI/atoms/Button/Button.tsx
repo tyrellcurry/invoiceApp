@@ -4,11 +4,31 @@ import Icon from '@/app/components/UI/atoms/Icon/Icon';
 import classNames from 'classnames';
 
 const Button = (props: IButtonProps): JSX.Element => {
-  const { iconLeft, iconRight, children } = props;
+  const {
+    iconLeft,
+    iconLeftClassName,
+    iconRight,
+    iconRightClassName,
+    children,
+    href,
+    variant = 'primary',
+    className: classNameProp,
+    ...rest
+  } = props;
+
+  const buttonVariantClasses = {
+    primary: 'btn--primary',
+    secondary: 'btn--secondary',
+    dark: 'btn--dark',
+    danger: 'btn--danger',
+  };
+
+  const className = classNames('btn', buttonVariantClasses[variant], classNameProp);
+
   const renderButtonContent = (text?: string) => (
     <>
       {!!iconLeft && typeof iconLeft === 'string' ? (
-        <Icon name={iconLeft} className={classNames()} />
+        <Icon name={iconLeft} className={classNames('icon', iconLeftClassName)} />
       ) : (
         iconLeft
       )}
@@ -21,12 +41,19 @@ const Button = (props: IButtonProps): JSX.Element => {
         children
       )}
 
-      {!!iconRight && typeof iconRight === 'string' ? <Icon name={iconRight} /> : iconRight}
+      {!!iconRight && typeof iconRight === 'string' ? (
+        <Icon name={iconRight} className={classNames('icon', iconRightClassName)} />
+      ) : (
+        iconRight
+      )}
     </>
   );
-  const { href } = props;
   const TagName = !!href ? 'a' : 'button';
-  return <TagName>{renderButtonContent}</TagName>;
+  return (
+    <TagName {...rest} {...{ className }}>
+      {renderButtonContent()}
+    </TagName>
+  );
 };
 
 export default Button;

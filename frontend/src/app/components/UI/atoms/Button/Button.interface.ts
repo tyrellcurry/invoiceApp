@@ -6,5 +6,11 @@ export interface IButtonProps {
   className?: string;
   href?: string;
   iconLeft?: IIconProps['name'] | JSX.Element;
+  iconLeftClassName?: string;
   iconRight?: IIconProps['name'] | JSX.Element;
+  iconRightClassName?: string;
+  variant?: 'primary' | 'secondary' | 'dark' | 'danger';
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
 }
