@@ -1,6 +1,8 @@
 @layer components {
-  .btn {
+  .base {
     @apply rounded-full py-[18px] px-[24px] text-[18px] font-bold leading-normal flex items-center;
+  }
+  .btn {
     .icon {
       @apply max-w-full;
     }

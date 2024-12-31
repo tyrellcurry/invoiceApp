@@ -17,10 +17,11 @@ const Button = (props: IButtonProps): JSX.Element => {
   } = props;
 
   const buttonVariantClasses = {
-    primary: 'btn--primary',
-    secondary: 'btn--secondary',
-    dark: 'btn--dark',
-    danger: 'btn--danger',
+    primary: 'base btn--primary',
+    secondary: 'base btn--secondary',
+    dark: 'base btn--dark',
+    danger: 'base btn--danger',
+    custom: 'btn--custom',
   };
 
   const className = classNames('btn', buttonVariantClasses[variant], classNameProp);

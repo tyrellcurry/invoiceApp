@@ -14,6 +14,7 @@ import React, { JSX } from 'react';
 import { IIconProps } from '@/app/components/UI/atoms/Icon/Icon.interface';
 import Moon from '@/app/components/UI/atoms/Icon/assets/dm-moon.svg';
 import Sun from '@/app/components/UI/atoms/Icon/assets/dm-sun.svg';
+import MenuLogoBtn from '@/app/components/UI/atoms/Icon/assets/menu-logo-btn.svg';
 
 const Icon = ({ name, ...props }: IIconProps): JSX.Element => {
   let ComponentToRender: React.ElementType | null = null;
@@ -24,6 +25,9 @@ const Icon = ({ name, ...props }: IIconProps): JSX.Element => {
       break;
     case 'dm-sun':
       ComponentToRender = Sun;
+      break;
+    case 'menu-logo-btn':
+      ComponentToRender = MenuLogoBtn;
       break;
     default:
       break;

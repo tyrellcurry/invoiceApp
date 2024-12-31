@@ -13,6 +13,9 @@ export default {
       fontFamily: {
         sans: ['var(--font-leaguespartan)'],
       },
+      screens: {
+        xs: '414px',
+      },
     },
     colors: {
       transparent: 'transparent',
@@ -30,6 +33,7 @@ export default {
       },
       gray: {
         100: '#F8F8FB', // Very Light Gray
+        '04': '#494E6E', // Soft Light Gray Blue
         '05': '#DFE3FA', // Light Gray Blue
         '05b': '#F9FAFE', // Light Gray Btn
         '06': '#888EB0', // Medium Gray
