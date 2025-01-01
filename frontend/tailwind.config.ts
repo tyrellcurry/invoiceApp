@@ -38,10 +38,20 @@ export default {
         '05b': '#F9FAFE', // Light Gray Btn
         '06': '#888EB0', // Medium Gray
         '07': '#7E88C3', // Muted Blue
+        '07b': '#858BB2', // Muted Gray Blue
         '08': '#0C0E16', // Blackish Gray
         '09': '#373B53', // Blackish Blue-Light
+        '09a': 'rgba(55, 59, 83, 0.057)', // Muted Gray Blue
         400: '#1E2139', // Dark Gray-Blue
         '12': '#141625', // Very Dark Gray-Black
+      },
+      green: {
+        '05a': 'rgba(51, 214, 159, 0.1)',
+        '05': '#33D69F',
+      },
+      orange: {
+        '05': '#FF8F00',
+        '05a': 'rgba(255, 143, 0, 0.057)',
       },
       red: {
         '08': '#EC5757', // Red

@@ -1,5 +1,5 @@
 export interface IIconProps {
   className?: string;
-  name: 'dm-moon' | 'dm-sun' | 'menu-logo-btn';
+  name: 'dm-moon' | 'dm-sun' | 'menu-logo-btn' | 'chevron-right';
   fill?: string;
 }
