@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Main Menu Component renders correctly with default props 1`] = `
+<div>
+  <nav
+    class="bg-gray-09 flex justify-between items-stretch lg:flex-col lg:w-fit lg:rounded-r-[20px] lg:rounded-tr-3xl lg:h-screen lg:fixed lg:left-0"
+  >
+    <a
+      class="btn btn--custom w-[50px] h-[50px] xs:w-[72px] xs:h-[72px] md:w-[80px] md:h-[80px]"
+    >
+      <svg
+        class="icon w-full h-full"
+      />
+    </a>
+    <div
+      class="flex gap-5 px-6 md:gap-8 md:px-8 lg:flex-col lg:gap-5 lg:px-0 lg:py-6"
+    >
+      <button
+        class="btn btn--custom h-fit self-center"
+      >
+        <svg
+          class="icon w-8 h-8 fill-gray-07 hover:fill-gray-05"
+        />
+      </button>
+      <hr
+        class="border-none w-0.5 h-full bg-gray-04 self-stretch lg:w-full lg:h-0.5"
+      />
+      <button
+        class="btn btn--custom h-fit self-center relative"
+      >
+        <img
+          alt="lorem ipsum"
+          class="rounded-full w-full h-auto max-w-8"
+          data-nimg="1"
+          decoding="async"
+          height="64"
+          loading="lazy"
+          src="/_next/image?url=%2Fassets%2Fprofile-default.png&w=128&q=75"
+          srcset="/_next/image?url=%2Fassets%2Fprofile-default.png&w=64&q=75 1x, /_next/image?url=%2Fassets%2Fprofile-default.png&w=128&q=75 2x"
+          style="color: transparent;"
+          width="64"
+        />
+      </button>
+    </div>
+  </nav>
+</div>
+`;

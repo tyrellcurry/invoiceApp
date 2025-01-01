@@ -3,4 +3,6 @@ export interface IMainMenuProps {
   darkmodeToggle: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   profileImage?: string;
   profileImageAlt: string;
+  darkmodeBtnAria?: string;
+  lightmodeBtnAria?: string;
 }
