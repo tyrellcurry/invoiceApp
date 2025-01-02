@@ -14,10 +14,11 @@ const Invoice = (props: IInvoiceProps): JSX.Element => {
     invoiceStatusText,
     dueText,
     localeAmountDue = 'en',
+    ...rest
   } = props;
 
   return (
-    <>
+    <div {...rest}>
       {/* Mobile View */}
       <div className="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6">
         <div className="flex justify-between">
@@ -135,7 +136,7 @@ const Invoice = (props: IInvoiceProps): JSX.Element => {
 
         {/* Button Section */}
       </div>
-    </>
+    </div>
   );
 };
 

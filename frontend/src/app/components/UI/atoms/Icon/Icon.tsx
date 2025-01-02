@@ -16,6 +16,8 @@ import Moon from '@/app/components/UI/atoms/Icon/assets/dm-moon.svg';
 import Sun from '@/app/components/UI/atoms/Icon/assets/dm-sun.svg';
 import MenuLogoBtn from '@/app/components/UI/atoms/Icon/assets/menu-logo-btn.svg';
 import ChevronRight from '@/app/components/UI/atoms/Icon/assets/chevron-right.svg';
+import ChevronDown from '@/app/components/UI/atoms/Icon/assets/chevron-down.svg';
+import CirclePlus from '@/app/components/UI/atoms/Icon/assets/circle-plus.svg';
 
 const Icon = ({ name, ...props }: IIconProps): JSX.Element => {
   let ComponentToRender: React.ElementType | null = null;
@@ -32,6 +34,12 @@ const Icon = ({ name, ...props }: IIconProps): JSX.Element => {
       break;
     case 'chevron-right':
       ComponentToRender = ChevronRight;
+      break;
+    case 'chevron-down':
+      ComponentToRender = ChevronDown;
+      break;
+    case 'circle-plus':
+      ComponentToRender = CirclePlus;
       break;
     default:
       break;

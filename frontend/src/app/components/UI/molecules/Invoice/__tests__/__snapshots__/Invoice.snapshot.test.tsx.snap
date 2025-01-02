@@ -1,0 +1,145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Invoice Component renders correctly with data passed to props 1`] = `
+<div>
+  <div>
+    <div
+      class="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6"
+    >
+      <div
+        class="flex justify-between"
+      >
+        <p
+          class="text text--body text-gray-08 font-bold"
+        >
+          <span
+            class="text text--body text-gray-07"
+          >
+            #
+          </span>
+          RT3080
+        </p>
+        <p
+          class="text text--body text-gray-07b"
+        >
+          Jensen Huang
+        </p>
+      </div>
+      <div
+        class="flex justify-between"
+      >
+        <div>
+          <p
+            class="text text--body text-gray-07 flex gap-1 pb-[9px]"
+          >
+            <span
+              class="text text--body text-gray-06"
+            >
+              Due
+            </span>
+            Jan 1st, 2025
+          </p>
+          <p
+            class="text text--body text-gray-08 font-bold"
+          >
+            <span
+              class="text text--body"
+            >
+              $
+            </span>
+            1,800.90
+          </p>
+        </div>
+        <div
+          class="py-[14px] px-[30px] rounded-md leading-none flex items-center self-center bg-gray-09a text-gray-09"
+        >
+          <span
+            class="text text--body font-bold text-center flex gap-x-1.5 items-center"
+          >
+            <div
+              class="w-2 h-2 rounded-full bg-gray-09"
+            />
+            Draft
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg"
+    >
+      <div
+        class="flex gap-x-11"
+      >
+        <div
+          class="flex gap-x-11 w-[256px]"
+        >
+          <p
+            class="text text--body text-gray-08 font-bold"
+          >
+            <span
+              class="text text--body text-gray-07"
+            >
+              #
+            </span>
+            RT3080
+          </p>
+          <p
+            class="text text--body text-gray-07 flex gap-1"
+          >
+            <span
+              class="text text--body text-gray-06"
+            >
+              Due
+            </span>
+            Jan 1st, 2025
+          </p>
+        </div>
+        <p
+          class="text text--body text-gray-07b"
+        >
+          Jensen Huang
+        </p>
+      </div>
+      <div>
+        <div
+          class="flex items-center gap-x-2"
+        >
+          <p
+            class="text text--body text-gray-08 font-bold text-right"
+          >
+            <span
+              class="text text--body"
+            >
+              $
+            </span>
+            1,800.90
+          </p>
+          <div
+            class="w-[150px]"
+          >
+            <div
+              class="py-[14px] px-[30px] rounded-md leading-none flex items-center self-center w-fit ml-auto bg-gray-09a text-gray-09"
+            >
+              <span
+                class="text text--body font-bold text-center flex gap-x-1.5 items-center"
+              >
+                <div
+                  class="w-2 h-2 rounded-full bg-gray-09"
+                />
+                Draft
+              </span>
+            </div>
+          </div>
+          <button
+            class="btn btn--custom p-1 ml-3"
+          >
+            <svg
+              class="icon"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
