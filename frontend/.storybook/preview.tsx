@@ -2,6 +2,7 @@ import React from 'react';
 import type { Preview } from '@storybook/react';
 import '../src/app/app.css';
 import 'tailwindcss/tailwind.css';
+import { withThemeByClassName } from '@storybook/addon-themes';
 
 import { League_Spartan } from 'next/font/google';
 
@@ -11,30 +12,20 @@ const leagueSpartan = League_Spartan({
   variable: '--font-leaguespartan',
 });
 
-export const globalTypes = {
-  theme: {
-    name: 'Theme',
-    description: 'Global theme for components',
-    defaultValue: 'light',
-    toolbar: {
-      icon: 'moon',
-      items: ['light mode', 'dark mode'],
-    },
-  },
-};
-
 const preview: Preview = {
   decorators: [
-    (Story, context) => {
-      const theme = context.globals.theme;
-      return (
-        <main
-          className={`${leagueSpartan.variable} ${theme === 'dark' ? 'dark' : 'light'} font-sans`}
-        >
-          <Story />
-        </main>
-      );
-    },
+    withThemeByClassName({
+      themes: {
+        Light: 'light',
+        Dark: 'dark bg-gray-09',
+      },
+      defaultTheme: 'Light',
+    }),
+    (Story) => (
+      <main className={`${leagueSpartan.variable} font-sans`}>
+        <Story />
+      </main>
+    ),
   ],
   parameters: {
     controls: {
