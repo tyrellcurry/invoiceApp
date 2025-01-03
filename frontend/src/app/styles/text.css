@@ -2,16 +2,16 @@
   .text {
     /* Text Variants */
     &--h1 {
-      @apply font-bold leading-[33px] text-[36px] tracking-[-1px];
+      @apply font-bold text-[36px] tracking-[-1px];
     }
     &--h2 {
-      @apply font-bold leading-[22px] text-[24px] tracking-[-0.75px];
+      @apply font-bold text-[28px] tracking-[-0.75px];
     }
     &--h3 {
-      @apply font-bold leading-[24px] text-[15px] tracking-[-0.25px];
+      @apply font-bold text-[20px] tracking-[-0.25px];
     }
     &--kicker {
-      @apply font-bold leading-[15px] text-[15px] tracking-[-0.25px];
+      @apply font-bold text-[18px] tracking-[-0.25px];
     }
     &--body {
       @apply text-[18px] tracking-[-0.1px];
