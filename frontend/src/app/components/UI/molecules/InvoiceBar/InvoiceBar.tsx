@@ -1,12 +1,14 @@
-import Button from '@/app/components/UI/atoms/Button/Button';
-import Text from '@/app/components/UI/atoms/Text/Text';
+import { JSX } from 'react';
 import { IInvoiceBarProps } from '@/app/components/UI/molecules/InvoiceBar/InvoiceBar.interface';
 import classNames from 'classnames';
-import { JSX, useState } from 'react';
+import Button from '@/app/components/UI/atoms/Button/Button';
+import Text from '@/app/components/UI/atoms/Text/Text';
+import FilterDropDown from '@/app/components/UI/molecules/InvoiceBar/FilterDropdown';
+import useVisibilityToggle from '@/utils/hooks/useVisibilityToggle';
 
 const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  /* eslint-disable */
+  const { isVisible, setIsVisible, elementRef } = useVisibilityToggle<HTMLDivElement>();
+
   const {
     invoiceBarTitle,
     totalInvoicesTextDesktop,
@@ -15,18 +17,17 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
     filterStatusBtnTextMobile,
     newInvoiceBtnTextDesktop,
     newInvoiceBtnTextMobile,
+    newInvoiceHandler,
     draftText,
     pendingText,
     paidText,
+    setFilters,
+    filters,
+    ...rest
   } = props;
 
-  const DropDown = (): JSX.Element => {
-    return <div></div>;
-  };
-  /* eslint-disable */
-
   return (
-    <menu className="flex items-center justify-between">
+    <menu className="flex items-center justify-between" {...rest}>
       <div>
         <Text className="text-gray-08 dark:text-white" tag={'h2'} variant="h2">
           {invoiceBarTitle}
@@ -39,33 +40,42 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
         </Text>
       </div>
       <div className="flex items-center gap-x-[18px] md:gap-x-10">
-        <Button
-          className="flex items-center gap-x-3 font-bold text-xl dark:text-gray-05 md:hidden"
-          variant="custom"
-          iconRight={'chevron-down'}
-          iconRightClassName={classNames('w-5 h-auto', {
-            'rotate-180': !!isFilterOpen,
-          })}
-          onClick={() => setIsFilterOpen(!isFilterOpen)}
-        >
-          {filterStatusBtnTextMobile}
-        </Button>
-        <Button
-          className="items-center gap-x-3 font-bold text-lg dark:text-gray-05 hidden md:flex"
-          variant="custom"
-          iconRight={'chevron-down'}
-          iconRightClassName={classNames('w-4 h-auto', {
-            'rotate-180': !!isFilterOpen,
-          })}
-          onClick={() => setIsFilterOpen(!isFilterOpen)}
-        >
-          {filterStatusBtnTextDesktop}
-        </Button>
+        <div className="relative grid place-items-center">
+          <Button
+            className="flex items-center gap-x-3 font-bold text-xl dark:text-gray-05 md:hidden"
+            variant="custom"
+            iconRight={'chevron-down'}
+            iconRightClassName={classNames('w-5 h-auto', {
+              'rotate-180': !!isVisible,
+            })}
+            onClick={() => setIsVisible((prev) => !prev)}
+          >
+            {filterStatusBtnTextMobile}
+          </Button>
+          <Button
+            className="items-center gap-x-3 font-bold text-lg dark:text-gray-05 hidden md:flex"
+            variant="custom"
+            iconRight={'chevron-down'}
+            iconRightClassName={classNames('w-4 h-auto', {
+              'rotate-180': !!isVisible,
+            })}
+            onClick={() => setIsVisible((prev) => !prev)}
+          >
+            {filterStatusBtnTextDesktop}
+          </Button>
+          {isVisible && (
+            <FilterDropDown
+              dropdownRef={elementRef}
+              {...{ draftText, pendingText, paidText, setFilters, filters }}
+            />
+          )}
+        </div>
         <Button
           iconLeft={'circle-plus'}
           variant="primary"
           className="p-[6px] gap-x-2 items-center pr-[15px] text-xl md:hidden"
           iconLeftClassName="min-w-8 min-h-8 max-h-8 max-h-8"
+          onClick={newInvoiceHandler}
         >
           {newInvoiceBtnTextMobile}
         </Button>
@@ -74,11 +84,11 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           variant="primary"
           className="p-2 gap-x-2 items-center pr-[15px] text-lg hidden md:flex"
           iconLeftClassName="min-w-8 min-h-8 max-h-8 max-h-8"
+          onClick={newInvoiceHandler}
         >
           {newInvoiceBtnTextDesktop}
         </Button>
       </div>
-      {isFilterOpen && <div>I am open</div>}
     </menu>
   );
 };

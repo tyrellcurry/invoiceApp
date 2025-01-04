@@ -1,3 +1,5 @@
+import { IFilterDropdownProps } from '@/app/components/UI/molecules/InvoiceBar/FilterDropdown';
+
 export interface IInvoiceBarProps {
   invoiceBarTitle: string;
   totalInvoicesTextDesktop: string;
@@ -9,4 +11,7 @@ export interface IInvoiceBarProps {
   draftText: string;
   pendingText: string;
   paidText: string;
+  filters: IFilterDropdownProps['filters'];
+  setFilters: IFilterDropdownProps['setFilters'];
+  newInvoiceHandler: () => void;
 }

@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Invoice Bar Component renders correctly with filled props 1`] = `
+<div>
+  <menu
+    class="flex items-center justify-between"
+  >
+    <div>
+      <h2
+        class="text text--h2 text-gray-08 dark:text-white"
+      >
+        Invoice
+      </h2>
+      <p
+        class="text text--body text-gray-06 dark:text-white md:hidden"
+      >
+        total-mob
+      </p>
+      <p
+        class="text text--body text-gray-06 dark:text-white hidden md:block"
+      >
+        total-desktop
+      </p>
+    </div>
+    <div
+      class="flex items-center gap-x-[18px] md:gap-x-10"
+    >
+      <div
+        class="relative grid place-items-center"
+      >
+        <button
+          class="btn btn--custom flex items-center gap-x-3 font-bold text-xl dark:text-gray-05 md:hidden"
+        >
+          <span
+            class="select-none"
+          >
+            filter-mob
+          </span>
+          <svg
+            class="icon w-5 h-auto"
+          />
+        </button>
+        <button
+          class="btn btn--custom items-center gap-x-3 font-bold text-lg dark:text-gray-05 hidden md:flex"
+        >
+          <span
+            class="select-none"
+          >
+            filter-desktop
+          </span>
+          <svg
+            class="icon w-4 h-auto"
+          />
+        </button>
+      </div>
+      <button
+        class="btn base btn--primary p-[6px] gap-x-2 items-center pr-[15px] text-xl md:hidden"
+      >
+        <svg
+          class="icon min-w-8 min-h-8 max-h-8 max-h-8"
+        />
+        <span
+          class="select-none"
+        >
+          new-mob
+        </span>
+      </button>
+      <button
+        class="btn base btn--primary p-2 gap-x-2 items-center pr-[15px] text-lg hidden md:flex"
+      >
+        <svg
+          class="icon min-w-8 min-h-8 max-h-8 max-h-8"
+        />
+        <span
+          class="select-none"
+        >
+          new-desktop
+        </span>
+      </button>
+    </div>
+  </menu>
+</div>
+`;

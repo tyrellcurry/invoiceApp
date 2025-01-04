@@ -23,5 +23,14 @@ export const Default: Story = {
     paidText: 'Paid',
     draftText: 'Draft',
     pendingText: 'Pending',
+    newInvoiceHandler: () => {},
+    filters: {
+      draft: false,
+      pending: false,
+      paid: false,
+    },
+    setFilters: (updatedFilters) => {
+      console.log(updatedFilters);
+    },
   },
 };
