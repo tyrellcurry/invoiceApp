@@ -4,5 +4,5 @@ export interface ITextProps {
   className?: string;
   tag?: React.ElementType;
   variant?: TextVariants;
-  for?: string;
+  htmlFor?: string;
 }
