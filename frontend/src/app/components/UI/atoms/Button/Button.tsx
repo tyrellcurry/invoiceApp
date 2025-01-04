@@ -35,9 +35,9 @@ const Button = (props: IButtonProps): JSX.Element => {
       )}
 
       {!!text ? (
-        <span>{text}</span>
+        <span className="select-none">{text}</span>
       ) : ['string', 'number'].includes(typeof children) ? (
-        <span>{children}</span>
+        <span className="select-none">{children}</span>
       ) : (
         children
       )}
