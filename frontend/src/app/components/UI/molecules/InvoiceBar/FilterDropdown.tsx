@@ -27,7 +27,7 @@ const FilterDropDown = ({
   return (
     <div
       ref={dropdownRef}
-      className="absolute bg-white drop-shadow-xl p-6 w-[180px] lg:w-[220px] top-6 rounded-lg"
+      className="absolute bg-white drop-shadow-xl p-6 w-[180px] lg:w-[220px] top-6 rounded-lg dark:bg-blue-04 z-10"
     >
       <div>
         <Checkbox

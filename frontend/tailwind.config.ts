@@ -42,6 +42,7 @@ export default {
         '08': '#0C0E16', // Blackish Gray
         '09': '#373B53', // Blackish Blue-Light
         '09a': 'rgba(55, 59, 83, 0.057)', // Muted Gray Blue
+        '09b': '#363A58',
         400: '#1E2139', // Dark Gray-Blue
         '12': '#141625', // Very Dark Gray-Black
       },

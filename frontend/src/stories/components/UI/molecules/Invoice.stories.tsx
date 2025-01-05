@@ -12,13 +12,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  decorators: [
-    (Story) => (
-      <div className="bg-neutral-11 p-4 py-8">
-        <Story />
-      </div>
-    ),
-  ],
   args: {
     invoiceId: 'RT3080',
     billingName: 'Jensen Huang',

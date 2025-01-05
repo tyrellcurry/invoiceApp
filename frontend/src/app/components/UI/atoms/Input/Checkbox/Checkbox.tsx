@@ -10,9 +10,13 @@ const Checkbox = (props: ICheckboxProps): JSX.Element => {
         type="checkbox"
         id={labelId}
         onChange={onChange}
-        className="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 border-2 border-blue-01 rounded-sm checked:bg-blue-01 checked:border-0 cursor-pointer"
+        className="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 dark:bg-blue-03 border-2 border-blue-01 rounded-sm checked:bg-blue-01 dark:checked:bg-blue-01 checked:border-0 cursor-pointer"
       />
-      <Text className="cursor-pointer font-bold select-none" tag={'label'} htmlFor={labelId}>
+      <Text
+        className="cursor-pointer font-bold select-none dark:text-white"
+        tag={'label'}
+        htmlFor={labelId}
+      >
         {label}
       </Text>
       <svg

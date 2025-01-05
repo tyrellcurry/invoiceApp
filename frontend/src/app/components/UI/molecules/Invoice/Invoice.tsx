@@ -20,28 +20,28 @@ const Invoice = (props: IInvoiceProps): JSX.Element => {
   return (
     <div {...rest}>
       {/* Mobile View */}
-      <div className="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6">
+      <div className="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6 dark:bg-blue-03">
         <div className="flex justify-between">
-          <Text tag={'p'} className="text-gray-08 font-bold">
+          <Text tag={'p'} className="text-gray-08 font-bold dark:text-white">
             <Text tag={'span'} className="text-gray-07">
               #
             </Text>
             {invoiceId}
           </Text>
-          <Text tag={'p'} className="text-gray-07b">
+          <Text tag={'p'} className="text-gray-07b dark:text-white">
             {billingName}
           </Text>
         </div>
 
         <div className="flex justify-between">
           <div>
-            <Text tag={'p'} className="text-gray-07 flex gap-1 pb-[9px]">
-              <Text tag={'span'} className="text-gray-06">
+            <Text tag={'p'} className="text-gray-07 flex gap-1 pb-[9px] dark:text-gray-05">
+              <Text tag={'span'} className="text-gray-06 dark:text-gray-05">
                 {dueText}
               </Text>
               {invoiceDueDate}
             </Text>
-            <Text tag={'p'} className="text-gray-08 font-bold">
+            <Text tag={'p'} className="text-gray-08 font-bold dark:text-white">
               <Text tag={'span'}>
                 {localeAmountDue === 'en' && '$'}
                 {localeAmountDue === 'fr' && '€'}
@@ -52,20 +52,24 @@ const Invoice = (props: IInvoiceProps): JSX.Element => {
 
           <div
             className={classNames(
-              'py-[14px] px-[30px] rounded-md leading-none flex items-center self-center',
+              'py-[14px] px-[30px] rounded-md leading-none flex items-center justify-center self-center',
               {
                 'bg-green-05a text-green-05': invoiceStatus === 'paid',
                 'bg-orange-05a text-orange-05': invoiceStatus === 'pending',
-                'bg-gray-09a text-gray-09': invoiceStatus === 'draft',
+                'bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05':
+                  invoiceStatus === 'draft',
               }
             )}
           >
-            <Text className="font-bold text-center flex gap-x-1.5 items-center" tag={'span'}>
+            <Text
+              className="font-bold text-center flex gap-x-1.5 items-center text-[15px]"
+              tag={'span'}
+            >
               <div
                 className={classNames('w-2 h-2 rounded-full', {
                   'bg-green-05': invoiceStatus === 'paid',
                   'bg-orange-05': invoiceStatus === 'pending',
-                  'bg-gray-09': invoiceStatus === 'draft',
+                  'bg-gray-09 dark:bg-gray-05': invoiceStatus === 'draft',
                 })}
               />
               {invoiceStatusText}
@@ -75,24 +79,24 @@ const Invoice = (props: IInvoiceProps): JSX.Element => {
       </div>
 
       {/* Desktop View */}
-      <div className="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg">
+      <div className="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03">
         <div className="flex gap-x-11">
           {/* Invoice Details Section */}
           <div className="flex gap-x-11 w-[256px]">
-            <Text tag={'p'} className="text-gray-08 font-bold">
+            <Text tag={'p'} className="text-gray-08 font-bold dark:text-white">
               <Text tag={'span'} className="text-gray-07">
                 #
               </Text>
               {invoiceId}
             </Text>
-            <Text tag={'p'} className="text-gray-07 flex gap-1">
-              <Text tag={'span'} className="text-gray-06">
+            <Text tag={'p'} className="text-gray-07 flex gap-1 dark:text-gray-05">
+              <Text tag={'span'} className="text-gray-06 dark:text-gray-05">
                 {dueText}
               </Text>
               {invoiceDueDate}
             </Text>
           </div>
-          <Text tag={'p'} className="text-gray-07b">
+          <Text tag={'p'} className="text-gray-07b dark:text-white">
             {billingName}
           </Text>
         </div>
@@ -100,7 +104,7 @@ const Invoice = (props: IInvoiceProps): JSX.Element => {
         {/* Amount Due and Status Section */}
         <div>
           <div className="flex items-center gap-x-2">
-            <Text tag={'p'} className="text-gray-08 font-bold text-right">
+            <Text tag={'p'} className="text-gray-08 font-bold text-right dark:text-white">
               <Text tag={'span'}>
                 {localeAmountDue === 'en' && '$'}
                 {localeAmountDue === 'fr' && '€'}
@@ -110,11 +114,12 @@ const Invoice = (props: IInvoiceProps): JSX.Element => {
             <div className="w-[150px]">
               <div
                 className={classNames(
-                  'py-[14px] px-[30px] rounded-md leading-none flex items-center self-center w-fit ml-auto',
+                  'py-[14px] px-[30px] rounded-md leading-none flex items-center self-center justify-center ml-auto w-[145px]',
                   {
                     'bg-green-05a text-green-05': invoiceStatus === 'paid',
                     'bg-orange-05a text-orange-05': invoiceStatus === 'pending',
-                    'bg-gray-09a text-gray-09': invoiceStatus === 'draft',
+                    'bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05':
+                      invoiceStatus === 'draft',
                   }
                 )}
               >
@@ -123,7 +128,7 @@ const Invoice = (props: IInvoiceProps): JSX.Element => {
                     className={classNames('w-2 h-2 rounded-full', {
                       'bg-green-05': invoiceStatus === 'paid',
                       'bg-orange-05': invoiceStatus === 'pending',
-                      'bg-gray-09': invoiceStatus === 'draft',
+                      'bg-gray-09 dark:bg-gray-05': invoiceStatus === 'draft',
                     })}
                   />
                   {invoiceStatusText}
