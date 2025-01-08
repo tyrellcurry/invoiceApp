@@ -18,5 +18,5 @@ export interface IInvoicePageProps {
   filters: IFilterDropdownProps['filters'];
   setFilters: IFilterDropdownProps['setFilters'];
   newInvoiceHandler: IInvoiceBarProps['newInvoiceHandler'];
-  invoices: IInvoiceProps[];
+  initialInvoices: IInvoiceProps[];
 }

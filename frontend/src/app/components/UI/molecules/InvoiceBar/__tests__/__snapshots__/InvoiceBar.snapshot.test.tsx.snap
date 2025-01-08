@@ -4,6 +4,9 @@ exports[`Invoice Bar Component renders correctly with filled props 1`] = `
 <div>
   <menu
     class="flex items-center justify-between"
+    drafttext="draft"
+    paidtext="paid"
+    pendingtext="pending"
   >
     <div>
       <h2

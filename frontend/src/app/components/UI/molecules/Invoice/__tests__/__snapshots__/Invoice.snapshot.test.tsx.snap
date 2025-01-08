@@ -4,13 +4,13 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
 <div>
   <div>
     <div
-      class="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6"
+      class="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6 dark:bg-blue-03"
     >
       <div
         class="flex justify-between"
       >
         <p
-          class="text text--body text-gray-08 font-bold"
+          class="text text--body text-gray-08 font-bold dark:text-white"
         >
           <span
             class="text text--body text-gray-07"
@@ -20,7 +20,7 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
           RT3080
         </p>
         <p
-          class="text text--body text-gray-07b"
+          class="text text--body text-gray-07b dark:text-white"
         >
           Jensen Huang
         </p>
@@ -30,17 +30,17 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
       >
         <div>
           <p
-            class="text text--body text-gray-07 flex gap-1 pb-[9px]"
+            class="text text--body text-gray-07 flex gap-1 pb-[9px] dark:text-gray-05"
           >
             <span
-              class="text text--body text-gray-06"
+              class="text text--body text-gray-06 dark:text-gray-05"
             >
               Due
             </span>
             Jan 1st, 2025
           </p>
           <p
-            class="text text--body text-gray-08 font-bold"
+            class="text text--body text-gray-08 font-bold dark:text-white"
           >
             <span
               class="text text--body"
@@ -51,13 +51,13 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
           </p>
         </div>
         <div
-          class="py-[14px] px-[30px] rounded-md leading-none flex items-center self-center bg-gray-09a text-gray-09"
+          class="py-[14px] px-[30px] rounded-md leading-none flex items-center justify-center self-center bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
         >
           <span
-            class="text text--body font-bold text-center flex gap-x-1.5 items-center"
+            class="text text--body font-bold text-center flex gap-x-1.5 items-center text-[15px]"
           >
             <div
-              class="w-2 h-2 rounded-full bg-gray-09"
+              class="w-2 h-2 rounded-full bg-gray-09 dark:bg-gray-05"
             />
             Draft
           </span>
@@ -65,7 +65,7 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
       </div>
     </div>
     <div
-      class="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg"
+      class="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03"
     >
       <div
         class="flex gap-x-11"
@@ -74,7 +74,7 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
           class="flex gap-x-11 w-[256px]"
         >
           <p
-            class="text text--body text-gray-08 font-bold"
+            class="text text--body text-gray-08 font-bold dark:text-white"
           >
             <span
               class="text text--body text-gray-07"
@@ -84,10 +84,10 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
             RT3080
           </p>
           <p
-            class="text text--body text-gray-07 flex gap-1"
+            class="text text--body text-gray-07 flex gap-1 dark:text-gray-05"
           >
             <span
-              class="text text--body text-gray-06"
+              class="text text--body text-gray-06 dark:text-gray-05"
             >
               Due
             </span>
@@ -95,7 +95,7 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
           </p>
         </div>
         <p
-          class="text text--body text-gray-07b"
+          class="text text--body text-gray-07b dark:text-white"
         >
           Jensen Huang
         </p>
@@ -105,7 +105,7 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
           class="flex items-center gap-x-2"
         >
           <p
-            class="text text--body text-gray-08 font-bold text-right"
+            class="text text--body text-gray-08 font-bold text-right dark:text-white"
           >
             <span
               class="text text--body"
@@ -118,13 +118,13 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
             class="w-[150px]"
           >
             <div
-              class="py-[14px] px-[30px] rounded-md leading-none flex items-center self-center w-fit ml-auto bg-gray-09a text-gray-09"
+              class="py-[14px] px-[30px] rounded-md leading-none flex items-center self-center justify-center ml-auto w-[145px] bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
             >
               <span
                 class="text text--body font-bold text-center flex gap-x-1.5 items-center"
               >
                 <div
-                  class="w-2 h-2 rounded-full bg-gray-09"
+                  class="w-2 h-2 rounded-full bg-gray-09 dark:bg-gray-05"
                 />
                 Draft
               </span>

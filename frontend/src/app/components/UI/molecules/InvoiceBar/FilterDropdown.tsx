@@ -11,7 +11,7 @@ export interface IFilterDropdownProps {
   draftText: string;
   pendingText: string;
   paidText: string;
-  dropdownRef: React.RefObject<HTMLDivElement | null>;
+  elementRef: React.RefObject<HTMLDivElement | null>;
   filters: FilterState;
   setFilters: (updatedFilters: FilterState) => void;
 }
@@ -20,13 +20,13 @@ const FilterDropDown = ({
   draftText,
   pendingText,
   paidText,
-  dropdownRef,
   setFilters,
   filters,
+  elementRef,
 }: IFilterDropdownProps): JSX.Element => {
   return (
     <div
-      ref={dropdownRef}
+      ref={elementRef}
       className="absolute bg-white drop-shadow-xl p-6 w-[180px] lg:w-[220px] top-6 rounded-lg dark:bg-blue-04 z-10"
     >
       <div>

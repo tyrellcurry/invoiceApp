@@ -3,12 +3,8 @@ import { IInvoiceBarProps } from '@/app/components/UI/molecules/InvoiceBar/Invoi
 import classNames from 'classnames';
 import Button from '@/app/components/UI/atoms/Button/Button';
 import Text from '@/app/components/UI/atoms/Text/Text';
-import FilterDropDown from '@/app/components/UI/molecules/InvoiceBar/FilterDropdown';
-import useVisibilityToggle from '@/utils/hooks/useVisibilityToggle';
 
 const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
-  const { isVisible, setIsVisible, elementRef } = useVisibilityToggle<HTMLDivElement>();
-
   const {
     invoiceBarTitle,
     totalInvoicesTextDesktop,
@@ -18,11 +14,9 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
     newInvoiceBtnTextDesktop,
     newInvoiceBtnTextMobile,
     newInvoiceHandler,
-    draftText,
-    pendingText,
-    paidText,
-    setFilters,
-    filters,
+    isVisible,
+    setIsVisible,
+    children,
     ...rest
   } = props;
 
@@ -63,12 +57,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           >
             {filterStatusBtnTextDesktop}
           </Button>
-          {isVisible && (
-            <FilterDropDown
-              dropdownRef={elementRef}
-              {...{ draftText, pendingText, paidText, setFilters, filters }}
-            />
-          )}
+          {isVisible && children}
         </div>
         <Button
           iconLeft={'circle-plus'}

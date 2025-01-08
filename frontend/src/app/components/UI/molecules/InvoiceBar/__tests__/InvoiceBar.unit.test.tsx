@@ -1,17 +1,18 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import InvoiceBar from '@/app/components/UI/molecules/InvoiceBar/InvoiceBar';
+import FilterDropDown from '@/app/components/UI/molecules/InvoiceBar/FilterDropdown';
+import useVisibilityToggle from '@/utils/hooks/useVisibilityToggle';
 
 describe('Text Component - Unit Tests', () => {
   const testId = 'text-test-id';
 
   const RenderInvoiceBar = () => {
+    const { isVisible, setIsVisible, elementRef } = useVisibilityToggle<HTMLDivElement>();
+
     render(
       <InvoiceBar
         data-testid={testId}
-        paidText="paid"
-        draftText="draft"
-        pendingText="pending"
         invoiceBarTitle="Invoice"
         newInvoiceBtnTextMobile="new-mob"
         newInvoiceBtnTextDesktop="new-desktop"
@@ -19,7 +20,18 @@ describe('Text Component - Unit Tests', () => {
         totalInvoicesTextDesktop="total-desktop"
         filterStatusBtnTextMobile="filter-mob"
         filterStatusBtnTextDesktop="filter-desktop"
-      />
+        newInvoiceHandler={() => {}}
+        {...{ isVisible, setIsVisible }}
+      >
+        <FilterDropDown
+          paidText="paid"
+          draftText="draft"
+          pendingText="pending"
+          filters={{ draft: false, pending: false, paid: false }}
+          setFilters={() => {}}
+          {...{ elementRef }}
+        />
+      </InvoiceBar>
     );
   };
 

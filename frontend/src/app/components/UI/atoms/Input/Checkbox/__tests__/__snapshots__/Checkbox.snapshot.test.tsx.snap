@@ -6,12 +6,12 @@ exports[`Checkbox Component renders correctly with a label 1`] = `
     class="flex items-center gap-x-[13px]"
   >
     <input
-      class="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 border-2 border-blue-01 rounded-sm checked:bg-blue-01 checked:border-0 cursor-pointer"
+      class="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 dark:bg-blue-03 border-2 border-blue-01 rounded-sm checked:bg-blue-01 dark:checked:bg-blue-01 checked:border-0 cursor-pointer"
       id="checkbox-1"
       type="checkbox"
     />
     <label
-      class="text text--body cursor-pointer font-bold select-none"
+      class="text text--body cursor-pointer font-bold select-none dark:text-white"
       for="checkbox-1"
     >
       Test Label
@@ -40,12 +40,12 @@ exports[`Checkbox Component renders correctly without a label 1`] = `
     class="flex items-center gap-x-[13px]"
   >
     <input
-      class="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 border-2 border-blue-01 rounded-sm checked:bg-blue-01 checked:border-0 cursor-pointer"
+      class="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 dark:bg-blue-03 border-2 border-blue-01 rounded-sm checked:bg-blue-01 dark:checked:bg-blue-01 checked:border-0 cursor-pointer"
       id="checkbox-2"
       type="checkbox"
     />
     <label
-      class="text text--body cursor-pointer font-bold select-none"
+      class="text text--body cursor-pointer font-bold select-none dark:text-white"
       for="checkbox-2"
     />
     <svg
@@ -72,12 +72,12 @@ exports[`Checkbox Component renders with custom class names 1`] = `
     class="flex items-center gap-x-[13px]"
   >
     <input
-      class="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 border-2 border-blue-01 rounded-sm checked:bg-blue-01 checked:border-0 cursor-pointer"
+      class="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 dark:bg-blue-03 border-2 border-blue-01 rounded-sm checked:bg-blue-01 dark:checked:bg-blue-01 checked:border-0 cursor-pointer"
       id="checkbox-3"
       type="checkbox"
     />
     <label
-      class="text text--body cursor-pointer font-bold select-none"
+      class="text text--body cursor-pointer font-bold select-none dark:text-white"
       for="checkbox-3"
     >
       Custom Class
