@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Invoice Component renders correctly with data passed to props 1`] = `
+<div>
+  <div
+    billingname="Jensen Huang"
+    duetext="Due"
+    invoiceamountdue="1800.9"
+    invoiceduedate="Jan 1st, 2025"
+    invoiceid="RT3080"
+    invoicestatus="draft"
+    invoicestatustext="Draft"
+    localeamountdue="en"
+  >
+    <button
+      class="btn btn--custom w-full border-none"
+    >
+      <div
+        class="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6 dark:bg-blue-03"
+      >
+        <div
+          class="flex justify-between"
+        >
+          <p
+            class="text text--body text-gray-08 font-bold dark:text-white"
+          >
+            <span
+              class="text text--body text-gray-07"
+            >
+              #
+            </span>
+            RT3080
+          </p>
+          <p
+            class="text text--body text-gray-07b dark:text-white"
+          >
+            Jensen Huang
+          </p>
+        </div>
+        <div
+          class="flex justify-between"
+        >
+          <div>
+            <p
+              class="text text--body text-gray-07 flex gap-1 pb-[9px] dark:text-gray-05"
+            >
+              <span
+                class="text text--body text-gray-06 dark:text-gray-05"
+              >
+                Due
+              </span>
+              Jan 1st, 2025
+            </p>
+            <p
+              class="text text--body text-gray-08 font-bold dark:text-white"
+            >
+              <span
+                class="text text--body"
+              >
+                $
+              </span>
+              1,800.90
+            </p>
+          </div>
+          <div
+            class="py-[14px] px-[30px] rounded-md leading-none flex items-center justify-center self-center bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
+          >
+            <span
+              class="text text--body font-bold text-center flex gap-x-1.5 items-center text-[15px]"
+            >
+              <div
+                class="w-2 h-2 rounded-full bg-gray-09 dark:bg-gray-05"
+              />
+              Draft
+            </span>
+          </div>
+        </div>
+      </div>
+    </button>
+    <div
+      class="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03"
+    >
+      <div
+        class="flex gap-x-11"
+      >
+        <div
+          class="flex gap-x-11 w-[256px]"
+        >
+          <p
+            class="text text--body text-gray-08 font-bold dark:text-white"
+          >
+            <span
+              class="text text--body text-gray-07"
+            >
+              #
+            </span>
+            RT3080
+          </p>
+          <p
+            class="text text--body text-gray-07 flex gap-1 dark:text-gray-05"
+          >
+            <span
+              class="text text--body text-gray-06 dark:text-gray-05"
+            >
+              Due
+            </span>
+            Jan 1st, 2025
+          </p>
+        </div>
+        <p
+          class="text text--body text-gray-07b dark:text-white"
+        >
+          Jensen Huang
+        </p>
+      </div>
+      <div>
+        <div
+          class="flex items-center gap-x-2"
+        >
+          <p
+            class="text text--body text-gray-08 font-bold text-right dark:text-white"
+          >
+            <span
+              class="text text--body"
+            >
+              $
+            </span>
+            1,800.90
+          </p>
+          <div
+            class="w-[150px]"
+          >
+            <div
+              class="py-[14px] px-[30px] rounded-md leading-none flex items-center self-center justify-center ml-auto w-[145px] bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
+            >
+              <span
+                class="text text--body font-bold text-center flex gap-x-1.5 items-center"
+              >
+                <div
+                  class="w-2 h-2 rounded-full bg-gray-09 dark:bg-gray-05"
+                />
+                Draft
+              </span>
+            </div>
+          </div>
+          <button
+            class="btn btn--custom p-1 ml-3"
+          >
+            <svg
+              class="icon"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

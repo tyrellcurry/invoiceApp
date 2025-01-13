@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Invoice Bar Component renders correctly with filled props 1`] = `
+<div>
+  <menu
+    class="flex items-center justify-between"
+  >
+    <div>
+      <h2
+        class="text text--h2 text-gray-08 dark:text-white"
+      >
+        Invoice
+      </h2>
+      <p
+        class="text text--body text-gray-06 dark:text-white"
+      >
+        <span
+          class="block md:hidden"
+        >
+          total-mob
+        </span>
+        <span
+          class="hidden md:block"
+        >
+          total-desktop
+        </span>
+      </p>
+    </div>
+    <div
+      class="flex items-center gap-x-[18px] md:gap-x-10"
+    >
+      <div
+        class="relative grid place-items-center"
+      >
+        <button
+          class="btn btn--custom flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"
+        >
+          <span
+            class="block md:hidden"
+          >
+            filter-mob
+          </span>
+          <span
+            class="hidden md:block"
+          >
+            filter-desktop
+          </span>
+          <svg
+            class="icon w-4 md:w-5 h-auto"
+          />
+        </button>
+      </div>
+      <button
+        class="btn base btn--primary p-[6px] md:p-2 gap-x-2 items-center pr-[15px] text-xl md:text-lg"
+      >
+        <svg
+          class="icon min-w-8 min-h-8 max-h-8 max-h-8"
+        />
+        <span
+          class="block md:hidden"
+        >
+          new-mob
+        </span>
+        <span
+          class="hidden md:block"
+        >
+          new-desktop
+        </span>
+      </button>
+    </div>
+  </menu>
+</div>
+`;

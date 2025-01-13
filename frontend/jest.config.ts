@@ -11,6 +11,7 @@ const config: Config = {
   moduleNameMapper: {
     '^.+\\.(svg)$': '<rootDir>/__mocks__/svg.tsx',
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
+    '^react$': require.resolve('react'),
   },
   testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
