@@ -2,68 +2,81 @@
 
 exports[`Invoice Component renders correctly with data passed to props 1`] = `
 <div>
-  <div>
-    <div
-      class="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6 dark:bg-blue-03"
+  <div
+    billingname="Jensen Huang"
+    duetext="Due"
+    invoiceamountdue="1800.9"
+    invoiceduedate="Jan 1st, 2025"
+    invoiceid="RT3080"
+    invoicestatus="draft"
+    invoicestatustext="Draft"
+    localeamountdue="en"
+  >
+    <button
+      class="btn btn--custom w-full border-none"
     >
       <div
-        class="flex justify-between"
+        class="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6 dark:bg-blue-03"
       >
-        <p
-          class="text text--body text-gray-08 font-bold dark:text-white"
+        <div
+          class="flex justify-between"
         >
-          <span
-            class="text text--body text-gray-07"
-          >
-            #
-          </span>
-          RT3080
-        </p>
-        <p
-          class="text text--body text-gray-07b dark:text-white"
-        >
-          Jensen Huang
-        </p>
-      </div>
-      <div
-        class="flex justify-between"
-      >
-        <div>
-          <p
-            class="text text--body text-gray-07 flex gap-1 pb-[9px] dark:text-gray-05"
-          >
-            <span
-              class="text text--body text-gray-06 dark:text-gray-05"
-            >
-              Due
-            </span>
-            Jan 1st, 2025
-          </p>
           <p
             class="text text--body text-gray-08 font-bold dark:text-white"
           >
             <span
-              class="text text--body"
+              class="text text--body text-gray-07"
             >
-              $
+              #
             </span>
-            1,800.90
+            RT3080
+          </p>
+          <p
+            class="text text--body text-gray-07b dark:text-white"
+          >
+            Jensen Huang
           </p>
         </div>
         <div
-          class="py-[14px] px-[30px] rounded-md leading-none flex items-center justify-center self-center bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
+          class="flex justify-between"
         >
-          <span
-            class="text text--body font-bold text-center flex gap-x-1.5 items-center text-[15px]"
+          <div>
+            <p
+              class="text text--body text-gray-07 flex gap-1 pb-[9px] dark:text-gray-05"
+            >
+              <span
+                class="text text--body text-gray-06 dark:text-gray-05"
+              >
+                Due
+              </span>
+              Jan 1st, 2025
+            </p>
+            <p
+              class="text text--body text-gray-08 font-bold dark:text-white"
+            >
+              <span
+                class="text text--body"
+              >
+                $
+              </span>
+              1,800.90
+            </p>
+          </div>
+          <div
+            class="py-[14px] px-[30px] rounded-md leading-none flex items-center justify-center self-center bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
           >
-            <div
-              class="w-2 h-2 rounded-full bg-gray-09 dark:bg-gray-05"
-            />
-            Draft
-          </span>
+            <span
+              class="text text--body font-bold text-center flex gap-x-1.5 items-center text-[15px]"
+            >
+              <div
+                class="w-2 h-2 rounded-full bg-gray-09 dark:bg-gray-05"
+              />
+              Draft
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </button>
     <div
       class="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03"
     >

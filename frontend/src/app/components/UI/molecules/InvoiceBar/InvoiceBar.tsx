@@ -3,6 +3,8 @@ import { IInvoiceBarProps } from '@/app/components/UI/molecules/InvoiceBar/Invoi
 import classNames from 'classnames';
 import Button from '@/app/components/UI/atoms/Button/Button';
 import Text from '@/app/components/UI/atoms/Text/Text';
+import useVisibilityToggle from '@/utils/hooks/useVisibilityToggle';
+import Checkbox from '@/app/components/UI/atoms/Input/Checkbox/Checkbox';
 
 const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
   const {
@@ -14,11 +16,15 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
     newInvoiceBtnTextDesktop,
     newInvoiceBtnTextMobile,
     newInvoiceHandler,
-    isVisible,
-    setIsVisible,
-    children,
+    draftText,
+    pendingText,
+    paidText,
+    setFilters,
+    filters,
     ...rest
   } = props;
+
+  const { isVisible, setIsVisible, elementRef } = useVisibilityToggle();
 
   return (
     <menu className="flex items-center justify-between" {...rest}>
@@ -26,56 +32,86 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
         <Text className="text-gray-08 dark:text-white" tag={'h2'} variant="h2">
           {invoiceBarTitle}
         </Text>
-        <Text className="text-gray-06 dark:text-white md:hidden" tag={'p'}>
-          {totalInvoicesTextMobile}
-        </Text>
-        <Text className="text-gray-06 dark:text-white hidden md:block" tag={'p'}>
-          {totalInvoicesTextDesktop}
+        <Text className="text-gray-06 dark:text-white" tag={'p'}>
+          <span className="block md:hidden">{totalInvoicesTextMobile}</span>
+          <span className="hidden md:block">{totalInvoicesTextDesktop}</span>
         </Text>
       </div>
       <div className="flex items-center gap-x-[18px] md:gap-x-10">
         <div className="relative grid place-items-center">
           <Button
-            className="flex items-center gap-x-3 font-bold text-xl dark:text-gray-05 md:hidden"
+            className="flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"
             variant="custom"
             iconRight={'chevron-down'}
-            iconRightClassName={classNames('w-5 h-auto', {
+            iconRightClassName={classNames('w-4 md:w-5 h-auto', {
               'rotate-180': !!isVisible,
             })}
             onClick={() => setIsVisible((prev) => !prev)}
           >
-            {filterStatusBtnTextMobile}
+            <span className="block md:hidden">{filterStatusBtnTextMobile}</span>
+            <span className="hidden md:block">{filterStatusBtnTextDesktop}</span>
           </Button>
-          <Button
-            className="items-center gap-x-3 font-bold text-lg dark:text-gray-05 hidden md:flex"
-            variant="custom"
-            iconRight={'chevron-down'}
-            iconRightClassName={classNames('w-4 h-auto', {
-              'rotate-180': !!isVisible,
-            })}
-            onClick={() => setIsVisible((prev) => !prev)}
-          >
-            {filterStatusBtnTextDesktop}
-          </Button>
-          {isVisible && children}
+
+          {/* Children */}
+          {isVisible && (
+            <div
+              ref={elementRef}
+              className="absolute bg-white drop-shadow-xl p-6 w-[180px] lg:w-[220px] top-6 rounded-lg dark:bg-blue-04 z-10"
+            >
+              <div>
+                <Checkbox
+                  label={draftText}
+                  labelId={'draft'}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (setFilters) {
+                      setFilters({
+                        ...filters,
+                        draft: e.target.checked,
+                      });
+                    }
+                  }}
+                />
+              </div>
+              <div>
+                <Checkbox
+                  label={pendingText}
+                  labelId={'pending'}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (setFilters) {
+                      setFilters({
+                        ...filters,
+                        pending: e.target.checked,
+                      });
+                    }
+                  }}
+                />
+              </div>
+              <div>
+                <Checkbox
+                  label={paidText}
+                  labelId={'paid'}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (setFilters) {
+                      setFilters({
+                        ...filters,
+                        paid: e.target.checked,
+                      });
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          )}
         </div>
         <Button
           iconLeft={'circle-plus'}
           variant="primary"
-          className="p-[6px] gap-x-2 items-center pr-[15px] text-xl md:hidden"
+          className="p-[6px] md:p-2 gap-x-2 items-center pr-[15px] text-xl md:text-lg"
           iconLeftClassName="min-w-8 min-h-8 max-h-8 max-h-8"
           onClick={newInvoiceHandler}
         >
-          {newInvoiceBtnTextMobile}
-        </Button>
-        <Button
-          iconLeft={'circle-plus'}
-          variant="primary"
-          className="p-2 gap-x-2 items-center pr-[15px] text-lg hidden md:flex"
-          iconLeftClassName="min-w-8 min-h-8 max-h-8 max-h-8"
-          onClick={newInvoiceHandler}
-        >
-          {newInvoiceBtnTextDesktop}
+          <span className="block md:hidden">{newInvoiceBtnTextMobile}</span>
+          <span className="hidden md:block">{newInvoiceBtnTextDesktop}</span>
         </Button>
       </div>
     </menu>

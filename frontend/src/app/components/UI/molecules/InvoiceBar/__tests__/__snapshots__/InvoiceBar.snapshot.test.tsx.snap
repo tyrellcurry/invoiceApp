@@ -4,9 +4,6 @@ exports[`Invoice Bar Component renders correctly with filled props 1`] = `
 <div>
   <menu
     class="flex items-center justify-between"
-    drafttext="draft"
-    paidtext="paid"
-    pendingtext="pending"
   >
     <div>
       <h2
@@ -15,14 +12,18 @@ exports[`Invoice Bar Component renders correctly with filled props 1`] = `
         Invoice
       </h2>
       <p
-        class="text text--body text-gray-06 dark:text-white md:hidden"
+        class="text text--body text-gray-06 dark:text-white"
       >
-        total-mob
-      </p>
-      <p
-        class="text text--body text-gray-06 dark:text-white hidden md:block"
-      >
-        total-desktop
+        <span
+          class="block md:hidden"
+        >
+          total-mob
+        </span>
+        <span
+          class="hidden md:block"
+        >
+          total-desktop
+        </span>
       </p>
     </div>
     <div
@@ -32,50 +33,36 @@ exports[`Invoice Bar Component renders correctly with filled props 1`] = `
         class="relative grid place-items-center"
       >
         <button
-          class="btn btn--custom flex items-center gap-x-3 font-bold text-xl dark:text-gray-05 md:hidden"
+          class="btn btn--custom flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"
         >
           <span
-            class="select-none"
+            class="block md:hidden"
           >
             filter-mob
           </span>
-          <svg
-            class="icon w-5 h-auto"
-          />
-        </button>
-        <button
-          class="btn btn--custom items-center gap-x-3 font-bold text-lg dark:text-gray-05 hidden md:flex"
-        >
           <span
-            class="select-none"
+            class="hidden md:block"
           >
             filter-desktop
           </span>
           <svg
-            class="icon w-4 h-auto"
+            class="icon w-4 md:w-5 h-auto"
           />
         </button>
       </div>
       <button
-        class="btn base btn--primary p-[6px] gap-x-2 items-center pr-[15px] text-xl md:hidden"
+        class="btn base btn--primary p-[6px] md:p-2 gap-x-2 items-center pr-[15px] text-xl md:text-lg"
       >
         <svg
           class="icon min-w-8 min-h-8 max-h-8 max-h-8"
         />
         <span
-          class="select-none"
+          class="block md:hidden"
         >
           new-mob
         </span>
-      </button>
-      <button
-        class="btn base btn--primary p-2 gap-x-2 items-center pr-[15px] text-lg hidden md:flex"
-      >
-        <svg
-          class="icon min-w-8 min-h-8 max-h-8 max-h-8"
-        />
         <span
-          class="select-none"
+          class="hidden md:block"
         >
           new-desktop
         </span>

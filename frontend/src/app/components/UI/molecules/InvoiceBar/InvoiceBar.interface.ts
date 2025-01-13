@@ -7,7 +7,15 @@ export interface IInvoiceBarProps {
   newInvoiceBtnTextDesktop: string;
   newInvoiceBtnTextMobile: string;
   newInvoiceHandler: () => void;
-  isVisible: boolean;
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  children: React.ReactNode;
+  draftText: string;
+  pendingText: string;
+  paidText: string;
+  filters: FilterState;
+  setFilters: (updatedFilters: FilterState) => void;
+}
+
+interface FilterState {
+  draft: boolean;
+  pending: boolean;
+  paid: boolean;
 }

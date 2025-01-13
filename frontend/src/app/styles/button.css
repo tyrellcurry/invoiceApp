@@ -7,7 +7,7 @@
       @apply max-w-full;
     }
     span {
-      @apply w-full inline-block leading-none;
+      @apply w-full leading-none;
     }
     &--primary {
       @apply text-white bg-blue-01 hover:bg-blue-02;
