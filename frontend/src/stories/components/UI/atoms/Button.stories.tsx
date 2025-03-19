@@ -1,6 +1,6 @@
 import type { StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
-import Button from '@/app/components/UI/atoms/Button/Button';
+import Button from '@/components/UI/atoms/Button/Button';
 
 const meta = {
   title: 'Atoms/Button',

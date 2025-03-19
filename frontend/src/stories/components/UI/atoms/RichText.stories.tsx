@@ -1,6 +1,6 @@
 import type { StoryObj } from '@storybook/react';
 
-import RichText from '@/app/components/UI/atoms/RichText/RichText';
+import RichText from '@/components/UI/atoms/RichText/RichText';
 
 const meta = {
   title: 'Atoms/Rich Text',

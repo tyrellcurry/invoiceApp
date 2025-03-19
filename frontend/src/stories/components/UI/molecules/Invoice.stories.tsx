@@ -1,6 +1,6 @@
 import type { StoryObj } from '@storybook/react';
 
-import Invoice from '@/app/components/UI/molecules/Invoice/Invoice';
+import Invoice from '@/components/UI/molecules/Invoice/Invoice';
 
 const meta = {
   title: 'Molecules/Invoice',

@@ -1,11 +1,12 @@
 import createNextIntlPlugin from 'next-intl/plugin';
+import { NextConfig } from 'next';
+import { Configuration } from 'webpack';
 
 const withNextIntl = createNextIntlPlugin();
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  webpack(config: { module: { rules: [] } }) {
-    config.module.rules.push({
+const nextConfig: NextConfig = {
+  webpack(config: Configuration) {
+    config.module?.rules?.push({
       test: /\.svg$/i,
       use: ['@svgr/webpack'],
     });

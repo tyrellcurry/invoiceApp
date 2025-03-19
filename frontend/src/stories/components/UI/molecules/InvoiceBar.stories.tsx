@@ -1,6 +1,6 @@
 import type { StoryObj } from '@storybook/react';
 
-import InvoiceBar from '@/app/components/UI/molecules/InvoiceBar/InvoiceBar';
+import InvoiceBar from '@/components/UI/molecules/InvoiceBar/InvoiceBar';
 
 const meta = {
   title: 'Molecules/Invoice Bar',
@@ -29,8 +29,6 @@ export const Default: Story = {
       pending: false,
       paid: false,
     },
-    setFilters: (updatedFilters) => {
-      console.log(updatedFilters);
-    },
+    setFilters: () => {},
   },
 };
