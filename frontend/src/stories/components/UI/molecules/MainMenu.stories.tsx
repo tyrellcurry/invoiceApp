@@ -1,5 +1,5 @@
 import type { StoryObj } from '@storybook/react';
-import MainMenu from '@/app/components/UI/molecules/MainMenu/MainMenu';
+import MainMenu from '@/components/UI/molecules/MainMenu/MainMenu';
 
 const meta = {
   title: 'Molecules/Main Menu',
@@ -20,7 +20,7 @@ export const Default: Story = {
     profileImageAlt: 'lorem ipsum',
   },
   decorators: [
-    (Story) => (
+    (Story: Story) => (
       <div className="relative">
         <Story />
       </div>

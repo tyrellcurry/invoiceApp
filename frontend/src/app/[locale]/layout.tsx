@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation';
 import { routing, type Locale } from '@/i18n/routing';
 import type { Metadata } from 'next';
 import React from 'react';
-import '@/app/app.css';
-import { Provider as ThemeProvider } from '@/app/ThemeProvider';
+import '@/styles/app.css';
+import { Provider as ThemeProvider } from '@/providers/ThemeProvider';
 import { League_Spartan } from 'next/font/google';
 
 export const dynamic = 'force-dynamic';

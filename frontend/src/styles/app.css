@@ -1,0 +1,14 @@
+/* Dependencies */
+@import './tailwind.css';
+
+/* Components */
+@import './UI/text.css';
+@import './UI/button.css';
+
+.storybook_dark {
+  @apply bg-gray-12;
+}
+
+.storybook_light {
+  @apply bg-neutral-11;
+}

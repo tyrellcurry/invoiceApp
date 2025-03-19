@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Preview } from '@storybook/react';
-import '../src/app/app.css';
-import 'tailwindcss/tailwind.css';
+import '../src/styles/app.css';
 import { withThemeByClassName } from '@storybook/addon-themes';
 
 import { League_Spartan } from 'next/font/google';
@@ -16,8 +15,8 @@ const preview: Preview = {
   decorators: [
     withThemeByClassName({
       themes: {
-        Light: 'light bg-neutral-11',
-        Dark: 'dark bg-gray-12',
+        Light: 'light storybook_light',
+        Dark: 'dark storybook_dark',
       },
       defaultTheme: 'Light',
     }),
