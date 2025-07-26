@@ -29,7 +29,7 @@ const Button = (props: IButtonProps): JSX.Element => {
   const renderButtonContent = (text?: string) => (
     <>
       {!!iconLeft && typeof iconLeft === 'string' ? (
-        <Icon name={iconLeft} className={classNames('icon', iconLeftClassName)} />
+        <Icon className={classNames('icon', iconLeftClassName)} name={iconLeft} />
       ) : (
         iconLeft
       )}
@@ -43,7 +43,7 @@ const Button = (props: IButtonProps): JSX.Element => {
       )}
 
       {!!iconRight && typeof iconRight === 'string' ? (
-        <Icon name={iconRight} className={classNames('icon', iconRightClassName)} />
+        <Icon className={classNames('icon', iconRightClassName)} name={iconRight} />
       ) : (
         iconRight
       )}

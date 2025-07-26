@@ -7,28 +7,28 @@ const Checkbox = (props: ICheckboxProps): JSX.Element => {
   return (
     <div className="flex items-center gap-x-[13px]">
       <input
-        type="checkbox"
-        id={labelId}
-        onChange={onChange}
         className="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 dark:bg-blue-03 border-2 border-blue-01 rounded-sm checked:bg-blue-01 dark:checked:bg-blue-01 checked:border-0 cursor-pointer"
+        id={labelId}
+        type="checkbox"
+        onChange={onChange}
       />
       <Text
         className="cursor-pointer font-bold select-none dark:text-white"
-        tag={'label'}
         htmlFor={labelId}
+        tag={'label'}
       >
         {label}
       </Text>
       <svg
+        fill="none"
+        height="9"
+        viewBox="0 0 10 9"
+        width="10"
+        xmlns="http://www.w3.org/2000/svg"
         className="
       absolute 
       w-3.5 h-3.5 ml-0.5 
       hidden peer-checked:block pointer-events-none"
-        width="10"
-        height="9"
-        viewBox="0 0 10 9"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
       >
         <path d="M1.5 4.49976L3.62425 6.62402L8.96995 1.27832" stroke="white" strokeWidth="2" />
       </svg>

@@ -14,7 +14,7 @@ describe('Text Component - Unit Tests', () => {
   });
 
   it('applies valid attributes when passed', () => {
-    render(<RichText data-testid={testId} aria-describedby="aria test" value={'Hello, World!'} />);
+    render(<RichText aria-describedby="aria test" data-testid={testId} value={'Hello, World!'} />);
     const element = screen.getByTestId(testId);
     expect(element).toBeInTheDocument();
     expect(element.tagName).toBe('DIV');
@@ -23,7 +23,7 @@ describe('Text Component - Unit Tests', () => {
   });
 
   it('merges additional classNames with the variant className', () => {
-    render(<RichText value="Hello, World!" className="extra-class" />);
+    render(<RichText className="extra-class" value="Hello, World!" />);
     const element = screen.getByText('Hello, World!');
     expect(element).toHaveClass('text--rich');
     expect(element).toHaveClass('extra-class');

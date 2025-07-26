@@ -8,12 +8,12 @@ describe('Main Menu Component - Unit Tests', () => {
     render(
       <MainMenu
         darkmode={'dark'}
+        darkmodeBtnAria="lorem-dark"
         darkmodeToggle={() => {}}
+        data-testid={testId}
+        lightmodeBtnAria="lorem-light"
         profileImage={'/assets/profile-default.png'}
         profileImageAlt="lorem ipsum"
-        data-testid={testId}
-        darkmodeBtnAria="lorem-dark"
-        lightmodeBtnAria="lorem-light"
       />
     );
 
@@ -38,12 +38,12 @@ describe('Main Menu Component - Unit Tests', () => {
     render(
       <MainMenu
         darkmode={'light'}
+        darkmodeBtnAria="lorem-dark"
         darkmodeToggle={() => {}}
+        data-testid={testId}
+        lightmodeBtnAria="lorem-light"
         profileImage={'/assets/profile-default.png'}
         profileImageAlt="lorem ipsum"
-        data-testid={testId}
-        darkmodeBtnAria="lorem-dark"
-        lightmodeBtnAria="lorem-light"
       />
     );
     const element = screen.getByTestId(testId);

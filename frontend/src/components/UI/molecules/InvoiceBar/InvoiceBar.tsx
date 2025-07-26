@@ -41,8 +41,8 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
         <div className="relative grid place-items-center">
           <Button
             className="flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"
-            variant="custom"
             iconRight={'chevron-down'}
+            variant="custom"
             iconRightClassName={classNames('w-4 md:w-5 h-auto', {
               'rotate-180': !!isVisible,
             })}
@@ -55,8 +55,8 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           {/* Children */}
           {isVisible && (
             <div
-              ref={elementRef}
               className="absolute bg-white drop-shadow-xl p-6 w-[180px] lg:w-[220px] top-6 rounded-lg dark:bg-blue-04 z-10"
+              ref={elementRef}
             >
               <div>
                 <Checkbox
@@ -104,10 +104,10 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           )}
         </div>
         <Button
-          iconLeft={'circle-plus'}
-          variant="primary"
           className="p-[6px] md:p-2 gap-x-2 items-center pr-[15px] text-xl md:text-lg"
+          iconLeft={'circle-plus'}
           iconLeftClassName="min-w-8 min-h-8 max-h-8 max-h-8"
+          variant="primary"
           onClick={newInvoiceHandler}
         >
           <span className="block md:hidden">{newInvoiceBtnTextMobile}</span>

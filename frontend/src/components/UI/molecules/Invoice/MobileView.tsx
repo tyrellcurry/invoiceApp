@@ -15,28 +15,28 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
     localeAmountDue = 'en',
   } = props;
   return (
-    <Button variant="custom" className="w-full border-none">
+    <Button className="w-full border-none" variant="custom">
       <div className="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6 dark:bg-blue-03">
         <div className="flex justify-between">
-          <Text tag={'p'} className="text-gray-08 font-bold dark:text-white">
-            <Text tag={'span'} className="text-gray-07">
+          <Text className="text-gray-08 font-bold dark:text-white" tag={'p'}>
+            <Text className="text-gray-07" tag={'span'}>
               #
             </Text>
             {invoiceId}
           </Text>
-          <Text tag={'p'} className="text-gray-07b dark:text-white">
+          <Text className="text-gray-07b dark:text-white" tag={'p'}>
             {billingName}
           </Text>
         </div>
         <div className="flex justify-between">
           <div>
-            <Text tag={'p'} className="text-gray-07 flex gap-1 pb-[9px] dark:text-gray-05">
-              <Text tag={'span'} className="text-gray-06 dark:text-gray-05">
+            <Text className="text-gray-07 flex gap-1 pb-[9px] dark:text-gray-05" tag={'p'}>
+              <Text className="text-gray-06 dark:text-gray-05" tag={'span'}>
                 {dueText}
               </Text>
               {invoiceDueDate}
             </Text>
-            <Text tag={'p'} className="text-gray-08 font-bold dark:text-white">
+            <Text className="text-gray-08 font-bold dark:text-white" tag={'p'}>
               <Text tag={'span'}>
                 {localeAmountDue === 'en' && '$'}
                 {localeAmountDue === 'fr' && '€'}
