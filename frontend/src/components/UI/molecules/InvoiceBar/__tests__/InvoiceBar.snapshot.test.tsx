@@ -6,23 +6,23 @@ describe('Invoice Bar Component', () => {
   it('renders correctly with filled props', () => {
     const { container } = render(
       <InvoiceBar
-        paidText="paid"
         draftText="draft"
-        pendingText="pending"
-        invoiceBarTitle="Invoice"
-        newInvoiceBtnTextMobile="new-mob"
-        newInvoiceBtnTextDesktop="new-desktop"
-        totalInvoicesTextMobile="total-mob"
-        totalInvoicesTextDesktop="total-desktop"
-        filterStatusBtnTextMobile="filter-mob"
         filterStatusBtnTextDesktop="filter-desktop"
+        filterStatusBtnTextMobile="filter-mob"
+        invoiceBarTitle="Invoice"
+        newInvoiceBtnTextDesktop="new-desktop"
+        newInvoiceBtnTextMobile="new-mob"
         newInvoiceHandler={() => {}}
+        paidText="paid"
+        pendingText="pending"
+        setFilters={() => {}}
+        totalInvoicesTextDesktop="total-desktop"
+        totalInvoicesTextMobile="total-mob"
         filters={{
           draft: false,
           pending: false,
           paid: false,
         }}
-        setFilters={() => {}}
       />
     );
     expect(container).toMatchSnapshot();

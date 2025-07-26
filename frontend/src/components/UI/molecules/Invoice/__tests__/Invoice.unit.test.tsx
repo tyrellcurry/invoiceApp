@@ -7,15 +7,15 @@ describe('Invoice Component - Unit Tests', () => {
   const RenderInvoice = () =>
     render(
       <Invoice
+        billingName={'Jensen Huang'}
+        data-testid={testId}
+        dueText={'Due'}
+        invoiceAmountDue={1800.9}
+        invoiceDueDate={'Jan 1st, 2025'}
         invoiceId={'RT3080'}
         invoiceStatus="draft"
-        dueText={'Due'}
-        invoiceDueDate={'Jan 1st, 2025'}
         invoiceStatusText="Draft"
-        billingName={'Jensen Huang'}
-        invoiceAmountDue={1800.9}
         localeAmountDue={'en'}
-        data-testid={testId}
       />
     );
 
@@ -39,15 +39,15 @@ describe('Invoice Component - Unit Tests', () => {
   it('renders correct currency symbol and format for fr locale', () => {
     render(
       <Invoice
+        billingName={'Jensen Huang'}
+        data-testid={testId}
+        dueText={'Due'}
+        invoiceAmountDue={1800.9}
+        invoiceDueDate={'Jan 1st, 2025'}
         invoiceId={'RT3080'}
         invoiceStatus="draft"
-        dueText={'Due'}
-        invoiceDueDate={'Jan 1st, 2025'}
         invoiceStatusText="Draft"
-        billingName={'Jensen Huang'}
-        invoiceAmountDue={1800.9}
         localeAmountDue={'fr'}
-        data-testid={testId}
       />
     );
     const element = screen.getByTestId(testId);
@@ -58,15 +58,15 @@ describe('Invoice Component - Unit Tests', () => {
   it('renders correct status text for pending', () => {
     render(
       <Invoice
+        billingName={'Jensen Huang'}
+        data-testid={testId}
+        dueText={'Due'}
+        invoiceAmountDue={1800.9}
+        invoiceDueDate={'Jan 1st, 2025'}
         invoiceId={'RT3080'}
         invoiceStatus="pending"
-        dueText={'Due'}
-        invoiceDueDate={'Jan 1st, 2025'}
         invoiceStatusText="Pending"
-        billingName={'Jensen Huang'}
-        invoiceAmountDue={1800.9}
         localeAmountDue={'fr'}
-        data-testid={testId}
       />
     );
     const element = screen.getByTestId(testId);
@@ -77,15 +77,15 @@ describe('Invoice Component - Unit Tests', () => {
   it('renders correct status text for paid', () => {
     render(
       <Invoice
+        billingName={'Jensen Huang'}
+        data-testid={testId}
+        dueText={'Due'}
+        invoiceAmountDue={1800.9}
+        invoiceDueDate={'Jan 1st, 2025'}
         invoiceId={'RT3080'}
         invoiceStatus="paid"
-        dueText={'Due'}
-        invoiceDueDate={'Jan 1st, 2025'}
         invoiceStatusText="Paid"
-        billingName={'Jensen Huang'}
-        invoiceAmountDue={1800.9}
         localeAmountDue={'fr'}
-        data-testid={testId}
       />
     );
     const element = screen.getByTestId(testId);

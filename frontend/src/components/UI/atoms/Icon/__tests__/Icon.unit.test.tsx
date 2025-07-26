@@ -13,7 +13,7 @@ describe('Icon Component - Unit Tests', () => {
   });
 
   it('applies the correct className', () => {
-    render(<Icon data-testid={testId} name="dm-sun" className="test" />);
+    render(<Icon className="test" data-testid={testId} name="dm-sun" />);
     const element = screen.getByTestId(testId);
     expect(element).toHaveClass('test');
   });

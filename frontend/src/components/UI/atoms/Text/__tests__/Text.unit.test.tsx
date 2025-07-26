@@ -22,7 +22,7 @@ describe('Text Component - Unit Tests', () => {
 
   it('applies valid attributes when passed', () => {
     render(
-      <Text tag="h1" aria-describedby="aria test">
+      <Text aria-describedby="aria test" tag="h1">
         Heading
       </Text>
     );
@@ -39,7 +39,7 @@ describe('Text Component - Unit Tests', () => {
 
   it('merges additional classNames with the variant className', () => {
     render(
-      <Text variant="custom" className="extra-class">
+      <Text className="extra-class" variant="custom">
         Custom Text
       </Text>
     );

@@ -18,29 +18,29 @@ const MainMenu = (props: IMainMenuProps): JSX.Element => {
       {...rest}
     >
       <Button
-        href="/"
         className="w-[50px] h-[50px] xs:w-[72px] xs:h-[72px] md:w-[80px] md:h-[80px]"
+        href="/"
         iconLeft={'menu-logo-btn'}
         iconLeftClassName="w-full h-full"
         variant="custom"
       />
       <div className="flex gap-5 px-6 md:gap-8 md:px-8 lg:flex-col lg:gap-5 lg:px-0 lg:py-6">
         <Button
+          aria-label={darkmode === 'dark' ? lightmodeBtnAria : darkmodeBtnAria}
           className="h-fit self-center"
           iconLeft={darkmode === 'dark' ? 'dm-sun' : 'dm-moon'}
           iconLeftClassName="w-8 h-8 fill-gray-07 hover:fill-gray-05"
           variant="custom"
           onClick={darkmodeToggle}
-          aria-label={darkmode === 'dark' ? lightmodeBtnAria : darkmodeBtnAria}
         />
         <hr className="border-none w-0.5 h-full bg-gray-04 self-stretch lg:w-full lg:h-0.5" />
         <Button className="h-fit self-center relative" variant="custom">
           <Image
-            className="rounded-full w-full h-auto max-w-8"
-            src={!!profileImage ? profileImage : '/assets/profile-default.png'}
             alt={profileImageAlt}
-            width={64}
+            className="rounded-full w-full h-auto max-w-8"
             height={64}
+            src={!!profileImage ? profileImage : '/assets/profile-default.png'}
+            width={64}
           />
         </Button>
       </div>

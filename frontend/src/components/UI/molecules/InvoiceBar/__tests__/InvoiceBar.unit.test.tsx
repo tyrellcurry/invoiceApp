@@ -9,17 +9,17 @@ describe('Text Component - Unit Tests', () => {
     render(
       <InvoiceBar
         data-testid={testId}
-        invoiceBarTitle="Invoice"
-        newInvoiceBtnTextMobile="new-mob"
-        newInvoiceBtnTextDesktop="new-desktop"
-        totalInvoicesTextMobile="total-mob"
-        totalInvoicesTextDesktop="total-desktop"
-        filterStatusBtnTextMobile="filter-mob"
+        draftText="Draft"
         filterStatusBtnTextDesktop="filter-desktop"
+        filterStatusBtnTextMobile="filter-mob"
+        invoiceBarTitle="Invoice"
+        newInvoiceBtnTextDesktop="new-desktop"
+        newInvoiceBtnTextMobile="new-mob"
         newInvoiceHandler={() => {}}
         paidText="Paid"
-        draftText="Draft"
         pendingText="Pending"
+        totalInvoicesTextDesktop="total-desktop"
+        totalInvoicesTextMobile="total-mob"
         filters={{
           draft: false,
           pending: false,

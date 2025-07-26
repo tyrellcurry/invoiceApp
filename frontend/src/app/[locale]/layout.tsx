@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { routing, type Locale } from '@/i18n/routing';
+import { type Locale, routing } from '@/i18n/routing';
 import type { Metadata } from 'next';
 import React from 'react';
 import '@/styles/app.css';
@@ -37,7 +37,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${leagueSpartan.variable} font-sans`} suppressHydrationWarning>
+    <html className={`${leagueSpartan.variable} font-sans`} lang={locale} suppressHydrationWarning>
       <body className="bg-neutral-11 dark:bg-gray-12">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>{children}</ThemeProvider>

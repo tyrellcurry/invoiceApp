@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import Button from '@/components/UI/atoms/Button/Button';
 
 describe('Button Component - Unit Tests', () => {
@@ -56,7 +56,7 @@ describe('Button Component - Unit Tests', () => {
 
   it('renders secondary `variant` with custom class when a custom `className` is passed', () => {
     render(
-      <Button data-testid={testId} variant="secondary" className="test">
+      <Button className="test" data-testid={testId} variant="secondary">
         Hello, World!
       </Button>
     );
@@ -113,7 +113,7 @@ describe('Button Component - Unit Tests', () => {
   it('renders disbled button when `disabled` is passed and does not fire click event', () => {
     const handleClick = jest.fn();
     render(
-      <Button data-testid={testId} onClick={handleClick} disabled>
+      <Button data-testid={testId} disabled onClick={handleClick}>
         Hello, World!
       </Button>
     );

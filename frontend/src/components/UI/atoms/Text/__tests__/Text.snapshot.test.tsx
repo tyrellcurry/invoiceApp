@@ -10,7 +10,7 @@ describe('Text Component', () => {
 
   it('renders correctly with a custom tag and variant', () => {
     const { container } = render(
-      <Text tag="h1" variant="h1" className="custom-class">
+      <Text className="custom-class" tag="h1" variant="h1">
         Heading Text
       </Text>
     );
