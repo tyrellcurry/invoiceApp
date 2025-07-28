@@ -4,8 +4,8 @@
  *
  * Used for rendering HTML as Rich Text
  *
- * @param className - element's custom classes
- * @param(required) value - HTML or string to render
+ * @param className
+ * @param value
  *
  * @returns {JSX.Element}
  */
