@@ -4,7 +4,8 @@ import Invoice from '@/components/UI/molecules/Invoice/Invoice';
 
 describe('Invoice Component - Unit Tests', () => {
   const testId = 'text-test-id';
-  const RenderInvoice = () =>
+
+  it('renders correctly with data passed to props', () => {
     render(
       <Invoice
         billingName={'Jensen Huang'}
@@ -18,15 +19,24 @@ describe('Invoice Component - Unit Tests', () => {
         localeAmountDue={'en'}
       />
     );
-
-  it('renders correctly with data passed to props', () => {
-    RenderInvoice();
     const element = screen.getByTestId(testId);
     expect(element).toBeInTheDocument();
   });
 
   it('renders correct visual data from props passed', () => {
-    RenderInvoice();
+    render(
+      <Invoice
+        billingName={'Jensen Huang'}
+        data-testid={testId}
+        dueText={'Due'}
+        invoiceAmountDue={1800.9}
+        invoiceDueDate={'Jan 1st, 2025'}
+        invoiceId={'RT3080'}
+        invoiceStatus="draft"
+        invoiceStatusText="Draft"
+        localeAmountDue={'en'}
+      />
+    );
     const element = screen.getByTestId(testId);
     expect(element).toBeInTheDocument();
     expect(element).toHaveTextContent(/#RT3080/);

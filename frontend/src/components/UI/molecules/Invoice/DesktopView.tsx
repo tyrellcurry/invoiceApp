@@ -14,9 +14,13 @@ const DesktopView = (props: IInvoiceProps): JSX.Element => {
     invoiceStatusText,
     dueText,
     localeAmountDue = 'en',
+    ...rest
   } = props;
   return (
-    <div className="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03">
+    <div
+      className="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03"
+      {...rest}
+    >
       <div className="flex gap-x-11">
         {/* Invoice Details Section */}
         <div className="flex gap-x-11 w-[256px]">
