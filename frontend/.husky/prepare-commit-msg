@@ -18,7 +18,7 @@ if [[ "${MESSAGE}" = "Merge branch "* ]]; then
   exit 0
 fi
 
-# If no ticket number found in branch name, just exit without modifying the message
+# Allow commits without ticket numbers by exiting gracefully when no ticket is found in the branch name
 if [[ -z $TICKET ]]; then
   exit 0
 fi
