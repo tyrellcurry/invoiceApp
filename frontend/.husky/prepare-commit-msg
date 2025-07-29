@@ -1,8 +1,6 @@
 #!/bin/bash
-
 # Extract the ticket number from the branch name and prepend it in the commit message.
 # This script will run in the git hook prepare-commit-msg.
-
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 MESSAGE_FILE=$1
 MESSAGE=$(cat $MESSAGE_FILE)
@@ -20,20 +18,17 @@ if [[ "${MESSAGE}" = "Merge branch "* ]]; then
   exit 0
 fi
 
+# Allow commits without ticket numbers by exiting gracefully when no ticket is found in the branch name
 if [[ -z $TICKET ]]; then
-  echo "You are not providing a valid branch name with ticket number."
-  echo "Please follow this format 'issue-type/ABC-123/ticket-title'."
-  exit 1
+  exit 0
 fi
 
 if [[ "${MESSAGE}" = "${TICKET}: "* ]]; then
   # If start with ABC-123: abc, delete it! With colon.
   MESSAGE=$(echo ${MESSAGE} | sed "s/^${TICKET}: //")
-
 elif [[ "${MESSAGE}" = "${TICKET} "* ]]; then
   # If start with ABC-123 abc, delete it! Without colon.
   MESSAGE=$(echo ${MESSAGE} | sed "s/^${TICKET} //")
-
 elif [[ "${MESSAGE}" = "[${TICKET}]"* ]]; then
   # Already well formatted then do nothing
   exit 0
