@@ -9,16 +9,11 @@ import Checkbox from '@/components/UI/atoms/Input/Checkbox/Checkbox';
 const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
   const {
     invoiceBarTitle,
-    totalInvoicesTextDesktop,
-    totalInvoicesTextMobile,
-    filterStatusBtnTextDesktop,
-    filterStatusBtnTextMobile,
-    newInvoiceBtnTextDesktop,
-    newInvoiceBtnTextMobile,
+    newInvoiceBtn,
+    totalInvoicesText,
+    filterStatusBtn,
     newInvoiceHandler,
-    draftText,
-    pendingText,
-    paidText,
+    filterStatusText,
     setFilters,
     filters,
     ...rest
@@ -33,8 +28,8 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           {invoiceBarTitle}
         </Text>
         <Text className="text-gray-06 dark:text-white" tag={'p'}>
-          <span className="block md:hidden">{totalInvoicesTextMobile}</span>
-          <span className="hidden md:block">{totalInvoicesTextDesktop}</span>
+          <span className="block md:hidden">{totalInvoicesText?.mobile}</span>
+          <span className="hidden md:block">{totalInvoicesText?.desktop}</span>
         </Text>
       </div>
       <div className="flex items-center gap-x-[18px] md:gap-x-10">
@@ -46,11 +41,14 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
             iconRightClassName={classNames('w-4 md:w-5 h-auto', {
               'rotate-180': !!isVisible,
             })}
+            label={
+              <>
+                <span className="block md:hidden">{filterStatusBtn?.mobile}</span>
+                <span className="hidden md:block">{filterStatusBtn?.desktop}</span>
+              </>
+            }
             onClick={() => setIsVisible((prev) => !prev)}
-          >
-            <span className="block md:hidden">{filterStatusBtnTextMobile}</span>
-            <span className="hidden md:block">{filterStatusBtnTextDesktop}</span>
-          </Button>
+          />
 
           {/* Children */}
           {isVisible && (
@@ -60,7 +58,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
             >
               <div>
                 <Checkbox
-                  label={draftText}
+                  label={filterStatusText.draft}
                   labelId={'draft'}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (setFilters) {
@@ -74,7 +72,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
               </div>
               <div>
                 <Checkbox
-                  label={pendingText}
+                  label={filterStatusText.pending}
                   labelId={'pending'}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (setFilters) {
@@ -88,7 +86,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
               </div>
               <div>
                 <Checkbox
-                  label={paidText}
+                  label={filterStatusText.paid}
                   labelId={'paid'}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (setFilters) {
@@ -108,11 +106,14 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           iconLeft={'circle-plus'}
           iconLeftClassName="min-w-8 min-h-8 max-h-8 max-h-8"
           variant="primary"
+          label={
+            <>
+              <span className="block md:hidden">{newInvoiceBtn?.mobile}</span>
+              <span className="hidden md:block">{newInvoiceBtn?.desktop}</span>
+            </>
+          }
           onClick={newInvoiceHandler}
-        >
-          <span className="block md:hidden">{newInvoiceBtnTextMobile}</span>
-          <span className="hidden md:block">{newInvoiceBtnTextDesktop}</span>
-        </Button>
+        />
       </div>
     </menu>
   );

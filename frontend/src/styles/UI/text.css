@@ -1,5 +1,6 @@
 @layer components {
   .text {
+    @apply text-left;
     /* Text Variants */
     &--h1 {
       @apply font-bold text-[36px] tracking-[-1px];

@@ -6,22 +6,33 @@ describe('Invoice Bar Component', () => {
   it('renders correctly with filled props', () => {
     const { container } = render(
       <InvoiceBar
-        draftText="draft"
-        filterStatusBtnTextDesktop="filter-desktop"
-        filterStatusBtnTextMobile="filter-mob"
+        data-testid={'snapshot'}
         invoiceBarTitle="Invoice"
-        newInvoiceBtnTextDesktop="new-desktop"
-        newInvoiceBtnTextMobile="new-mob"
         newInvoiceHandler={() => {}}
-        paidText="paid"
-        pendingText="pending"
-        setFilters={() => {}}
-        totalInvoicesTextDesktop="total-desktop"
-        totalInvoicesTextMobile="total-mob"
         filters={{
           draft: false,
           pending: false,
           paid: false,
+        }}
+        filterStatusBtn={{
+          desktop: 'filter-desktop',
+          mobile: 'filter-mob',
+        }}
+        filterStatusText={{
+          draft: 'Draft',
+          paid: 'Paid',
+          pending: 'Pending',
+        }}
+        newInvoiceBtn={{
+          desktop: 'new-desktop',
+          mobile: 'new-mob',
+        }}
+        setFilters={(updatedFilters) => {
+          console.log(updatedFilters);
+        }}
+        totalInvoicesText={{
+          desktop: 'total-desktop',
+          mobile: 'total-mob',
         }}
       />
     );

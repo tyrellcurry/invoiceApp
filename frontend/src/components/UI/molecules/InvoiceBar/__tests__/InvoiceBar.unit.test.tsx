@@ -9,24 +9,32 @@ describe('Text Component - Unit Tests', () => {
     render(
       <InvoiceBar
         data-testid={testId}
-        draftText="Draft"
-        filterStatusBtnTextDesktop="filter-desktop"
-        filterStatusBtnTextMobile="filter-mob"
         invoiceBarTitle="Invoice"
-        newInvoiceBtnTextDesktop="new-desktop"
-        newInvoiceBtnTextMobile="new-mob"
         newInvoiceHandler={() => {}}
-        paidText="Paid"
-        pendingText="Pending"
-        totalInvoicesTextDesktop="total-desktop"
-        totalInvoicesTextMobile="total-mob"
         filters={{
           draft: false,
           pending: false,
           paid: false,
         }}
+        filterStatusBtn={{
+          desktop: 'filter-desktop',
+          mobile: 'filter-mob',
+        }}
+        filterStatusText={{
+          draft: 'Draft',
+          paid: 'Paid',
+          pending: 'Pending',
+        }}
+        newInvoiceBtn={{
+          desktop: 'new-desktop',
+          mobile: 'new-mob',
+        }}
         setFilters={(updatedFilters) => {
           console.log(updatedFilters);
+        }}
+        totalInvoicesText={{
+          desktop: 'total-desktop',
+          mobile: 'total-mob',
         }}
       />
     );

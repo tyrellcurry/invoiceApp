@@ -3,6 +3,7 @@ import { IInvoiceProps } from '@/components/UI/molecules/Invoice/Invoice.interfa
 import Text from '@/components/UI/atoms/Text/Text';
 import classNames from 'classnames';
 import Button from '@/components/UI/atoms/Button/Button';
+import { DRAFT, PAID, PENDING } from '../../const/invoice';
 
 const DesktopView = (props: IInvoiceProps): JSX.Element => {
   const {
@@ -57,19 +58,19 @@ const DesktopView = (props: IInvoiceProps): JSX.Element => {
               className={classNames(
                 'py-[14px] px-[30px] rounded-md leading-none flex items-center self-center justify-center ml-auto w-[145px]',
                 {
-                  'bg-green-05a text-green-05': invoiceStatus === 'paid',
-                  'bg-orange-05a text-orange-05': invoiceStatus === 'pending',
+                  'bg-green-05a text-green-05': invoiceStatus === PAID,
+                  'bg-orange-05a text-orange-05': invoiceStatus === PENDING,
                   'bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05':
-                    invoiceStatus === 'draft',
+                    invoiceStatus === DRAFT,
                 }
               )}
             >
               <Text className="font-bold text-center flex gap-x-1.5 items-center" tag={'span'}>
                 <div
                   className={classNames('w-2 h-2 rounded-full', {
-                    'bg-green-05': invoiceStatus === 'paid',
-                    'bg-orange-05': invoiceStatus === 'pending',
-                    'bg-gray-09 dark:bg-gray-05': invoiceStatus === 'draft',
+                    'bg-green-05': invoiceStatus === PAID,
+                    'bg-orange-05': invoiceStatus === PENDING,
+                    'bg-gray-09 dark:bg-gray-05': invoiceStatus === DRAFT,
                   })}
                 />
                 {invoiceStatusText}

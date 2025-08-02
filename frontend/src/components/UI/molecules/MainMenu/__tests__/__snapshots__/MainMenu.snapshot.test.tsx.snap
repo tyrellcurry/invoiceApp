@@ -7,6 +7,7 @@ exports[`Main Menu Component renders correctly with default props 1`] = `
   >
     <a
       class="btn btn--custom w-[50px] h-[50px] xs:w-[72px] xs:h-[72px] md:w-[80px] md:h-[80px]"
+      href="/"
     >
       <svg
         class="icon w-full h-full"
@@ -25,8 +26,10 @@ exports[`Main Menu Component renders correctly with default props 1`] = `
       <hr
         class="border-none w-0.5 h-full bg-gray-04 self-stretch lg:w-full lg:h-0.5"
       />
-      <button
-        class="btn btn--custom h-fit self-center relative"
+      <a
+        class="h-fit self-center relative"
+        data-testid="profile-link"
+        href="#"
       >
         <img
           alt="lorem ipsum"
@@ -40,7 +43,7 @@ exports[`Main Menu Component renders correctly with default props 1`] = `
           style="color: transparent;"
           width="64"
         />
-      </button>
+      </a>
     </div>
   </nav>
 </div>

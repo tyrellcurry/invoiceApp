@@ -8,8 +8,10 @@ describe('Main Menu Component', () => {
       <MainMenu
         darkmode={'dark'}
         darkmodeToggle={() => {}}
-        profileImage={'/assets/profile-default.png'}
-        profileImageAlt="lorem ipsum"
+        profile={{
+          profileImage: '/assets/profile-default.png',
+          profileImageAlt: 'lorem ipsum',
+        }}
       />
     );
     expect(container).toMatchSnapshot();

@@ -4,6 +4,7 @@ exports[`Invoice Bar Component renders correctly with filled props 1`] = `
 <div>
   <menu
     class="flex items-center justify-between"
+    data-testid="snapshot"
   >
     <div>
       <h2
@@ -35,15 +36,17 @@ exports[`Invoice Bar Component renders correctly with filled props 1`] = `
         <button
           class="btn btn--custom flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"
         >
-          <span
-            class="block md:hidden"
-          >
-            filter-mob
-          </span>
-          <span
-            class="hidden md:block"
-          >
-            filter-desktop
+          <span>
+            <span
+              class="block md:hidden"
+            >
+              filter-mob
+            </span>
+            <span
+              class="hidden md:block"
+            >
+              filter-desktop
+            </span>
           </span>
           <svg
             class="icon w-4 md:w-5 h-auto"
@@ -56,15 +59,17 @@ exports[`Invoice Bar Component renders correctly with filled props 1`] = `
         <svg
           class="icon min-w-8 min-h-8 max-h-8 max-h-8"
         />
-        <span
-          class="block md:hidden"
-        >
-          new-mob
-        </span>
-        <span
-          class="hidden md:block"
-        >
-          new-desktop
+        <span>
+          <span
+            class="block md:hidden"
+          >
+            new-mob
+          </span>
+          <span
+            class="hidden md:block"
+          >
+            new-desktop
+          </span>
         </span>
       </button>
     </div>

@@ -4,16 +4,21 @@ import MainMenu from '@/components/UI/molecules/MainMenu/MainMenu';
 
 describe('Main Menu Component - Unit Tests', () => {
   const testId = 'text-test-id';
-  const RenderMainMenu = () =>
+  const RenderMainMenu = (darkMode?: string) =>
     render(
       <MainMenu
-        darkmode={'dark'}
-        darkmodeBtnAria="lorem-dark"
+        darkmode={darkMode || 'dark'}
         darkmodeToggle={() => {}}
         data-testid={testId}
-        lightmodeBtnAria="lorem-light"
-        profileImage={'/assets/profile-default.png'}
-        profileImageAlt="lorem ipsum"
+        darkmodeBtn={{
+          darkAria: 'lorem-dark',
+          lightAria: 'lorem-light',
+        }}
+        profile={{
+          profileImage: '/assets/profile-default.png',
+          profileImageAlt: 'lorem ipsum',
+          link: 'google.ca',
+        }}
       />
     );
 
@@ -35,17 +40,7 @@ describe('Main Menu Component - Unit Tests', () => {
   });
 
   it('renders with the correct button and icon in lightmode with aria', () => {
-    render(
-      <MainMenu
-        darkmode={'light'}
-        darkmodeBtnAria="lorem-dark"
-        darkmodeToggle={() => {}}
-        data-testid={testId}
-        lightmodeBtnAria="lorem-light"
-        profileImage={'/assets/profile-default.png'}
-        profileImageAlt="lorem ipsum"
-      />
-    );
+    RenderMainMenu('light');
     const element = screen.getByTestId(testId);
     expect(element.tagName).toBe('NAV');
     expect(element).toBeInTheDocument();
@@ -72,5 +67,16 @@ describe('Main Menu Component - Unit Tests', () => {
     // Verify the button contains the correct icon
     const icon = darkmodeButton.querySelector('.icon');
     expect(icon).toBeInTheDocument();
+  });
+
+  it('renders with the correct profile link url', () => {
+    RenderMainMenu();
+    const element = screen.getByTestId(testId);
+    expect(element.tagName).toBe('NAV');
+    expect(element).toBeInTheDocument();
+
+    // Find the link
+    const profileLink = screen.getByTestId('profile-link');
+    expect(profileLink).toHaveAttribute('href', 'google.ca');
   });
 });

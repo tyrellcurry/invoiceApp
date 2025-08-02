@@ -1,5 +1,6 @@
 import type { StoryObj } from '@storybook/react';
 import MainMenu from '@/components/UI/molecules/MainMenu/MainMenu';
+import { DARK_MODE } from '../../const/app';
 
 const meta = {
   title: 'Molecules/Main Menu',
@@ -15,13 +16,15 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    darkmode: 'dark',
+    darkmode: DARK_MODE,
     darkmodeToggle: () => {},
-    profileImageAlt: 'lorem ipsum',
+    profile: {
+      profileImageAlt: 'lorem ipsum',
+    },
   },
   decorators: [
-    (Story: Story) => (
-      <div className="relative">
+    (Story) => (
+      <div className="relative" style={{ position: 'relative' }}>
         <Story />
       </div>
     ),
