@@ -1,6 +1,7 @@
 import type { StoryObj } from '@storybook/react';
 
 import Invoice from '@/components/UI/molecules/Invoice/Invoice';
+import { InvoiceStatus } from './Invoice.interface';
 
 const meta = {
   title: 'Molecules/Invoice',
@@ -17,7 +18,7 @@ export const Default: Story = {
     billingName: 'Jensen Huang',
     invoiceDueDate: '19 Aug 2021',
     invoiceAmountDue: 1800.9,
-    invoiceStatus: 'draft',
+    invoiceStatus: InvoiceStatus.DRAFT,
     dueText: 'Due',
     invoiceStatusText: 'Draft',
   },

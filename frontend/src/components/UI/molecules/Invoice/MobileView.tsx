@@ -2,6 +2,7 @@ import { JSX } from 'react';
 import { IInvoiceProps } from '@/components/UI/molecules/Invoice/Invoice.interface';
 import classNames from 'classnames';
 import Text from '@/components/UI/atoms/Text/Text';
+import { DRAFT, PAID, PENDING } from '../../const/invoice';
 const MobileView = (props: IInvoiceProps): JSX.Element => {
   const {
     invoiceId,
@@ -48,10 +49,10 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
             className={classNames(
               'py-[14px] px-[30px] rounded-md leading-none flex items-center justify-center self-center',
               {
-                'bg-green-05a text-green-05': invoiceStatus === 'paid',
-                'bg-orange-05a text-orange-05': invoiceStatus === 'pending',
+                'bg-green-05a text-green-05': invoiceStatus === PAID,
+                'bg-orange-05a text-orange-05': invoiceStatus === PENDING,
                 'bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05':
-                  invoiceStatus === 'draft',
+                  invoiceStatus === DRAFT,
               }
             )}
           >
@@ -61,9 +62,9 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
             >
               <div
                 className={classNames('w-2 h-2 rounded-full', {
-                  'bg-green-05': invoiceStatus === 'paid',
-                  'bg-orange-05': invoiceStatus === 'pending',
-                  'bg-gray-09 dark:bg-gray-05': invoiceStatus === 'draft',
+                  'bg-green-05': invoiceStatus === PAID,
+                  'bg-orange-05': invoiceStatus === PENDING,
+                  'bg-gray-09 dark:bg-gray-05': invoiceStatus === DRAFT,
                 })}
               />
               {invoiceStatusText}

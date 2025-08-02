@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Invoice from '@/components/UI/molecules/Invoice/Invoice';
+import { InvoiceStatus } from '../Invoice.interface';
 
 describe('Invoice Component - Unit Tests', () => {
   const testId = 'text-test-id';
@@ -14,7 +15,7 @@ describe('Invoice Component - Unit Tests', () => {
         invoiceAmountDue={1800.9}
         invoiceDueDate={'Jan 1st, 2025'}
         invoiceId={'RT3080'}
-        invoiceStatus="draft"
+        invoiceStatus={InvoiceStatus.DRAFT}
         invoiceStatusText="Draft"
         localeAmountDue={'en'}
       />
@@ -32,7 +33,7 @@ describe('Invoice Component - Unit Tests', () => {
         invoiceAmountDue={1800.9}
         invoiceDueDate={'Jan 1st, 2025'}
         invoiceId={'RT3080'}
-        invoiceStatus="draft"
+        invoiceStatus={InvoiceStatus.DRAFT}
         invoiceStatusText="Draft"
         localeAmountDue={'en'}
       />
@@ -55,7 +56,7 @@ describe('Invoice Component - Unit Tests', () => {
         invoiceAmountDue={1800.9}
         invoiceDueDate={'Jan 1st, 2025'}
         invoiceId={'RT3080'}
-        invoiceStatus="draft"
+        invoiceStatus={InvoiceStatus.DRAFT}
         invoiceStatusText="Draft"
         localeAmountDue={'fr'}
       />
@@ -74,7 +75,7 @@ describe('Invoice Component - Unit Tests', () => {
         invoiceAmountDue={1800.9}
         invoiceDueDate={'Jan 1st, 2025'}
         invoiceId={'RT3080'}
-        invoiceStatus="pending"
+        invoiceStatus={InvoiceStatus.PENDING}
         invoiceStatusText="Pending"
         localeAmountDue={'fr'}
       />
@@ -93,7 +94,7 @@ describe('Invoice Component - Unit Tests', () => {
         invoiceAmountDue={1800.9}
         invoiceDueDate={'Jan 1st, 2025'}
         invoiceId={'RT3080'}
-        invoiceStatus="paid"
+        invoiceStatus={InvoiceStatus.PAID}
         invoiceStatusText="Paid"
         localeAmountDue={'fr'}
       />
