@@ -5,8 +5,8 @@ import Button from '@/components/UI/atoms/Button/Button';
 describe('Button Component - Unit Tests', () => {
   const testId = 'text-test-id';
 
-  it('renders with the correct default `tag`, `variant`, `className`, and `children`', () => {
-    render(<Button data-testid={testId}>Hello, World!</Button>);
+  it('renders with the correct default `tag`, `variant`, `className`, and `label`', () => {
+    render(<Button data-testid={testId} label="Hello, World!" />);
     const element = screen.getByTestId(testId);
     expect(element.tagName).toBe('BUTTON');
     expect(element).toHaveClass('btn btn--primary');
@@ -15,29 +15,7 @@ describe('Button Component - Unit Tests', () => {
     expect(content).toBeInTheDocument();
   });
 
-  it('renders the text inside a span when `text` is provided', () => {
-    render(<Button>{'Hello World'}</Button>);
-    const buttonContent = screen.getByText('Hello World');
-    expect(buttonContent.tagName).toBe('SPAN');
-  });
-
-  it('renders children as span when `children` is a string or number and `text` is not provided', () => {
-    render(<Button>{42}</Button>);
-    const buttonContent = screen.getByText('42');
-    expect(buttonContent.tagName).toBe('SPAN');
-  });
-
-  it('renders children directly when `children` is not a string or number and `text` is not provided', () => {
-    render(
-      <Button>
-        <div data-testid="custom-child">Custom Child</div>
-      </Button>
-    );
-    const customChild = screen.getByTestId('custom-child');
-    expect(customChild).toBeInTheDocument();
-  });
-
-  it('renders empty content when neither `text` nor `children` are provided', () => {
+  it('renders empty content when `label` is not provided', () => {
     render(<Button />);
     const button = screen.getByRole('button');
     expect(button).toBeInTheDocument();
@@ -45,21 +23,13 @@ describe('Button Component - Unit Tests', () => {
   });
 
   it('renders as <a> tag when `href` is passed', () => {
-    render(
-      <Button data-testid={testId} href="#">
-        Hello, World!
-      </Button>
-    );
+    render(<Button data-testid={testId} href="#" label="Link" />);
     const element = screen.getByTestId(testId);
     expect(element.tagName).toBe('A');
   });
 
   it('renders secondary `variant` with custom class when a custom `className` is passed', () => {
-    render(
-      <Button className="test" data-testid={testId} variant="secondary">
-        Hello, World!
-      </Button>
-    );
+    render(<Button className="test" data-testid={testId} variant="secondary" />);
     const element = screen.getByTestId(testId);
     expect(element.tagName).toBe('BUTTON');
     expect(element).toHaveClass('btn btn--secondary test');
@@ -67,44 +37,28 @@ describe('Button Component - Unit Tests', () => {
   });
 
   it('renders `type` submit when `type` prop passed as submit', () => {
-    render(
-      <Button data-testid={testId} type="submit">
-        Hello, World!
-      </Button>
-    );
+    render(<Button data-testid={testId} type="submit" />);
     const element = screen.getByTestId(testId);
     expect(element.getAttribute('type')).toBe('submit');
   });
 
   it('`onClick` event triggers when button is clicked', () => {
     const handleClick = jest.fn();
-    render(
-      <Button data-testid={testId} onClick={handleClick}>
-        Hello, World!
-      </Button>
-    );
+    render(<Button data-testid={testId} onClick={handleClick} />);
     const element = screen.getByTestId(testId);
     fireEvent.click(element);
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it('renders icon left when `iconLeft` is added as prop', () => {
-    render(
-      <Button data-testid={testId} iconLeft="dm-moon">
-        Hello, World!
-      </Button>
-    );
+    render(<Button data-testid={testId} iconLeft="dm-moon" />);
     const element = screen.getByTestId(testId);
     const svg = element.querySelector('svg');
     expect(svg).toBeInTheDocument();
   });
 
   it('renders icon right when `iconRight` is added as prop', () => {
-    render(
-      <Button data-testid={testId} iconRight="dm-moon">
-        Hello, World!
-      </Button>
-    );
+    render(<Button data-testid={testId} iconRight="dm-moon" />);
     const element = screen.getByTestId(testId);
     const svg = element.querySelector('svg');
     expect(svg).toBeInTheDocument();
@@ -112,11 +66,7 @@ describe('Button Component - Unit Tests', () => {
 
   it('renders disbled button when `disabled` is passed and does not fire click event', () => {
     const handleClick = jest.fn();
-    render(
-      <Button data-testid={testId} disabled onClick={handleClick}>
-        Hello, World!
-      </Button>
-    );
+    render(<Button data-testid={testId} disabled onClick={handleClick} />);
     const element = screen.getByTestId(testId);
     fireEvent.click(element);
     expect(handleClick).toHaveBeenCalledTimes(0);

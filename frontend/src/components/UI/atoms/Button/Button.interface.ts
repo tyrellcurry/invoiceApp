@@ -1,16 +1,26 @@
-import React, { JSX } from 'react';
+import { ComponentPropsWithoutRef, JSX } from 'react';
 import { IIconProps } from '@/components/UI/atoms/Icon/Icon.interface';
 
-export interface IButtonProps {
-  children?: React.ReactNode;
+interface BaseButtonProps {
   className?: string;
-  href?: string;
   iconLeft?: IIconProps['name'] | JSX.Element;
   iconLeftClassName?: string;
   iconRight?: IIconProps['name'] | JSX.Element;
   iconRightClassName?: string;
+  label?: string;
   variant?: 'primary' | 'secondary' | 'dark' | 'danger' | 'custom';
-  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
-  type?: 'button' | 'submit';
-  disabled?: boolean;
 }
+
+interface ButtonAsButton
+  extends BaseButtonProps,
+    Omit<ComponentPropsWithoutRef<'button'>, keyof BaseButtonProps> {
+  href?: never;
+}
+
+interface ButtonAsAnchor
+  extends BaseButtonProps,
+    Omit<ComponentPropsWithoutRef<'a'>, keyof BaseButtonProps> {
+  href: string;
+}
+
+export type IButtonProps = ButtonAsButton | ButtonAsAnchor;

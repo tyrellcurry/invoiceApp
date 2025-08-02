@@ -1,5 +1,6 @@
-export interface ICheckboxProps {
+import { ComponentPropsWithoutRef } from 'react';
+
+export interface ICheckboxProps extends ComponentPropsWithoutRef<'input'> {
   labelId: string;
   label: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }

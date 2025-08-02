@@ -1,11 +1,11 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Invoice from '@/components/UI/molecules/Invoice/Invoice';
+import DesktopView from '../DesktopView';
 
 describe('Invoice Component', () => {
   it('renders correctly with data passed to props', () => {
     const { container } = render(
-      <Invoice
+      <DesktopView
         billingName={'Jensen Huang'}
         dueText={'Due'}
         invoiceAmountDue={1800.9}

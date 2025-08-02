@@ -1,3 +1,21 @@
+/**
+ * @name Button
+ * @author Tyrell Curry <tyrellcurryio@gmail.com>
+ *
+ * Used for rendering buttons
+ *
+ * @param iconLeft
+ * @param iconLeftClassName
+ * @param iconRight
+ * @param iconRightClassName
+ * @param href
+ * @param label
+ * @param variant - default: 'primary'
+ * @param className
+ *
+ * @returns {JSX.Element}
+ */
+
 import React, { JSX } from 'react';
 import { IButtonProps } from '@/components/UI/atoms/Button/Button.interface';
 import Icon from '@/components/UI/atoms/Icon/Icon';
@@ -9,8 +27,8 @@ const Button = (props: IButtonProps): JSX.Element => {
     iconLeftClassName,
     iconRight,
     iconRightClassName,
-    children,
     href,
+    label,
     variant = 'primary',
     className: classNameProp,
     ...rest
@@ -26,7 +44,7 @@ const Button = (props: IButtonProps): JSX.Element => {
 
   const className = classNames('btn', buttonVariantClasses[variant], classNameProp);
 
-  const renderButtonContent = (text?: string) => (
+  const renderButtonContent = () => (
     <>
       {!!iconLeft && typeof iconLeft === 'string' ? (
         <Icon className={classNames('icon', iconLeftClassName)} name={iconLeft} />
@@ -34,13 +52,7 @@ const Button = (props: IButtonProps): JSX.Element => {
         iconLeft
       )}
 
-      {!!text ? (
-        <span className="select-none">{text}</span>
-      ) : ['string', 'number'].includes(typeof children) ? (
-        <span className="select-none">{children}</span>
-      ) : (
-        children
-      )}
+      {!!label && <span>{label}</span>}
 
       {!!iconRight && typeof iconRight === 'string' ? (
         <Icon className={classNames('icon', iconRightClassName)} name={iconRight} />
@@ -49,11 +61,19 @@ const Button = (props: IButtonProps): JSX.Element => {
       )}
     </>
   );
-  const TagName = !!href ? 'a' : 'button';
+
+  if (href) {
+    return (
+      <a {...(rest as React.ComponentPropsWithoutRef<'a'>)} className={className} href={href}>
+        {renderButtonContent()}
+      </a>
+    );
+  }
+
   return (
-    <TagName {...rest} {...{ className }}>
+    <button {...(rest as React.ComponentPropsWithoutRef<'button'>)} className={className}>
       {renderButtonContent()}
-    </TagName>
+    </button>
   );
 };
 

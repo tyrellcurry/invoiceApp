@@ -2,7 +2,6 @@ import { JSX } from 'react';
 import { IInvoiceProps } from '@/components/UI/molecules/Invoice/Invoice.interface';
 import classNames from 'classnames';
 import Text from '@/components/UI/atoms/Text/Text';
-import Button from '@/components/UI/atoms/Button/Button';
 const MobileView = (props: IInvoiceProps): JSX.Element => {
   const {
     invoiceId,
@@ -15,7 +14,7 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
     localeAmountDue = 'en',
   } = props;
   return (
-    <Button className="w-full border-none" variant="custom">
+    <button className="w-full border-none">
       <div className="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6 dark:bg-blue-03">
         <div className="flex justify-between">
           <Text className="text-gray-08 font-bold dark:text-white" tag={'p'}>
@@ -72,7 +71,7 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
           </div>
         </div>
       </div>
-    </Button>
+    </button>
   );
 };
 

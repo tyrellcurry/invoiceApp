@@ -17,7 +17,7 @@ exports[`Checkbox Component renders correctly with a label 1`] = `
       Test Label
     </label>
     <svg
-      class=" absolute  w-3.5 h-3.5 ml-0.5  hidden peer-checked:block pointer-events-none"
+      class=" absolute w-3.5 h-3.5 ml-0.5 hidden peer-checked:block pointer-events-none"
       fill="none"
       height="9"
       viewBox="0 0 10 9"
@@ -49,7 +49,7 @@ exports[`Checkbox Component renders correctly without a label 1`] = `
       for="checkbox-2"
     />
     <svg
-      class=" absolute  w-3.5 h-3.5 ml-0.5  hidden peer-checked:block pointer-events-none"
+      class=" absolute w-3.5 h-3.5 ml-0.5 hidden peer-checked:block pointer-events-none"
       fill="none"
       height="9"
       viewBox="0 0 10 9"
@@ -83,7 +83,7 @@ exports[`Checkbox Component renders with custom class names 1`] = `
       Custom Class
     </label>
     <svg
-      class=" absolute  w-3.5 h-3.5 ml-0.5  hidden peer-checked:block pointer-events-none"
+      class=" absolute w-3.5 h-3.5 ml-0.5 hidden peer-checked:block pointer-events-none"
       fill="none"
       height="9"
       viewBox="0 0 10 9"

@@ -4,8 +4,7 @@
  *
  * Used for rendering icons
  *
- * @param name - name of icon set in IIconProps type
- * @param props - className
+ * @param name
  *
  * @returns {JSX.Element}
  */
