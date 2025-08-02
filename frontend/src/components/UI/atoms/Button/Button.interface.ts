@@ -7,7 +7,7 @@ interface BaseButtonProps {
   iconLeftClassName?: string;
   iconRight?: IIconProps['name'] | JSX.Element;
   iconRightClassName?: string;
-  label?: string;
+  label?: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'dark' | 'danger' | 'custom';
 }
 

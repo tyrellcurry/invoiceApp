@@ -13,16 +13,24 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    filterStatusBtnTextMobile: 'Filter',
-    filterStatusBtnTextDesktop: 'Filter by status',
+    filterStatusBtn: {
+      mobile: 'Filter',
+      desktop: 'Filter by status',
+    },
     invoiceBarTitle: 'Invoices',
-    newInvoiceBtnTextMobile: 'New',
-    newInvoiceBtnTextDesktop: 'New Invoice',
-    totalInvoicesTextMobile: '7 invoices',
-    totalInvoicesTextDesktop: 'There are 7 total invoices',
-    paidText: 'Paid',
-    draftText: 'Draft',
-    pendingText: 'Pending',
+    newInvoiceBtn: {
+      mobile: 'New',
+      desktop: 'New Invoice',
+    },
+    totalInvoicesText: {
+      mobile: '7 invoices',
+      desktop: 'There are 7 total invoices',
+    },
+    filterStatusText: {
+      paid: 'Paid',
+      draft: 'Draft',
+      pending: 'Pending',
+    },
     newInvoiceHandler: () => {},
     filters: {
       draft: false,
