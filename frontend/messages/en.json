@@ -1,9 +1,20 @@
 {
-  "HomePage": {
-    "title": "Hello world!",
-    "about": "Go to the about page"
-  },
   "MainMenu": {
-    "profileImageAlt": "Profile image"
+    "profileImageAlt": "Profile image",
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode"
+  },
+  "Dashboard": {
+    "title": "Invoices",
+    "totalMobile": "{count} invoices",
+    "totalDesktop": "There are {count} total invoices",
+    "filterMobile": "Filter",
+    "filterDesktop": "Filter by status",
+    "newInvoiceMobile": "New",
+    "newInvoiceDesktop": "New Invoice",
+    "statusDraft": "Draft",
+    "statusPending": "Pending",
+    "statusPaid": "Paid",
+    "due": "Due"
   }
 }

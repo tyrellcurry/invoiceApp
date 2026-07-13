@@ -3,7 +3,7 @@ import type { StoryObj } from '@storybook/nextjs';
 import Checkbox from '@/components/ui/checkbox/checkbox';
 
 const meta = {
-  title: 'Atoms/Checkbox',
+  title: 'UI/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
 };

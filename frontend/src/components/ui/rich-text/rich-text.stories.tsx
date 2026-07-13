@@ -3,7 +3,7 @@ import type { StoryObj } from '@storybook/nextjs';
 import RichText from '@/components/ui/rich-text/rich-text';
 
 const meta = {
-  title: 'Atoms/Rich Text',
+  title: 'UI/Rich Text',
   component: RichText,
   tags: ['autodocs'],
 };

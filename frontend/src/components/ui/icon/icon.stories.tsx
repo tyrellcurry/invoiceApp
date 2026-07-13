@@ -3,7 +3,7 @@ import type { StoryObj } from '@storybook/nextjs';
 import Icon from '@/components/ui/icon/icon';
 
 const meta = {
-  title: 'Atoms/Icon',
+  title: 'UI/Icon',
   component: Icon,
   tags: ['autodocs'],
 };

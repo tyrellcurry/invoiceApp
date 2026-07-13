@@ -3,7 +3,7 @@ import type { StoryObj } from '@storybook/nextjs';
 import Text from '@/components/ui/text/text';
 
 const meta = {
-  title: 'Atoms/Text',
+  title: 'UI/Text',
   component: Text,
   tags: ['autodocs'],
 };
