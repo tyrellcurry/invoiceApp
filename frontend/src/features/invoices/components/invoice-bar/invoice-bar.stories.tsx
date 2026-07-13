@@ -3,7 +3,7 @@ import type { StoryObj } from '@storybook/nextjs';
 import InvoiceBar from '@/features/invoices/components/invoice-bar/invoice-bar';
 
 const meta = {
-  title: 'Molecules/Invoice Bar',
+  title: 'Features/Invoices/Invoice Bar',
   component: InvoiceBar,
   tags: ['autodocs'],
 };

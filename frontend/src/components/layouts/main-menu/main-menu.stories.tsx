@@ -3,7 +3,7 @@ import MainMenu from '@/components/layouts/main-menu/main-menu';
 import { DARK_MODE } from '@/config/constants';
 
 const meta = {
-  title: 'Molecules/Main Menu',
+  title: 'Layouts/Main Menu',
   component: MainMenu,
   tags: ['autodocs'],
   parameters: {

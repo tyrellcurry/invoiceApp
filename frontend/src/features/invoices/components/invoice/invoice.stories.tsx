@@ -4,7 +4,7 @@ import Invoice from '@/features/invoices/components/invoice/invoice';
 import { InvoiceStatus } from '../../types/invoice';
 
 const meta = {
-  title: 'Molecules/Invoice',
+  title: 'Features/Invoices/Invoice',
   component: Invoice,
   tags: ['autodocs'],
 };
