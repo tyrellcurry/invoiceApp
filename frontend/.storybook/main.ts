@@ -4,12 +4,11 @@ import type { Configuration, RuleSetRule } from 'webpack';
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
+    // In Storybook 10 the "essentials" (controls, actions, viewport, etc.) and
+    // interactions are bundled into core and are no longer separate addons.
     '@storybook/addon-onboarding',
-    '@storybook/addon-essentials',
+    '@storybook/addon-docs',
     '@chromatic-com/storybook',
-    '@storybook/addon-interactions',
-    '@storybook/addon-styling-webpack',
-    '@storybook/addon-postcss',
     '@storybook/addon-themes',
   ],
   framework: {
@@ -17,9 +16,6 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ['../public'],
-  core: {
-    builder: '@storybook/builder-webpack5',
-  },
   webpackFinal: async (config: Configuration) => {
     const imageRule = config.module?.rules?.find((rule) => {
       const test = (rule as { test: RegExp }).test;

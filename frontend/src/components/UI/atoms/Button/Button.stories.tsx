@@ -1,5 +1,5 @@
-import type { StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import type { StoryObj } from '@storybook/nextjs';
+import { fn } from 'storybook/test';
 import Button from '@/components/UI/atoms/Button/Button';
 
 const meta = {

@@ -1,26 +1,27 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals';
+import nextTypescript from 'eslint-config-next/typescript';
 import unusedImports from 'eslint-plugin-unused-imports';
-import react from 'eslint-plugin-react';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import storybook from 'eslint-plugin-storybook';
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  {
+    ignores: ['.next/**', 'storybook-static/**', 'coverage/**', 'node_modules/**'],
+  },
+  // Next.js 16 ships native flat configs, so we consume them directly instead
+  // of bridging the legacy shareable configs through FlatCompat. These already
+  // register the `react`, `react-hooks`, `@next/next` and `@typescript-eslint`
+  // plugins, so we must not redefine them below.
+  ...nextCoreWebVitals,
+  ...nextTypescript,
+  ...storybook.configs['flat/recommended'],
   {
     files: ['src/**/*.{js,jsx,ts,tsx}'],
     plugins: {
       'unused-imports': unusedImports,
-      react: react,
     },
     rules: {
       'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': [
         'warn',

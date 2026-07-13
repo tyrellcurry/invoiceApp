@@ -1,4 +1,4 @@
-import type { StoryObj } from '@storybook/react';
+import type { StoryObj } from '@storybook/nextjs';
 
 import RichText from '@/components/UI/atoms/RichText/RichText';
 

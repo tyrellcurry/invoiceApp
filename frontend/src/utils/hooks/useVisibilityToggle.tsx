@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-function useVisibilityToggle<T extends HTMLDIVElement>() {
+function useVisibilityToggle<T extends HTMLDivElement>() {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef<T>(null);
 

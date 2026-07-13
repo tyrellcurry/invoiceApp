@@ -1,4 +1,4 @@
-import type { StoryObj } from '@storybook/react';
+import type { StoryObj } from '@storybook/nextjs';
 
 import Invoice from '@/components/UI/molecules/Invoice/Invoice';
 import { InvoiceStatus } from './Invoice.interface';

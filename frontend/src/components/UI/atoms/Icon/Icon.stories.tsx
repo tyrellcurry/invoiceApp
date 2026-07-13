@@ -1,4 +1,4 @@
-import type { StoryObj } from '@storybook/react';
+import type { StoryObj } from '@storybook/nextjs';
 
 import Icon from '@/components/UI/atoms/Icon/Icon';
 
@@ -17,7 +17,7 @@ export const Sample: Story = {
     fill: '#252945',
   },
   decorators: [
-    (Story: Story) => (
+    (Story) => (
       <div style={{ width: '50px' }}>
         <Story />
       </div>

@@ -1,4 +1,4 @@
-import type { StoryObj } from '@storybook/react';
+import type { StoryObj } from '@storybook/nextjs';
 import MainMenu from '@/components/UI/molecules/MainMenu/MainMenu';
 import { DARK_MODE } from '../../const/app';
 
