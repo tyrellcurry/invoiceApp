@@ -66,6 +66,36 @@ const eslintConfig = [
       ],
     },
   },
+  // Bulletproof-react unidirectional architecture: shared -> features -> app.
+  // Enforced via the `import` plugin already registered by eslint-config-next.
+  {
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    rules: {
+      'import/no-restricted-paths': [
+        'error',
+        {
+          zones: [
+            // Features cannot import from other features.
+            {
+              target: './src/features/invoices',
+              from: './src/features',
+              except: ['./invoices'],
+            },
+            // Features cannot reach up into the app layer.
+            {
+              target: './src/features',
+              from: './src/app',
+            },
+            // Shared modules cannot import from features or the app layer.
+            {
+              target: ['./src/components', './src/hooks', './src/lib', './src/stores', './src/config'],
+              from: ['./src/features', './src/app'],
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];
 
 export default eslintConfig;

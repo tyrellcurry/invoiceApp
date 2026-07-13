@@ -2,8 +2,8 @@
 @import './tailwind.css';
 
 /* Components */
-@import './UI/text.css';
-@import './UI/button.css';
+@import './ui/text.css';
+@import './ui/button.css';
 
 .storybook_dark {
   @apply bg-gray-12;
