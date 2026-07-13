@@ -4,7 +4,7 @@ import type { Configuration, RuleSetRule } from 'webpack';
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    // In Storybook 9 the "essentials" (controls, actions, viewport, etc.) and
+    // In Storybook 10 the "essentials" (controls, actions, viewport, etc.) and
     // interactions are bundled into core and are no longer separate addons.
     '@storybook/addon-onboarding',
     '@storybook/addon-docs',
