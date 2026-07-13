@@ -1,5 +1,10 @@
 import type { Config } from 'jest';
 import nextJest from 'next/jest.js';
+import { createRequire } from 'module';
+
+// Jest 30 loads this TS config as an ES module, so `require` is not available
+// in scope. Recreate it for the CommonJS-style `require.resolve` below.
+const require = createRequire(import.meta.url);
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment

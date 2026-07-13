@@ -5,6 +5,16 @@ import { Configuration } from 'webpack';
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
+  // Turbopack is the default bundler in Next.js 16 (dev + build).
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
+  // Retained for any tooling that still falls back to webpack (e.g. Storybook).
   webpack(config: Configuration) {
     config.module?.rules?.push({
       test: /\.svg$/i,
@@ -12,16 +22,6 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
-  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-  },
 };
 
-module.exports = withNextIntl(nextConfig);
+export default withNextIntl(nextConfig);
