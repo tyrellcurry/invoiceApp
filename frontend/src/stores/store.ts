@@ -1,8 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+// Placeholder reducer so the store has a valid reducer map before any feature
+// slices exist (configureStore throws on an empty `reducer` object). Remove
+// this entry once the first real feature slice is added below.
+const placeholderReducer = (state: Record<string, never> = {}) => state;
+
 export const makeStore = () => {
   return configureStore({
-    reducer: {},
+    reducer: {
+      placeholder: placeholderReducer,
+    },
   });
 };
 
