@@ -1,5 +1,5 @@
-import React from 'react';
+import HomeView from './home-view';
 
 export default function Home() {
-  return <div>hello world</div>;
+  return <HomeView />;
 }
