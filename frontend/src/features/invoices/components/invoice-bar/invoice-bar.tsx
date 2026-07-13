@@ -1,5 +1,8 @@
 import { JSX } from 'react';
-import { IInvoiceBarProps } from '@/features/invoices/components/invoice-bar/invoice-bar.types';
+import {
+  FilterState,
+  IInvoiceBarProps,
+} from '@/features/invoices/components/invoice-bar/invoice-bar.types';
 import classNames from 'classnames';
 import Button from '@/components/ui/button/button';
 import Text from '@/components/ui/text/text';
@@ -20,6 +23,15 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
   } = props;
 
   const { isVisible, setIsVisible, elementRef } = useVisibilityToggle();
+
+  const handleFilterChange =
+    (key: keyof FilterState) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (setFilters) {
+        setFilters({ ...filters, [key]: event.target.checked });
+      }
+    };
+
+  const filterKeys: (keyof FilterState)[] = ['draft', 'pending', 'paid'];
 
   return (
     <menu className="flex items-center justify-between" {...rest}>
@@ -56,48 +68,15 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
               className="absolute bg-white drop-shadow-xl p-6 w-[180px] lg:w-[220px] top-6 rounded-lg dark:bg-blue-04 z-10"
               ref={elementRef}
             >
-              <div>
-                <Checkbox
-                  label={filterStatusText.draft}
-                  labelId={'draft'}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    if (setFilters) {
-                      setFilters({
-                        ...filters,
-                        draft: e.target.checked,
-                      });
-                    }
-                  }}
-                />
-              </div>
-              <div>
-                <Checkbox
-                  label={filterStatusText.pending}
-                  labelId={'pending'}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    if (setFilters) {
-                      setFilters({
-                        ...filters,
-                        pending: e.target.checked,
-                      });
-                    }
-                  }}
-                />
-              </div>
-              <div>
-                <Checkbox
-                  label={filterStatusText.paid}
-                  labelId={'paid'}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    if (setFilters) {
-                      setFilters({
-                        ...filters,
-                        paid: e.target.checked,
-                      });
-                    }
-                  }}
-                />
-              </div>
+              {filterKeys.map((key) => (
+                <div key={key}>
+                  <Checkbox
+                    label={filterStatusText[key]}
+                    labelId={key}
+                    onChange={handleFilterChange(key)}
+                  />
+                </div>
+              ))}
             </div>
           )}
         </div>

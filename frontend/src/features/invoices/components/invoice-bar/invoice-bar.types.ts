@@ -3,7 +3,7 @@ interface deviceText {
   mobile: string;
 }
 
-interface FilterState {
+export interface FilterState {
   draft: boolean;
   pending: boolean;
   paid: boolean;

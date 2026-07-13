@@ -2,7 +2,12 @@ import { JSX } from 'react';
 import { IInvoiceProps } from '@/features/invoices/types/invoice';
 import classNames from 'classnames';
 import Text from '@/components/ui/text/text';
-import { DRAFT, PAID, PENDING } from '../../constants';
+import {
+  formatInvoiceAmount,
+  getCurrencySymbol,
+} from '@/features/invoices/utils/format-invoice-amount';
+import { getInvoiceStatusStyles } from '@/features/invoices/utils/get-invoice-status-styles';
+
 const MobileView = (props: IInvoiceProps): JSX.Element => {
   const {
     invoiceId,
@@ -14,6 +19,8 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
     dueText,
     localeAmountDue = 'en',
   } = props;
+
+  const statusStyles = getInvoiceStatusStyles(invoiceStatus);
   return (
     <button className="w-full border-none">
       <div className="md:hidden bg-white p-6 rounded-lg drop-shadow-sm flex flex-col gap-y-6 dark:bg-blue-03">
@@ -37,36 +44,22 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
               {invoiceDueDate}
             </Text>
             <Text className="text-gray-08 font-bold dark:text-white" tag={'p'}>
-              <Text tag={'span'}>
-                {localeAmountDue === 'en' && '$'}
-                {localeAmountDue === 'fr' && '€'}
-              </Text>
-              {invoiceAmountDue.toLocaleString(localeAmountDue, { minimumFractionDigits: 2 })}
+              <Text tag={'span'}>{getCurrencySymbol(localeAmountDue)}</Text>
+              {formatInvoiceAmount(invoiceAmountDue, localeAmountDue)}
             </Text>
           </div>
 
           <div
             className={classNames(
               'py-[14px] px-[30px] rounded-md leading-none flex items-center justify-center self-center',
-              {
-                'bg-green-05a text-green-05': invoiceStatus === PAID,
-                'bg-orange-05a text-orange-05': invoiceStatus === PENDING,
-                'bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05':
-                  invoiceStatus === DRAFT,
-              }
+              statusStyles.badge
             )}
           >
             <Text
               className="font-bold text-center flex gap-x-1.5 items-center text-[15px]"
               tag={'span'}
             >
-              <div
-                className={classNames('w-2 h-2 rounded-full', {
-                  'bg-green-05': invoiceStatus === PAID,
-                  'bg-orange-05': invoiceStatus === PENDING,
-                  'bg-gray-09 dark:bg-gray-05': invoiceStatus === DRAFT,
-                })}
-              />
+              <div className={classNames('w-2 h-2 rounded-full', statusStyles.dot)} />
               {invoiceStatusText}
             </Text>
           </div>

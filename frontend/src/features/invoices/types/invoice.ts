@@ -3,13 +3,16 @@ export enum InvoiceStatus {
   PENDING = 'PENDING',
   DRAFT = 'DRAFT',
 }
+
+export type InvoiceLocale = 'en' | 'fr';
+
 export interface IInvoiceProps {
   invoiceId: string;
   invoiceDueDate: string;
   billingName: string;
   invoiceAmountDue: number;
   invoiceStatus: InvoiceStatus;
-  localeAmountDue?: 'en' | 'fr';
+  localeAmountDue?: InvoiceLocale;
   dueText: string;
   invoiceStatusText: string;
 }
