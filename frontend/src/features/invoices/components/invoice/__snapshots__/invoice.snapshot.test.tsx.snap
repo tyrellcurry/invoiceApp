@@ -3,13 +3,13 @@
 exports[`Invoice Component renders correctly with data passed to props 1`] = `
 <div>
   <div
-    class="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03"
+    class="flex flex-row items-center justify-between hidden md:flex py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03"
   >
     <div
-      class="flex gap-x-11"
+      class="flex flex-row gap-x-11"
     >
       <div
-        class="flex gap-x-11 w-[256px]"
+        class="flex flex-row gap-x-11 w-[256px]"
       >
         <p
           class="text text--body text-gray-08 font-bold dark:text-white"
@@ -40,7 +40,7 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
     </div>
     <div>
       <div
-        class="flex items-center gap-x-2"
+        class="flex flex-row items-center gap-x-2"
       >
         <p
           class="text text--body text-gray-08 font-bold text-right dark:text-white"
@@ -56,7 +56,7 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
           class="w-[150px]"
         >
           <div
-            class="py-[14px] px-[30px] rounded-md leading-none flex items-center self-center justify-center ml-auto w-[145px] bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
+            class="flex flex-row items-center justify-center py-[14px] px-[30px] rounded-md leading-none self-center ml-auto w-[145px] bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
           >
             <span
               class="text text--body font-bold text-center flex gap-x-1.5 items-center"

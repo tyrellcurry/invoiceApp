@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import MainMenu from '@/components/layouts/main-menu/main-menu';
+import Container from '@/components/ui/container/container';
+import Flex from '@/components/ui/flex/flex';
 import InvoiceBar from '@/features/invoices/components/invoice-bar/invoice-bar';
 import type { FilterState } from '@/features/invoices/components/invoice-bar/invoice-bar.types';
 import Invoice from '@/features/invoices/components/invoice/invoice';
@@ -71,14 +73,19 @@ const HomeView = () => {
   );
 
   return (
-    <div className="min-h-screen lg:pl-25">
+    <Container className="min-h-screen lg:pl-25">
       <MainMenu
         darkmode={theme}
         darkmodeBtn={{ darkAria: tMenu('switchToDark'), lightAria: tMenu('switchToLight') }}
         darkmodeToggle={toggleTheme}
         profile={{ profileImageAlt: tMenu('profileImageAlt') }}
       />
-      <main className="mx-auto flex max-w-250 flex-col gap-y-8 px-6 py-8 md:py-12 lg:py-16">
+      <Flex
+        as="main"
+        className="mx-auto max-w-250 px-6 py-8 md:py-12 lg:py-16"
+        direction="col"
+        gapY={8}
+      >
         <InvoiceBar
           filters={filters}
           filterStatusBtn={{ mobile: t('filterMobile'), desktop: t('filterDesktop') }}
@@ -96,7 +103,7 @@ const HomeView = () => {
             desktop: t('totalDesktop', { count: SAMPLE_INVOICES.length }),
           }}
         />
-        <ul className="flex flex-col gap-y-4">
+        <Flex as="ul" direction="col" gapY={4}>
           {visibleInvoices.map((invoice) => (
             <li key={invoice.invoiceId}>
               <Invoice
@@ -106,9 +113,9 @@ const HomeView = () => {
               />
             </li>
           ))}
-        </ul>
-      </main>
-    </div>
+        </Flex>
+      </Flex>
+    </Container>
   );
 };
 

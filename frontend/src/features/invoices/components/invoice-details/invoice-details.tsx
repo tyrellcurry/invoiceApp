@@ -13,6 +13,9 @@
 import { JSX } from 'react';
 import classNames from 'classnames';
 import Button from '@/components/ui/button/button';
+import Container from '@/components/ui/container/container';
+import Flex from '@/components/ui/flex/flex';
+import Grid from '@/components/ui/grid/grid';
 import Text from '@/components/ui/text/text';
 import {
   IInvoiceDetailsProps,
@@ -32,14 +35,15 @@ const AddressBlock = ({
   address: InvoiceAddress;
   className?: string;
 }): JSX.Element => (
-  <div
-    className={classNames('text-gray-07 dark:text-gray-05 flex flex-col leading-[18px]', className)}
+  <Flex
+    className={classNames('text-gray-07 dark:text-gray-05 leading-[18px]', className)}
+    direction="col"
   >
     <Text tag={'span'}>{address.street}</Text>
     <Text tag={'span'}>{address.city}</Text>
     <Text tag={'span'}>{address.postCode}</Text>
     <Text tag={'span'}>{address.country}</Text>
-  </div>
+  </Flex>
 );
 
 const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
@@ -67,15 +71,15 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
   const statusStyles = getInvoiceStatusStyles(invoiceStatus);
 
   const actions = (
-    <div className="flex items-center gap-x-2">
+    <Flex align="center" gapX={2}>
       <Button label={labels.edit} variant="secondary" onClick={onEdit} />
       <Button label={labels.delete} variant="danger" onClick={onDelete} />
       <Button label={labels.markAsPaid} variant="primary" onClick={onMarkAsPaid} />
-    </div>
+    </Flex>
   );
 
   return (
-    <div className="flex flex-col gap-y-6">
+    <Flex direction="col" gapY={6}>
       <Button
         className="flex items-center gap-x-6 w-fit font-bold text-gray-08 dark:text-white"
         iconLeft={'chevron-right'}
@@ -86,14 +90,21 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
       />
 
       {/* Status / actions bar */}
-      <div className="flex flex-col gap-y-6 md:flex-row md:items-center md:justify-between rounded-lg bg-white px-6 py-5 md:px-8 drop-shadow-lg dark:bg-blue-03">
-        <div className="flex items-center justify-between gap-x-4 md:justify-start md:gap-x-4">
+      <Flex
+        className="md:flex-row md:items-center md:justify-between rounded-lg bg-white px-6 py-5 md:px-8 drop-shadow-lg dark:bg-blue-03"
+        direction="col"
+        gapY={6}
+      >
+        <Flex align="center" className="md:justify-start md:gap-x-4" gapX={4} justify="between">
           <Text className="text-gray-07b dark:text-gray-05" tag={'span'}>
             {labels.status}
           </Text>
-          <div
+          <Flex
+            align="center"
+            gapX={1.5}
+            justify="center"
             className={classNames(
-              'flex items-center justify-center gap-x-1.5 rounded-md px-[18px] py-3 leading-none w-[104px]',
+              'rounded-md px-[18px] py-3 leading-none w-[104px]',
               statusStyles.badge
             )}
           >
@@ -101,16 +112,16 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
             <Text className="font-bold" tag={'span'}>
               {labels.statusText}
             </Text>
-          </div>
-        </div>
-        <div className="hidden md:block">{actions}</div>
-      </div>
+          </Flex>
+        </Flex>
+        <Container className="hidden md:block">{actions}</Container>
+      </Flex>
 
       {/* Invoice detail card */}
-      <div className="rounded-lg bg-white p-6 md:p-12 drop-shadow-lg dark:bg-blue-03">
+      <Container className="rounded-lg bg-white p-6 md:p-12 drop-shadow-lg dark:bg-blue-03">
         {/* Header: id + description / sender address */}
-        <div className="flex flex-col gap-y-8 md:flex-row md:justify-between">
-          <div>
+        <Flex className="md:flex-row md:justify-between" direction="col" gapY={8}>
+          <Container>
             <Text className="font-bold text-gray-08 dark:text-white" tag={'p'}>
               <Text className="text-gray-06" tag={'span'}>
                 #
@@ -120,31 +131,31 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
             <Text className="text-gray-07 dark:text-gray-05" tag={'p'}>
               {description}
             </Text>
-          </div>
+          </Container>
           <AddressBlock address={senderAddress} className="md:text-right" />
-        </div>
+        </Flex>
 
         {/* Meta: dates / bill to / sent to */}
-        <div className="mt-8 grid grid-cols-2 gap-y-8 md:mt-11 md:grid-cols-3">
-          <div className="flex flex-col gap-y-8">
-            <div className="flex flex-col gap-y-3">
+        <Grid className="mt-8 md:mt-11 md:grid-cols-3" cols={2} gapY={8}>
+          <Flex direction="col" gapY={8}>
+            <Flex direction="col" gapY={3}>
               <Text className="text-gray-07 dark:text-gray-05" tag={'p'}>
                 {labels.invoiceDate}
               </Text>
               <Text className="font-bold text-gray-08 dark:text-white" tag={'p'}>
                 {invoiceDate}
               </Text>
-            </div>
-            <div className="flex flex-col gap-y-3">
+            </Flex>
+            <Flex direction="col" gapY={3}>
               <Text className="text-gray-07 dark:text-gray-05" tag={'p'}>
                 {labels.paymentDue}
               </Text>
               <Text className="font-bold text-gray-08 dark:text-white" tag={'p'}>
                 {paymentDue}
               </Text>
-            </div>
-          </div>
-          <div className="flex flex-col gap-y-2">
+            </Flex>
+          </Flex>
+          <Flex direction="col" gapY={2}>
             <Text className="text-gray-07 dark:text-gray-05" tag={'p'}>
               {labels.billTo}
             </Text>
@@ -152,21 +163,21 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
               {clientName}
             </Text>
             <AddressBlock address={clientAddress} className="mt-1" />
-          </div>
-          <div className="flex flex-col gap-y-3">
+          </Flex>
+          <Flex direction="col" gapY={3}>
             <Text className="text-gray-07 dark:text-gray-05" tag={'p'}>
               {labels.sentTo}
             </Text>
             <Text className="font-bold text-gray-08 dark:text-white" tag={'p'}>
               {clientEmail}
             </Text>
-          </div>
-        </div>
+          </Flex>
+        </Grid>
 
         {/* Line items */}
-        <div className="mt-11 overflow-hidden rounded-lg">
-          <div className="bg-gray-05b p-6 md:p-8 dark:bg-blue-04">
-            <div className="hidden grid-cols-[2fr_0.5fr_1fr_1fr] gap-x-4 md:grid">
+        <Container className="mt-11 overflow-hidden rounded-lg">
+          <Container className="bg-gray-05b p-6 md:p-8 dark:bg-blue-04">
+            <Grid className="hidden grid-cols-[2fr_0.5fr_1fr_1fr] md:grid" gapX={4}>
               <Text className="text-gray-07 dark:text-gray-05" tag={'span'}>
                 {labels.itemName}
               </Text>
@@ -179,11 +190,14 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
               <Text className="text-gray-07 text-right dark:text-gray-05" tag={'span'}>
                 {labels.total}
               </Text>
-            </div>
-            <ul className="flex flex-col gap-y-6 md:gap-y-8 md:mt-8">
+            </Grid>
+            <Flex as="ul" className="md:gap-y-8 md:mt-8" direction="col" gapY={6}>
               {items.map((item) => (
-                <li
-                  className="grid grid-cols-2 items-center md:grid-cols-[2fr_0.5fr_1fr_1fr] md:gap-x-4"
+                <Grid
+                  align="center"
+                  as="li"
+                  className="md:grid-cols-[2fr_0.5fr_1fr_1fr] md:gap-x-4"
+                  cols={2}
                   key={item.name}
                 >
                   <Text className="font-bold text-gray-08 dark:text-white" tag={'span'}>
@@ -208,28 +222,32 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
                   >
                     {`${currency} ${formatInvoiceAmount(getLineItemTotal(item.quantity, item.price), localeAmountDue)}`}
                   </Text>
-                </li>
+                </Grid>
               ))}
-            </ul>
-          </div>
+            </Flex>
+          </Container>
 
           {/* Amount due footer */}
-          <div className="flex items-center justify-between bg-gray-09 px-6 py-6 md:px-8 dark:bg-gray-12">
+          <Flex
+            align="center"
+            className="bg-gray-09 px-6 py-6 md:px-8 dark:bg-gray-12"
+            justify="between"
+          >
             <Text className="text-white" tag={'span'}>
               {labels.amountDue}
             </Text>
             <Text className="font-bold text-white text-2xl" tag={'span'}>
               {`${currency} ${formatInvoiceAmount(invoiceAmountDue, localeAmountDue)}`}
             </Text>
-          </div>
-        </div>
-      </div>
+          </Flex>
+        </Container>
+      </Container>
 
       {/* Actions bar (mobile: pinned below the card) */}
-      <div className="md:hidden rounded-lg bg-white px-6 py-5 drop-shadow-lg dark:bg-blue-03">
+      <Container className="md:hidden rounded-lg bg-white px-6 py-5 drop-shadow-lg dark:bg-blue-03">
         {actions}
-      </div>
-    </div>
+      </Container>
+    </Flex>
   );
 };
 
