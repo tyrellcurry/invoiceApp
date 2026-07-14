@@ -3,12 +3,12 @@ import type { Preview } from '@storybook/nextjs';
 import '../src/styles/app.css';
 import { withThemeByClassName } from '@storybook/addon-themes';
 
-import { League_Spartan } from 'next/font/google';
+import { Lexend } from 'next/font/google';
 
-const leagueSpartan = League_Spartan({
+const lexend = Lexend({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-leaguespartan',
+  variable: '--font-lexend',
 });
 
 const preview: Preview = {
@@ -21,7 +21,7 @@ const preview: Preview = {
       defaultTheme: 'Light',
     }),
     (Story) => (
-      <main className={`${leagueSpartan.variable} font-sans`}>
+      <main className={`${lexend.variable} font-sans`}>
         <Story />
       </main>
     ),

@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-leaguespartan)'],
+        sans: ['var(--font-lexend)'],
       },
       screens: {
         xs: '414px',
