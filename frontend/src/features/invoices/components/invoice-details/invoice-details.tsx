@@ -135,6 +135,9 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
           <AddressBlock address={senderAddress} className="md:text-right" />
         </Flex>
 
+        {/* Divider between the header row and the invoice meta */}
+        <hr className="mt-8 md:mt-11 h-px border-0 bg-gray-05 dark:bg-blue-04" />
+
         {/* Meta: dates / bill to / sent to */}
         <Grid className="mt-8 md:mt-11 md:grid-cols-3" cols={2} gapY={8}>
           <Flex direction="col" gapY={8}>
