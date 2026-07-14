@@ -1,14 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/lib/i18n/routing';
 import Flex from '@/components/ui/flex/flex';
 import InvoiceBar from '@/features/invoices/components/invoice-bar/invoice-bar';
 import type { FilterState } from '@/features/invoices/components/invoice-bar/invoice-bar.types';
 import Invoice from '@/features/invoices/components/invoice/invoice';
+import InvoiceFormDrawer from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer';
+import type { InvoiceFormValues } from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer.types';
 import { sampleInvoices } from '@/features/invoices/data/sample-invoices';
+import { useInvoiceFormLabels } from '@/features/invoices/hooks/use-invoice-form-labels';
 import { InvoiceStatus } from '@/features/invoices/types/invoice';
+import { emptyInvoiceFormValues } from '@/features/invoices/utils/invoice-form-values';
 
 const STATUS_TO_FILTER_KEY: Record<InvoiceStatus, keyof FilterState> = {
   [InvoiceStatus.DRAFT]: 'draft',
@@ -18,14 +22,20 @@ const STATUS_TO_FILTER_KEY: Record<InvoiceStatus, keyof FilterState> = {
 
 const HomeView = () => {
   const t = useTranslations('Dashboard');
+  const { labels: formLabels, paymentTermOptions } = useInvoiceFormLabels();
   const [filters, setFilters] = useState<FilterState>({
     draft: false,
     pending: false,
     paid: false,
   });
+  const [isCreating, setIsCreating] = useState(false);
 
-  // @TODO: wire up new-invoice creation once the create flow exists.
-  const handleNewInvoice = () => {};
+  const emptyValues = useMemo(() => emptyInvoiceFormValues(), []);
+
+  // @TODO: persist the new invoice via `features/invoices/api` once a backend exists.
+  const handleCreateSubmit = (_values: InvoiceFormValues) => {
+    setIsCreating(false);
+  };
 
   const statusLabels: Record<InvoiceStatus, string> = {
     [InvoiceStatus.DRAFT]: t('statusDraft'),
@@ -46,7 +56,7 @@ const HomeView = () => {
         filterStatusBtn={{ mobile: t('filterMobile'), desktop: t('filterDesktop') }}
         invoiceBarTitle={t('title')}
         newInvoiceBtn={{ mobile: t('newInvoiceMobile'), desktop: t('newInvoiceDesktop') }}
-        newInvoiceHandler={handleNewInvoice}
+        newInvoiceHandler={() => setIsCreating(true)}
         setFilters={setFilters}
         filterStatusText={{
           draft: t('statusDraft'),
@@ -75,6 +85,17 @@ const HomeView = () => {
           </li>
         ))}
       </Flex>
+
+      <InvoiceFormDrawer
+        initialValues={emptyValues}
+        labels={formLabels}
+        mode="create"
+        open={isCreating}
+        paymentTermOptions={paymentTermOptions}
+        onClose={() => setIsCreating(false)}
+        onSaveDraft={handleCreateSubmit}
+        onSubmit={handleCreateSubmit}
+      />
     </Flex>
   );
 };

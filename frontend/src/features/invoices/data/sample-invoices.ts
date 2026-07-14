@@ -11,6 +11,7 @@ export const sampleInvoices: Invoice[] = [
     description: 'Re-branding',
     status: InvoiceStatus.PAID,
     invoiceDate: '18 Jul 2021',
+    paymentTerms: 30,
     paymentDue: '19 Aug 2021',
     senderAddress: {
       street: '19 Union Terrace',
@@ -34,6 +35,7 @@ export const sampleInvoices: Invoice[] = [
     description: 'Graphic Design',
     status: InvoiceStatus.PENDING,
     invoiceDate: '21 Aug 2021',
+    paymentTerms: 30,
     paymentDue: '20 Sep 2021',
     senderAddress: {
       street: '19 Union Terrace',
@@ -60,6 +62,7 @@ export const sampleInvoices: Invoice[] = [
     description: 'Website Redesign',
     status: InvoiceStatus.DRAFT,
     invoiceDate: '30 Aug 2021',
+    paymentTerms: 30,
     paymentDue: '01 Oct 2021',
     senderAddress: {
       street: '19 Union Terrace',
