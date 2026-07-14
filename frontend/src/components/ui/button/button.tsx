@@ -12,6 +12,7 @@
  * @param label
  * @param variant - default: 'primary'
  * @param className
+ * @param children - custom button content (rendered after any icon/label)
  *
  * @returns {JSX.Element}
  */
@@ -31,6 +32,7 @@ const Button = (props: IButtonProps): JSX.Element => {
     label,
     variant = 'primary',
     className: classNameProp,
+    children,
     ...rest
   } = props;
 
@@ -59,6 +61,8 @@ const Button = (props: IButtonProps): JSX.Element => {
       ) : (
         iconRight
       )}
+
+      {children}
     </>
   );
 
