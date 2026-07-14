@@ -71,14 +71,14 @@ const HomeView = () => {
   );
 
   return (
-    <div className="min-h-screen lg:pl-[103px]">
+    <div className="min-h-screen lg:pl-25">
       <MainMenu
         darkmode={theme}
         darkmodeBtn={{ darkAria: tMenu('switchToDark'), lightAria: tMenu('switchToLight') }}
         darkmodeToggle={toggleTheme}
         profile={{ profileImageAlt: tMenu('profileImageAlt') }}
       />
-      <main className="mx-auto flex max-w-[730px] flex-col gap-y-8 px-6 py-8 md:py-12 lg:py-16">
+      <main className="mx-auto flex max-w-250 flex-col gap-y-8 px-6 py-8 md:py-12 lg:py-16">
         <InvoiceBar
           filters={filters}
           filterStatusBtn={{ mobile: t('filterMobile'), desktop: t('filterDesktop') }}
