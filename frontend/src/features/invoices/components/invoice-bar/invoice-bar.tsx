@@ -5,6 +5,9 @@ import {
 } from '@/features/invoices/components/invoice-bar/invoice-bar.types';
 import classNames from 'classnames';
 import Button from '@/components/ui/button/button';
+import Container from '@/components/ui/container/container';
+import Flex from '@/components/ui/flex/flex';
+import Grid from '@/components/ui/grid/grid';
 import Text from '@/components/ui/text/text';
 import useVisibilityToggle from '@/hooks/use-visibility-toggle';
 import Checkbox from '@/components/ui/checkbox/checkbox';
@@ -34,8 +37,8 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
   const filterKeys: (keyof FilterState)[] = ['draft', 'pending', 'paid'];
 
   return (
-    <menu className="flex items-center justify-between" {...rest}>
-      <div>
+    <Flex align="center" as="menu" justify="between" {...rest}>
+      <Container>
         <Text className="text-gray-08 dark:text-white" tag={'h2'} variant="h2">
           {invoiceBarTitle}
         </Text>
@@ -43,9 +46,9 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           <span className="block md:hidden">{totalInvoicesText?.mobile}</span>
           <span className="hidden md:block">{totalInvoicesText?.desktop}</span>
         </Text>
-      </div>
-      <div className="flex items-center gap-x-[18px] md:gap-x-10">
-        <div className="relative grid place-items-center">
+      </Container>
+      <Flex align="center" className="gap-x-[18px] md:gap-x-10">
+        <Grid className="relative place-items-center">
           <Button
             className="flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"
             iconRight={'chevron-down'}
@@ -69,17 +72,17 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
               ref={elementRef}
             >
               {filterKeys.map((key) => (
-                <div key={key}>
+                <Container key={key}>
                   <Checkbox
                     label={filterStatusText[key]}
                     labelId={key}
                     onChange={handleFilterChange(key)}
                   />
-                </div>
+                </Container>
               ))}
             </div>
           )}
-        </div>
+        </Grid>
         <Button
           className="p-[6px] md:p-2 gap-x-2 items-center pr-[15px] text-xl md:text-lg"
           iconLeft={'circle-plus'}
@@ -93,8 +96,8 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           }
           onClick={newInvoiceHandler}
         />
-      </div>
-    </menu>
+      </Flex>
+    </Flex>
   );
 };
 

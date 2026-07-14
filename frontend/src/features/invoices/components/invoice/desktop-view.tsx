@@ -1,5 +1,7 @@
 import { JSX } from 'react';
 import { IInvoiceProps } from '@/features/invoices/types/invoice';
+import Container from '@/components/ui/container/container';
+import Flex from '@/components/ui/flex/flex';
 import Text from '@/components/ui/text/text';
 import classNames from 'classnames';
 import Button from '@/components/ui/button/button';
@@ -24,13 +26,15 @@ const DesktopView = (props: IInvoiceProps): JSX.Element => {
 
   const statusStyles = getInvoiceStatusStyles(invoiceStatus);
   return (
-    <div
-      className="hidden md:flex justify-between items-center py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03"
+    <Flex
+      align="center"
+      className="hidden md:flex py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03"
+      justify="between"
       {...rest}
     >
-      <div className="flex gap-x-11">
+      <Flex gapX={11}>
         {/* Invoice Details Section */}
-        <div className="flex gap-x-11 w-[256px]">
+        <Flex className="w-[256px]" gapX={11}>
           <Text className="text-gray-08 font-bold dark:text-white" tag={'p'}>
             <Text className="text-gray-07" tag={'span'}>
               #
@@ -43,23 +47,25 @@ const DesktopView = (props: IInvoiceProps): JSX.Element => {
             </Text>
             {invoiceDueDate}
           </Text>
-        </div>
+        </Flex>
         <Text className="text-gray-07b dark:text-white" tag={'p'}>
           {billingName}
         </Text>
-      </div>
+      </Flex>
 
       {/* Amount Due and Status Section */}
-      <div>
-        <div className="flex items-center gap-x-2">
+      <Container>
+        <Flex align="center" gapX={2}>
           <Text className="text-gray-08 font-bold text-right dark:text-white" tag={'p'}>
             <Text tag={'span'}>{getCurrencySymbol(localeAmountDue)}</Text>
             {formatInvoiceAmount(invoiceAmountDue, localeAmountDue)}
           </Text>
-          <div className="w-[150px]">
-            <div
+          <Container className="w-[150px]">
+            <Flex
+              align="center"
+              justify="center"
               className={classNames(
-                'py-[14px] px-[30px] rounded-md leading-none flex items-center self-center justify-center ml-auto w-[145px]',
+                'py-[14px] px-[30px] rounded-md leading-none self-center ml-auto w-[145px]',
                 statusStyles.badge
               )}
             >
@@ -67,14 +73,14 @@ const DesktopView = (props: IInvoiceProps): JSX.Element => {
                 <div className={classNames('w-2 h-2 rounded-full', statusStyles.dot)} />
                 {invoiceStatusText}
               </Text>
-            </div>
-          </div>
+            </Flex>
+          </Container>
 
           {/* Button Section */}
           <Button className="p-1 ml-3" iconLeft={'chevron-right'} variant="custom"></Button>
-        </div>
-      </div>
-    </div>
+        </Flex>
+      </Container>
+    </Flex>
   );
 };
 export default DesktopView;

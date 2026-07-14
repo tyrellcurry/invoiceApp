@@ -3,7 +3,7 @@
 exports[`Invoice Bar Component renders correctly with filled props 1`] = `
 <div>
   <menu
-    class="flex items-center justify-between"
+    class="flex flex-row items-center justify-between"
     data-testid="snapshot"
   >
     <div>
@@ -28,10 +28,10 @@ exports[`Invoice Bar Component renders correctly with filled props 1`] = `
       </p>
     </div>
     <div
-      class="flex items-center gap-x-[18px] md:gap-x-10"
+      class="flex flex-row items-center gap-x-[18px] md:gap-x-10"
     >
       <div
-        class="relative grid place-items-center"
+        class="grid relative place-items-center"
       >
         <button
           class="btn btn--custom flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"

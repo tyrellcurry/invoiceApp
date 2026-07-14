@@ -1,14 +1,18 @@
 import React, { JSX } from 'react';
 import { IMainMenuProps } from '@/components/layouts/main-menu/main-menu.types';
 import Button from '@/components/ui/button/button';
+import Flex from '@/components/ui/flex/flex';
 import Image from 'next/image';
 import { DARK_MODE } from '@/config/constants';
 import Link from 'next/link';
 const MainMenu = (props: IMainMenuProps): JSX.Element => {
   const { darkmode, darkmodeToggle, profile, darkmodeBtn, ...rest } = props;
   return (
-    <nav
-      className="bg-gray-09 flex justify-between items-stretch lg:flex-col lg:w-fit lg:rounded-r-[20px] lg:rounded-tr-3xl lg:h-screen lg:fixed lg:left-0"
+    <Flex
+      align="stretch"
+      as="nav"
+      className="bg-gray-09 lg:flex-col lg:w-fit lg:rounded-r-[20px] lg:rounded-tr-3xl lg:h-screen lg:fixed lg:left-0"
+      justify="between"
       {...rest}
     >
       <Button
@@ -18,7 +22,7 @@ const MainMenu = (props: IMainMenuProps): JSX.Element => {
         iconLeftClassName="w-full h-full"
         variant="custom"
       />
-      <div className="flex gap-5 px-6 md:gap-8 md:px-8 lg:flex-col lg:gap-5 lg:px-0 lg:py-6">
+      <Flex className="px-6 md:gap-8 md:px-8 lg:flex-col lg:gap-5 lg:px-0 lg:py-6" gap={5}>
         <Button
           aria-label={darkmode === DARK_MODE ? darkmodeBtn?.lightAria : darkmodeBtn?.darkAria}
           className="h-fit self-center"
@@ -41,8 +45,8 @@ const MainMenu = (props: IMainMenuProps): JSX.Element => {
             width={64}
           />
         </Link>
-      </div>
-    </nav>
+      </Flex>
+    </Flex>
   );
 };
 

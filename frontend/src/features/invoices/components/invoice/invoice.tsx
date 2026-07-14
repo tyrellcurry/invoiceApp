@@ -17,15 +17,16 @@
  */
 import { JSX } from 'react';
 import { IInvoiceProps } from '@/features/invoices/types/invoice';
+import Container from '@/components/ui/container/container';
 import MobileView from '@/features/invoices/components/invoice/mobile-view';
 import DesktopView from '@/features/invoices/components/invoice/desktop-view';
 
 const Invoice = (props: IInvoiceProps): JSX.Element => {
   return (
-    <div>
+    <Container>
       <MobileView {...props} />
       <DesktopView {...props} />
-    </div>
+    </Container>
   );
 };
 
