@@ -16,5 +16,24 @@
     "statusPending": "Pending",
     "statusPaid": "Paid",
     "due": "Due"
+  },
+  "InvoiceDetails": {
+    "goBack": "Go back",
+    "status": "Status",
+    "edit": "Edit",
+    "delete": "Delete",
+    "markAsPaid": "Mark as Paid",
+    "billTo": "Bill To",
+    "sentTo": "Sent to",
+    "invoiceDate": "Invoice Date",
+    "paymentDue": "Payment Due",
+    "itemName": "Item Name",
+    "quantity": "QTY.",
+    "price": "Price",
+    "total": "Total",
+    "amountDue": "Amount Due",
+    "statusDraft": "Draft",
+    "statusPending": "Pending",
+    "statusPaid": "Paid"
   }
 }

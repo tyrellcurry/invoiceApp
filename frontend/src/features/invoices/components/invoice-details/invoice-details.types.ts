@@ -1,17 +1,11 @@
-import { InvoiceLocale, InvoiceStatus } from '@/features/invoices/types/invoice';
+import {
+  InvoiceAddress,
+  InvoiceLineItem,
+  InvoiceLocale,
+  InvoiceStatus,
+} from '@/features/invoices/types/invoice';
 
-export interface InvoiceAddress {
-  street: string;
-  city: string;
-  postCode: string;
-  country: string;
-}
-
-export interface InvoiceLineItem {
-  name: string;
-  quantity: number;
-  price: number;
-}
+export type { InvoiceAddress, InvoiceLineItem };
 
 /** All user-facing copy, passed in so the component stays presentation-only. */
 export interface InvoiceDetailsLabels {

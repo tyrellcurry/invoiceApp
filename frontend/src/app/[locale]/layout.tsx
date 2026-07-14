@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import React from 'react';
 import '@/styles/app.css';
 import { AppProvider } from '@/app/provider';
+import AppShell from '@/components/layouts/app-shell/app-shell';
 import { League_Spartan } from 'next/font/google';
 
 export const dynamic = 'force-dynamic';
@@ -40,7 +41,9 @@ export default async function LocaleLayout({
     <html className={`${leagueSpartan.variable} font-sans`} lang={locale} suppressHydrationWarning>
       <body className="bg-neutral-11 dark:bg-gray-12">
         <NextIntlClientProvider messages={messages}>
-          <AppProvider>{children}</AppProvider>
+          <AppProvider>
+            <AppShell>{children}</AppShell>
+          </AppProvider>
         </NextIntlClientProvider>
       </body>
     </html>

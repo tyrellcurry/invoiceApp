@@ -6,6 +6,34 @@ export enum InvoiceStatus {
 
 export type InvoiceLocale = 'en' | 'fr';
 
+export interface InvoiceAddress {
+  street: string;
+  city: string;
+  postCode: string;
+  country: string;
+}
+
+export interface InvoiceLineItem {
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+/** Full invoice record @TODO:(stands in for the API model until a backend exists). */
+export interface Invoice {
+  id: string;
+  description: string;
+  status: InvoiceStatus;
+  invoiceDate: string;
+  paymentDue: string;
+  senderAddress: InvoiceAddress;
+  clientName: string;
+  clientEmail: string;
+  clientAddress: InvoiceAddress;
+  items: InvoiceLineItem[];
+  amountDue: number;
+}
+
 export interface IInvoiceProps {
   invoiceId: string;
   invoiceDueDate: string;

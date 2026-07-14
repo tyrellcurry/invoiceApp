@@ -4,7 +4,7 @@ import Container from '@/components/ui/container/container';
 import Flex from '@/components/ui/flex/flex';
 import Text from '@/components/ui/text/text';
 import classNames from 'classnames';
-import Button from '@/components/ui/button/button';
+import Icon from '@/components/ui/icon/icon';
 import {
   formatInvoiceAmount,
   getCurrencySymbol,
@@ -76,8 +76,8 @@ const DesktopView = (props: IInvoiceProps): JSX.Element => {
             </Flex>
           </Container>
 
-          {/* Button Section */}
-          <Button className="p-1 ml-3" iconLeft={'chevron-right'} variant="custom"></Button>
+          {/* Chevron affordance (the whole row is a link) */}
+          <Icon className="ml-3" name="chevron-right" />
         </Flex>
       </Container>
     </Flex>
