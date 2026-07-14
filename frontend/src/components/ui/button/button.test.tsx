@@ -64,6 +64,17 @@ describe('Button Component - Unit Tests', () => {
     expect(svg).toBeInTheDocument();
   });
 
+  it('renders custom `children` content', () => {
+    render(
+      <Button data-testid={testId} variant="custom">
+        <span>Custom content</span>
+      </Button>
+    );
+    const element = screen.getByTestId(testId);
+    expect(element).toHaveClass('btn btn--custom');
+    expect(screen.getByText('Custom content')).toBeInTheDocument();
+  });
+
   it('renders disbled button when `disabled` is passed and does not fire click event', () => {
     const handleClick = jest.fn();
     render(<Button data-testid={testId} disabled onClick={handleClick} />);

@@ -1,6 +1,7 @@
 import { JSX } from 'react';
 import { IInvoiceProps } from '@/features/invoices/types/invoice';
 import classNames from 'classnames';
+import Button from '@/components/ui/button/button';
 import Container from '@/components/ui/container/container';
 import Flex from '@/components/ui/flex/flex';
 import Text from '@/components/ui/text/text';
@@ -24,7 +25,7 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
 
   const statusStyles = getInvoiceStatusStyles(invoiceStatus);
   return (
-    <button className="w-full border-none">
+    <Button className="w-full border-none" variant="custom">
       <Flex
         className="md:hidden bg-white p-6 rounded-lg drop-shadow-sm dark:bg-blue-03"
         direction="col"
@@ -73,7 +74,7 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
           </Flex>
         </Flex>
       </Flex>
-    </button>
+    </Button>
   );
 };
 
