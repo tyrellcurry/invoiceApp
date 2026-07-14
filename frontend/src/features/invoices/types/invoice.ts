@@ -25,6 +25,8 @@ export interface Invoice {
   description: string;
   status: InvoiceStatus;
   invoiceDate: string;
+  /** Payment terms in days (e.g. 30 = Net 30 Days). */
+  paymentTerms: number;
   paymentDue: string;
   senderAddress: InvoiceAddress;
   clientName: string;

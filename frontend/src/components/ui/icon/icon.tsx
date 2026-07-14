@@ -17,6 +17,7 @@ import MenuLogoBtn from '@/components/ui/icon/assets/menu-logo-btn.svg';
 import ChevronRight from '@/components/ui/icon/assets/chevron-right.svg';
 import ChevronDown from '@/components/ui/icon/assets/chevron-down.svg';
 import CirclePlus from '@/components/ui/icon/assets/circle-plus.svg';
+import Trash from '@/components/ui/icon/assets/trash.svg';
 
 const Icon = ({ name, ...props }: IIconProps): JSX.Element => {
   let ComponentToRender: React.ElementType | null = null;
@@ -39,6 +40,9 @@ const Icon = ({ name, ...props }: IIconProps): JSX.Element => {
       break;
     case 'circle-plus':
       ComponentToRender = CirclePlus;
+      break;
+    case 'trash':
+      ComponentToRender = Trash;
       break;
     default:
       break;

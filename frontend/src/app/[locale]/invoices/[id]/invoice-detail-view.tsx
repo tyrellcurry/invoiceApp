@@ -1,15 +1,23 @@
 'use client';
 
-import { JSX } from 'react';
+import { JSX, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/lib/i18n/routing';
 import Container from '@/components/ui/container/container';
 import InvoiceDetails from '@/features/invoices/components/invoice-details/invoice-details';
+import InvoiceFormDrawer from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer';
+import type { InvoiceFormValues } from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer.types';
+import { useInvoiceFormLabels } from '@/features/invoices/hooks/use-invoice-form-labels';
 import { Invoice, InvoiceStatus } from '@/features/invoices/types/invoice';
+import { invoiceToFormValues } from '@/features/invoices/utils/invoice-form-values';
 
 const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
   const t = useTranslations('InvoiceDetails');
   const router = useRouter();
+  const { labels: formLabels, paymentTermOptions } = useInvoiceFormLabels();
+  const [isEditing, setIsEditing] = useState(false);
+
+  const formValues = useMemo(() => invoiceToFormValues(invoice), [invoice]);
 
   const statusText: Record<InvoiceStatus, string> = {
     [InvoiceStatus.DRAFT]: t('statusDraft'),
@@ -17,9 +25,14 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
     [InvoiceStatus.PAID]: t('statusPaid'),
   };
 
+  // @TODO: persist edits via `features/invoices/api` once a backend exists.
+  const handleSubmit = (_values: InvoiceFormValues) => {
+    setIsEditing(false);
+  };
+
   return (
     <Container className="mx-auto max-w-[730px]">
-      {/* @TODO: wire onEdit/onDelete/onMarkAsPaid once the invoice mutation flow exists. */}
+      {/* @TODO: wire onDelete/onMarkAsPaid once the invoice mutation flow exists. */}
       <InvoiceDetails
         clientAddress={invoice.clientAddress}
         clientEmail={invoice.clientEmail}
@@ -49,7 +62,19 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
           total: t('total'),
           amountDue: t('amountDue'),
         }}
+        onEdit={() => setIsEditing(true)}
         onGoBack={() => router.push('/')}
+      />
+
+      <InvoiceFormDrawer
+        initialValues={formValues}
+        invoiceId={invoice.id}
+        labels={formLabels}
+        mode="edit"
+        open={isEditing}
+        paymentTermOptions={paymentTermOptions}
+        onClose={() => setIsEditing(false)}
+        onSubmit={handleSubmit}
       />
     </Container>
   );
