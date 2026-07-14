@@ -68,13 +68,9 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
             </span>
           </div>
         </div>
-        <button
-          class="btn btn--custom p-1 ml-3"
-        >
-          <svg
-            class="icon"
-          />
-        </button>
+        <svg
+          class="ml-3"
+        />
       </div>
     </div>
   </div>
