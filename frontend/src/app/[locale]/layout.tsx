@@ -7,14 +7,14 @@ import React from 'react';
 import '@/styles/app.css';
 import { AppProvider } from '@/app/provider';
 import AppShell from '@/components/layouts/app-shell/app-shell';
-import { League_Spartan } from 'next/font/google';
+import { Lexend } from 'next/font/google';
 
 export const dynamic = 'force-dynamic';
 
-const leagueSpartan = League_Spartan({
+const lexend = Lexend({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-leaguespartan',
+  variable: '--font-lexend',
 });
 
 export const metadata: Metadata = {
@@ -38,7 +38,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html className={`${leagueSpartan.variable} font-sans`} lang={locale} suppressHydrationWarning>
+    <html className={`${lexend.variable} font-sans`} lang={locale} suppressHydrationWarning>
       <body className="bg-neutral-11 dark:bg-gray-12">
         <NextIntlClientProvider messages={messages}>
           <AppProvider>
