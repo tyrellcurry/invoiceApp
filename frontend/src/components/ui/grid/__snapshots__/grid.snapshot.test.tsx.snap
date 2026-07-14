@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Grid Component renders correctly 1`] = `
+<div>
+  <div
+    class="grid grid-cols-3 items-center gap-4"
+  >
+    content
+  </div>
+</div>
+`;
