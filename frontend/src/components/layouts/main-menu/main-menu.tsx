@@ -16,7 +16,7 @@ const MainMenu = (props: IMainMenuProps): JSX.Element => {
       {...rest}
     >
       <Button
-        className="w-[50px] h-[50px] xs:w-[72px] xs:h-[72px] md:w-[80px] md:h-[80px]"
+        className="w-12.5 h-12.5 xs:w-18 xs:h-18 md:w-20 md:h-20"
         href="/"
         iconLeft={'menu-logo-btn'}
         iconLeftClassName="w-full h-full"

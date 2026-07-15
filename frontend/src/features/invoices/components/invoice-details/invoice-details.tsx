@@ -36,7 +36,7 @@ const AddressBlock = ({
   className?: string;
 }): JSX.Element => (
   <Flex
-    className={classNames('text-gray-07 dark:text-gray-05 leading-[18px]', className)}
+    className={classNames('text-gray-07 dark:text-gray-05 leading-4.5', className)}
     direction="col"
   >
     <Text tag={'span'}>{address.street}</Text>
@@ -103,10 +103,7 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
             align="center"
             gapX={1.5}
             justify="center"
-            className={classNames(
-              'rounded-md px-[18px] py-3 leading-none w-[104px]',
-              statusStyles.badge
-            )}
+            className={classNames('rounded-md px-4.5 py-3 leading-none w-26', statusStyles.badge)}
           >
             <div className={classNames('w-2 h-2 rounded-full', statusStyles.dot)} />
             <Text className="font-bold" tag={'span'}>

@@ -42,7 +42,7 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
       </Flex>
       <Flex justify="between">
         <Container>
-          <Text className="text-gray-07 flex gap-1 pb-[9px] dark:text-gray-05" tag={'p'}>
+          <Text className="text-gray-07 flex gap-1 pb-2.25 dark:text-gray-05" tag={'p'}>
             <Text className="text-gray-06 dark:text-gray-05" tag={'span'}>
               {dueText}
             </Text>
@@ -58,7 +58,7 @@ const MobileView = (props: IInvoiceProps): JSX.Element => {
           align="center"
           justify="center"
           className={classNames(
-            'py-[14px] px-[30px] rounded-md leading-none self-center',
+            'py-3.5 px-7.5 rounded-md leading-none self-center',
             statusStyles.badge
           )}
         >

@@ -9,7 +9,7 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
       class="flex flex-row gap-x-11"
     >
       <div
-        class="flex flex-row gap-x-11 w-[256px]"
+        class="flex flex-row gap-x-11 w-64"
       >
         <p
           class="text text--body text-gray-08 font-bold dark:text-white"
@@ -53,10 +53,10 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
           1,800.90
         </p>
         <div
-          class="w-[150px]"
+          class="w-37.5"
         >
           <div
-            class="flex flex-row items-center justify-center py-[14px] px-[30px] rounded-md leading-none self-center ml-auto w-[145px] bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
+            class="flex flex-row items-center justify-center py-3.5 px-7.5 rounded-md leading-none self-center ml-auto w-36.25 bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
           >
             <span
               class="text text--body font-bold text-center flex gap-x-1.5 items-center"

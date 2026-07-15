@@ -47,7 +47,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           <span className="hidden md:block">{totalInvoicesText?.desktop}</span>
         </Text>
       </Container>
-      <Flex align="center" className="gap-x-[18px] md:gap-x-10">
+      <Flex align="center" className="gap-x-4.5 md:gap-x-10">
         <Grid className="relative place-items-center">
           <Button
             className="flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"
@@ -68,7 +68,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           {/* Children */}
           {isVisible && (
             <div
-              className="absolute bg-white drop-shadow-xl p-6 w-[180px] lg:w-[220px] top-6 rounded-lg dark:bg-blue-04 z-10"
+              className="absolute bg-white drop-shadow-xl p-6 w-45 lg:w-55 top-6 rounded-lg dark:bg-blue-04 z-10"
               ref={elementRef}
             >
               {filterKeys.map((key) => (
@@ -84,7 +84,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           )}
         </Grid>
         <Button
-          className="p-[6px] md:p-2 gap-x-2 items-center pr-[15px] text-xl md:text-lg"
+          className="p-1.5 md:p-2 gap-x-2 items-center pr-3.75 text-xl md:text-lg"
           iconLeft={'circle-plus'}
           iconLeftClassName="min-w-8 min-h-8 max-h-8 max-h-8"
           variant="primary"

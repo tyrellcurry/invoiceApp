@@ -70,7 +70,7 @@ const DeleteInvoiceDialog = (props: IDeleteInvoiceDialogProps): JSX.Element => {
         gapY={3}
         role="alertdialog"
         className={classNames(
-          'relative z-10 w-full max-w-[480px] rounded-lg bg-white dark:bg-blue-03 p-8 md:p-12 shadow-[0px_10px_10px_-10px_rgba(72,84,159,0.1)] transition duration-200',
+          'relative z-10 w-full max-w-120 rounded-lg bg-white dark:bg-blue-03 p-8 md:p-12 shadow-[0px_10px_10px_-10px_rgba(72,84,159,0.1)] transition duration-200',
           open ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
         )}
         aria-modal
@@ -83,11 +83,7 @@ const DeleteInvoiceDialog = (props: IDeleteInvoiceDialogProps): JSX.Element => {
         <Text className="text-gray-08 dark:text-white" tag={'h2'} variant="h2">
           {labels.title}
         </Text>
-        <Text
-          className="text-gray-06 dark:text-gray-05 leading-[22px]"
-          tag={'p'}
-          variant="body-alt"
-        >
+        <Text className="text-gray-06 dark:text-gray-05 leading-5.5" tag={'p'} variant="body-alt">
           {labels.message}
         </Text>
         <Flex align="center" className="mt-4" gapX={2} justify="end">
