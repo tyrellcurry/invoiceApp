@@ -6,9 +6,7 @@ exports[`Invoice Bar Component renders correctly with filled props 1`] = `
     class="flex flex-row items-center justify-between flex-wrap gap-y-6 md:flex-nowrap md:gap-y-0"
     data-testid="snapshot"
   >
-    <div
-      class="order-1"
-    >
+    <div>
       <h2
         class="text text--h2 text-gray-08 dark:text-white"
       >
