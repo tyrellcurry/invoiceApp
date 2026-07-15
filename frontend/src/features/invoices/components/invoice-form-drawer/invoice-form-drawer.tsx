@@ -32,7 +32,7 @@ import {
 import { getLineItemTotal } from '@/features/invoices/utils/get-line-item-total';
 
 const inputClass =
-  'w-full rounded-[4px] border border-gray-05 dark:border-blue-04 bg-white dark:bg-blue-03 px-5 py-4 text-[15px] font-bold leading-none text-gray-08 dark:text-white outline-none focus:border-blue-01';
+  'w-full rounded-sm border border-gray-05 dark:border-blue-04 bg-white dark:bg-blue-03 px-5 py-4 text-[15px] font-bold leading-none text-gray-08 dark:text-white outline-none focus:border-blue-01';
 
 const sectionHeadingClass = 'text-blue-01 font-bold text-[15px]';
 
@@ -158,7 +158,7 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
         direction="col"
         role="dialog"
         className={classNames(
-          'absolute left-0 top-0 h-full w-full max-w-[616px] bg-white dark:bg-gray-12 lg:left-[103px] lg:rounded-r-[20px] transition-transform duration-300',
+          'absolute left-0 top-0 h-full w-full max-w-154 bg-white dark:bg-gray-12 lg:left-25.75 lg:rounded-r-[20px] transition-transform duration-300',
           open ? 'translate-x-0' : '-translate-x-[calc(100%_+_104px)]'
         )}
         aria-modal
@@ -356,7 +356,7 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
                   />
                 </Field>
                 <Field
-                  className="flex-1 md:w-[100px] md:flex-none"
+                  className="flex-1 md:w-25 md:flex-none"
                   htmlFor={`item-price-${index}`}
                   label={labels.price}
                 >
@@ -370,7 +370,7 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
                     onChange={(event) => setItem(index, 'price', Number(event.target.value))}
                   />
                 </Field>
-                <Flex className="md:w-[100px]" direction="col" gapY={2}>
+                <Flex className="md:w-25" direction="col" gapY={2}>
                   <Text
                     className="text-[13px] font-medium text-gray-07 dark:text-gray-05"
                     tag={'span'}

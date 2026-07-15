@@ -40,7 +40,7 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
   };
 
   return (
-    <Container className="mx-auto max-w-[730px]">
+    <Container className="mx-auto max-w-182.5">
       {/* @TODO: wire onMarkAsPaid once the invoice mutation flow exists. */}
       <InvoiceDetails
         clientAddress={invoice.clientAddress}

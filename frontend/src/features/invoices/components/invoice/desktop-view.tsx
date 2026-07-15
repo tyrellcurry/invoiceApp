@@ -34,7 +34,7 @@ const DesktopView = (props: IInvoiceProps): JSX.Element => {
     >
       <Flex gapX={11}>
         {/* Invoice Details Section */}
-        <Flex className="w-[256px]" gapX={11}>
+        <Flex className="w-64" gapX={11}>
           <Text className="text-gray-08 font-bold dark:text-white" tag={'p'}>
             <Text className="text-gray-07" tag={'span'}>
               #
@@ -60,12 +60,12 @@ const DesktopView = (props: IInvoiceProps): JSX.Element => {
             <Text tag={'span'}>{getCurrencySymbol(localeAmountDue)}</Text>
             {formatInvoiceAmount(invoiceAmountDue, localeAmountDue)}
           </Text>
-          <Container className="w-[150px]">
+          <Container className="w-37.5">
             <Flex
               align="center"
               justify="center"
               className={classNames(
-                'py-[14px] px-[30px] rounded-md leading-none self-center ml-auto w-[145px]',
+                'py-3.5 px-7.5 rounded-md leading-none self-center ml-auto w-36.25',
                 statusStyles.badge
               )}
             >

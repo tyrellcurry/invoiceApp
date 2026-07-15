@@ -18,7 +18,7 @@ import { JSX } from 'react';
 const Checkbox = (props: ICheckboxProps): JSX.Element => {
   const { labelId, label, ...rest } = props;
   return (
-    <Flex align="center" className="gap-x-[13px]">
+    <Flex align="center" className="gap-x-3.25">
       <input
         className="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 dark:bg-blue-03 border-2 border-blue-01 rounded-sm checked:bg-blue-01 dark:checked:bg-blue-01 checked:border-0 cursor-pointer"
         id={labelId}
