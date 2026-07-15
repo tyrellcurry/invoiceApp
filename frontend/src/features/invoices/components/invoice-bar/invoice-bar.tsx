@@ -37,8 +37,14 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
   const filterKeys: (keyof FilterState)[] = ['draft', 'pending', 'paid'];
 
   return (
-    <Flex align="center" as="menu" justify="between" {...rest}>
-      <Container>
+    <Flex
+      align="center"
+      as="menu"
+      className="flex-wrap gap-y-6 md:flex-nowrap md:gap-y-0"
+      justify="between"
+      {...rest}
+    >
+      <Container className="order-1">
         <Text className="text-gray-08 dark:text-white" tag={'h2'} variant="h2">
           {invoiceBarTitle}
         </Text>
@@ -47,8 +53,11 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           <span className="hidden md:block">{totalInvoicesText?.desktop}</span>
         </Text>
       </Container>
-      <Flex align="center" className="gap-x-[18px] md:gap-x-10">
-        <Grid className="relative place-items-center">
+      <Container className="contents md:flex md:items-center md:gap-x-10">
+        <Grid
+          align="center"
+          className="relative order-3 w-full justify-items-start md:order-none md:w-auto md:justify-items-center"
+        >
           <Button
             className="flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"
             iconRight={'chevron-down'}
@@ -84,7 +93,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           )}
         </Grid>
         <Button
-          className="p-[6px] md:p-2 gap-x-2 items-center pr-[15px] text-xl md:text-lg"
+          className="order-2 p-[6px] md:order-none md:p-2 gap-x-2 items-center pr-[15px] text-xl md:text-lg"
           iconLeft={'circle-plus'}
           iconLeftClassName="min-w-8 min-h-8 max-h-8 max-h-8"
           variant="primary"
@@ -96,7 +105,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
           }
           onClick={newInvoiceHandler}
         />
-      </Flex>
+      </Container>
     </Flex>
   );
 };

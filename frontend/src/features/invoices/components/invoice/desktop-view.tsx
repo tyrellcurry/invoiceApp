@@ -41,7 +41,7 @@ const DesktopView = (props: IInvoiceProps): JSX.Element => {
             </Text>
             {invoiceId}
           </Text>
-          <Text className="text-gray-07 flex gap-1 dark:text-gray-05" tag={'p'}>
+          <Text className="text-gray-07 flex gap-1 whitespace-nowrap dark:text-gray-05" tag={'p'}>
             <Text className="text-gray-06 dark:text-gray-05" tag={'span'}>
               {dueText}
             </Text>

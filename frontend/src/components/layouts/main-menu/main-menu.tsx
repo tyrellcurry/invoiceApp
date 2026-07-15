@@ -27,7 +27,7 @@ const MainMenu = (props: IMainMenuProps): JSX.Element => {
           aria-label={darkmode === DARK_MODE ? darkmodeBtn?.lightAria : darkmodeBtn?.darkAria}
           className="h-fit self-center"
           iconLeft={darkmode === DARK_MODE ? 'dm-sun' : 'dm-moon'}
-          iconLeftClassName="w-8 h-8 fill-gray-07 hover:fill-gray-05"
+          iconLeftClassName="w-7 h-7 max-h-7 md:w-8 md:h-8 md:max-h-8 fill-gray-07 hover:fill-gray-05"
           variant="custom"
           onClick={darkmodeToggle}
         />
@@ -39,7 +39,7 @@ const MainMenu = (props: IMainMenuProps): JSX.Element => {
         >
           <Image
             alt={profile?.profileImageAlt}
-            className="rounded-full w-full h-auto max-w-8"
+            className="rounded-full w-full h-auto max-w-10 min-w-7"
             height={64}
             src={!!profile?.profileImage ? profile?.profileImage : '/assets/profile-default.png'}
             width={64}
