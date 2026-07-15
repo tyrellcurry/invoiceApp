@@ -66,5 +66,11 @@
     "term7": "Net 7 Days",
     "term14": "Net 14 Days",
     "term30": "Net 30 Days"
+  },
+  "DeleteInvoice": {
+    "title": "Confirm Deletion",
+    "message": "Are you sure you want to delete invoice #{id}? This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete"
   }
 }

@@ -4,6 +4,7 @@ import { JSX, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/lib/i18n/routing';
 import Container from '@/components/ui/container/container';
+import DeleteInvoiceDialog from '@/features/invoices/components/delete-invoice-dialog/delete-invoice-dialog';
 import InvoiceDetails from '@/features/invoices/components/invoice-details/invoice-details';
 import InvoiceFormDrawer from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer';
 import type { InvoiceFormValues } from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer.types';
@@ -13,9 +14,11 @@ import { invoiceToFormValues } from '@/features/invoices/utils/invoice-form-valu
 
 const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
   const t = useTranslations('InvoiceDetails');
+  const tDelete = useTranslations('DeleteInvoice');
   const router = useRouter();
   const { labels: formLabels, paymentTermOptions } = useInvoiceFormLabels();
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const formValues = useMemo(() => invoiceToFormValues(invoice), [invoice]);
 
@@ -30,9 +33,15 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
     setIsEditing(false);
   };
 
+  // @TODO: delete via `features/invoices/api` once a backend exists.
+  const handleConfirmDelete = () => {
+    setIsDeleting(false);
+    router.push('/');
+  };
+
   return (
     <Container className="mx-auto max-w-[730px]">
-      {/* @TODO: wire onDelete/onMarkAsPaid once the invoice mutation flow exists. */}
+      {/* @TODO: wire onMarkAsPaid once the invoice mutation flow exists. */}
       <InvoiceDetails
         clientAddress={invoice.clientAddress}
         clientEmail={invoice.clientEmail}
@@ -62,6 +71,7 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
           total: t('total'),
           amountDue: t('amountDue'),
         }}
+        onDelete={() => setIsDeleting(true)}
         onEdit={() => setIsEditing(true)}
         onGoBack={() => router.push('/')}
       />
@@ -75,6 +85,18 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
         paymentTermOptions={paymentTermOptions}
         onClose={() => setIsEditing(false)}
         onSubmit={handleSubmit}
+      />
+
+      <DeleteInvoiceDialog
+        open={isDeleting}
+        labels={{
+          title: tDelete('title'),
+          message: tDelete('message', { id: invoice.id }),
+          cancel: tDelete('cancel'),
+          delete: tDelete('delete'),
+        }}
+        onCancel={() => setIsDeleting(false)}
+        onConfirm={handleConfirmDelete}
       />
     </Container>
   );
