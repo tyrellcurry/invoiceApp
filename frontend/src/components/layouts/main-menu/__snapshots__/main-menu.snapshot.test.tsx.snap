@@ -20,7 +20,7 @@ exports[`Main Menu Component renders correctly with default props 1`] = `
         class="btn btn--custom h-fit self-center"
       >
         <svg
-          class="icon w-8 h-8 fill-gray-07 hover:fill-gray-05"
+          class="icon w-7 h-7 max-h-7 md:w-8 md:h-8 md:max-h-8 fill-gray-07 hover:fill-gray-05"
         />
       </button>
       <hr
@@ -33,7 +33,7 @@ exports[`Main Menu Component renders correctly with default props 1`] = `
       >
         <img
           alt="lorem ipsum"
-          class="rounded-full w-full h-auto max-w-8"
+          class="rounded-full w-full h-auto max-w-10 min-w-7"
           data-nimg="1"
           decoding="async"
           height="64"

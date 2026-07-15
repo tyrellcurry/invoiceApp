@@ -22,7 +22,7 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
           RT3080
         </p>
         <p
-          class="text text--body text-gray-07 flex gap-1 dark:text-gray-05"
+          class="text text--body text-gray-07 flex gap-1 whitespace-nowrap dark:text-gray-05"
         >
           <span
             class="text text--body text-gray-06 dark:text-gray-05"
