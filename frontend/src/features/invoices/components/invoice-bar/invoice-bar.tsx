@@ -44,7 +44,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
       justify="between"
       {...rest}
     >
-      <Container className="order-1">
+      <Container>
         <Text className="text-gray-08 dark:text-white" tag={'h2'} variant="h2">
           {invoiceBarTitle}
         </Text>
