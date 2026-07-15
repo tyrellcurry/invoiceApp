@@ -98,7 +98,7 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
   return (
     <Flex direction="col" gapY={6}>
       <Button
-        className="flex items-center gap-x-6 w-fit font-bold text-gray-08 dark:text-white"
+        className="flex items-center gap-x-3 w-fit font-bold text-gray-08 dark:text-white"
         iconLeft={'chevron-right'}
         iconLeftClassName="rotate-180 shrink-0"
         label={labels.goBack}
