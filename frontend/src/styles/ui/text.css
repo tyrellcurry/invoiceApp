@@ -1,27 +1,27 @@
 @layer components {
   .text {
     @apply text-left;
-    /* Text Variants */
-    &--h1 {
-      @apply font-bold text-[36px] tracking-[-1px];
-    }
-    &--h2 {
-      @apply font-bold text-[28px] tracking-[-0.75px];
-    }
-    &--h3 {
-      @apply font-bold text-[20px] tracking-[-0.25px];
-    }
-    &--kicker {
-      @apply font-bold text-[18px] tracking-[-0.25px];
-    }
-    &--body {
-      @apply text-[18px] tracking-[-0.1px];
-    }
-    &--body-alt {
-      @apply font-medium leading-[20px] text-[18px] tracking-[-0.1px];
-    }
-    &--rich {
-      @apply text-[18px] tracking-[-0.1px];
-    }
+  }
+  /* Text Variants */
+  .text--h1 {
+    @apply font-bold text-[36px] tracking-[-1px];
+  }
+  .text--h2 {
+    @apply font-bold text-[28px] tracking-[-0.75px];
+  }
+  .text--h3 {
+    @apply font-bold text-[20px] tracking-[-0.25px];
+  }
+  .text--kicker {
+    @apply font-bold text-[18px] tracking-[-0.25px];
+  }
+  .text--body {
+    @apply text-[18px] tracking-[-0.1px];
+  }
+  .text--body-alt {
+    @apply font-medium leading-[20px] text-[18px] tracking-[-0.1px];
+  }
+  .text--rich {
+    @apply text-[18px] tracking-[-0.1px];
   }
 }
