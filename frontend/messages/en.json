@@ -15,7 +15,9 @@
     "statusDraft": "Draft",
     "statusPending": "Pending",
     "statusPaid": "Paid",
-    "due": "Due"
+    "due": "Due",
+    "emptyTitle": "There is nothing here",
+    "emptyDescription": "Create an invoice by clicking the <bold>New Invoice</bold> button and get started"
   },
   "InvoiceDetails": {
     "goBack": "Go back",
