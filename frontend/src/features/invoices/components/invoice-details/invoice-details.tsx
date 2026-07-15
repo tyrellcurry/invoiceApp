@@ -71,10 +71,27 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
   const statusStyles = getInvoiceStatusStyles(invoiceStatus);
 
   const actions = (
-    <Flex align="center" gapX={2}>
-      <Button label={labels.edit} variant="secondary" onClick={onEdit} />
-      <Button label={labels.delete} variant="danger" onClick={onDelete} />
-      <Button label={labels.markAsPaid} variant="primary" onClick={onMarkAsPaid} />
+    <Flex align="center" className="md:flex-row md:gap-x-2" direction="col" gap={2}>
+      <Flex className="w-full md:contents" gapX={2}>
+        <Button
+          className="flex-1 justify-center md:flex-none"
+          label={labels.edit}
+          variant="secondary"
+          onClick={onEdit}
+        />
+        <Button
+          className="flex-1 justify-center md:flex-none"
+          label={labels.delete}
+          variant="danger"
+          onClick={onDelete}
+        />
+      </Flex>
+      <Button
+        className="w-full justify-center md:w-fit"
+        label={labels.markAsPaid}
+        variant="primary"
+        onClick={onMarkAsPaid}
+      />
     </Flex>
   );
 
@@ -101,9 +118,9 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
           </Text>
           <Flex
             align="center"
+            className={classNames('rounded-md px-4.5 py-3 leading-none w-26', statusStyles.badge)}
             gapX={1.5}
             justify="center"
-            className={classNames('rounded-md px-4.5 py-3 leading-none w-26', statusStyles.badge)}
           >
             <div className={classNames('w-2 h-2 rounded-full', statusStyles.dot)} />
             <Text className="font-bold" tag={'span'}>

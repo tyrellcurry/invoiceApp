@@ -177,7 +177,7 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
         </Text>
 
         <form
-          className="flex-1 overflow-y-auto px-6 md:px-12"
+          className="flex-1 overflow-y-auto px-6 md:px-12 pb-8"
           id="invoice-form"
           onSubmit={(event) => {
             event.preventDefault();
@@ -402,42 +402,78 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
         </form>
 
         {/* Footer */}
-        <Flex
-          align="center"
-          className="px-6 md:px-12 py-6 shadow-[0_-10px_10px_-10px_rgba(72,84,159,0.1)]"
-          gapX={2}
-          justify={mode === 'edit' ? 'end' : 'between'}
-        >
+        <Container className="px-6 md:px-12 py-6 shadow-[0_-10px_10px_-10px_rgba(72,84,159,0.1)]">
           {mode === 'edit' ? (
-            <>
-              <Button label={labels.cancel} type="button" variant="secondary" onClick={onClose} />
+            <Flex className="md:justify-end" gap={2}>
               <Button
+                className="flex-1 justify-center md:flex-none"
+                label={labels.cancel}
+                type="button"
+                variant="secondary"
+                onClick={onClose}
+              />
+              <Button
+                className="flex-1 justify-center md:flex-none"
                 form="invoice-form"
                 label={labels.saveChanges}
                 type="submit"
                 variant="primary"
               />
-            </>
+            </Flex>
           ) : (
             <>
-              <Button label={labels.discard} type="button" variant="secondary" onClick={onClose} />
-              <Flex align="center" gapX={2}>
+              {/* Mobile: Discard + Save as Draft on one row, Save & Send full width */}
+              <Flex className="md:hidden" direction="col" gap={2}>
+                <Flex gapX={2}>
+                  <Button
+                    className="flex-1 justify-center"
+                    label={labels.discard}
+                    type="button"
+                    variant="secondary"
+                    onClick={onClose}
+                  />
+                  <Button
+                    className="flex-1 justify-center"
+                    label={labels.saveAsDraft}
+                    type="button"
+                    variant="dark"
+                    onClick={() => onSaveDraft?.(values)}
+                  />
+                </Flex>
                 <Button
-                  label={labels.saveAsDraft}
-                  type="button"
-                  variant="dark"
-                  onClick={() => onSaveDraft?.(values)}
-                />
-                <Button
+                  className="w-full justify-center"
                   form="invoice-form"
                   label={labels.saveAndSend}
                   type="submit"
                   variant="primary"
                 />
               </Flex>
+              {/* Desktop: Discard left, save actions right */}
+              <Flex align="center" className="hidden md:flex" justify="between">
+                <Button
+                  label={labels.discard}
+                  type="button"
+                  variant="secondary"
+                  onClick={onClose}
+                />
+                <Flex align="center" gapX={2}>
+                  <Button
+                    label={labels.saveAsDraft}
+                    type="button"
+                    variant="dark"
+                    onClick={() => onSaveDraft?.(values)}
+                  />
+                  <Button
+                    form="invoice-form"
+                    label={labels.saveAndSend}
+                    type="submit"
+                    variant="primary"
+                  />
+                </Flex>
+              </Flex>
             </>
           )}
-        </Flex>
+        </Container>
       </Flex>
     </Container>
   );
