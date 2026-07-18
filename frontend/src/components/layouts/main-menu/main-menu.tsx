@@ -2,9 +2,8 @@ import React, { JSX } from 'react';
 import { IMainMenuProps } from '@/components/layouts/main-menu/main-menu.types';
 import Button from '@/components/ui/button/button';
 import Flex from '@/components/ui/flex/flex';
-import Image from 'next/image';
+import { Link } from 'react-router';
 import { DARK_MODE } from '@/config/constants';
-import Link from 'next/link';
 const MainMenu = (props: IMainMenuProps): JSX.Element => {
   const { darkmode, darkmodeToggle, profile, darkmodeBtn, ...rest } = props;
   return (
@@ -35,14 +34,12 @@ const MainMenu = (props: IMainMenuProps): JSX.Element => {
         <Link
           className="h-fit self-center relative"
           data-testid="profile-link"
-          href={profile?.link || '#'}
+          to={profile?.link || '#'}
         >
-          <Image
+          <img
             alt={profile?.profileImageAlt}
             className="rounded-full w-full h-auto max-w-10 min-w-7"
-            height={64}
             src={!!profile?.profileImage ? profile?.profileImage : '/assets/profile-default.png'}
-            width={64}
           />
         </Link>
       </Flex>

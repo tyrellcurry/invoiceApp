@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`RichText Component renders correctly with HTML passed as a value 1`] = `
+exports[`RichText Component > renders correctly with HTML passed as a value 1`] = `
 <div>
   <div
     class="text text--rich"
@@ -12,7 +12,7 @@ exports[`RichText Component renders correctly with HTML passed as a value 1`] = 
 </div>
 `;
 
-exports[`RichText Component renders correctly with default props 1`] = `
+exports[`RichText Component > renders correctly with default props 1`] = `
 <div>
   <div
     class="text text--rich"

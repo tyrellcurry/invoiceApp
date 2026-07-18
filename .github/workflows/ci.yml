@@ -11,7 +11,7 @@ concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# The Next.js app lives in the `frontend/` subdirectory.
+# The app lives in the `frontend/` subdirectory.
 defaults:
   run:
     working-directory: frontend
@@ -49,7 +49,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run tests
-        run: npm test -- --ci
+        run: npm test
 
   build:
     name: Build
@@ -63,13 +63,6 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - name: Install dependencies
         run: npm ci
-      - name: Restore Next.js build cache
-        uses: actions/cache@v4
-        with:
-          path: frontend/.next/cache
-          key: nextjs-${{ hashFiles('frontend/package-lock.json') }}-${{ hashFiles('frontend/src/**/*.[jt]s', 'frontend/src/**/*.[jt]sx') }}
-          restore-keys: |
-            nextjs-${{ hashFiles('frontend/package-lock.json') }}-
       - name: Build
         run: npm run build
 

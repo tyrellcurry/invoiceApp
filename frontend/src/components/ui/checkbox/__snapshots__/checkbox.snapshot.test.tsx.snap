@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Checkbox Component renders correctly with a label 1`] = `
+exports[`Checkbox Component > renders correctly with a label 1`] = `
 <div>
   <div
     class="flex flex-row items-center gap-x-3.25"
@@ -17,7 +17,10 @@ exports[`Checkbox Component renders correctly with a label 1`] = `
       Test Label
     </label>
     <svg
-      class=" absolute w-3.5 h-3.5 ml-0.5 hidden peer-checked:block pointer-events-none"
+      class="
+      absolute
+      w-3.5 h-3.5 ml-0.5
+      hidden peer-checked:block pointer-events-none"
       fill="none"
       height="9"
       viewBox="0 0 10 9"
@@ -34,7 +37,7 @@ exports[`Checkbox Component renders correctly with a label 1`] = `
 </div>
 `;
 
-exports[`Checkbox Component renders correctly without a label 1`] = `
+exports[`Checkbox Component > renders correctly without a label 1`] = `
 <div>
   <div
     class="flex flex-row items-center gap-x-3.25"
@@ -49,7 +52,10 @@ exports[`Checkbox Component renders correctly without a label 1`] = `
       for="checkbox-2"
     />
     <svg
-      class=" absolute w-3.5 h-3.5 ml-0.5 hidden peer-checked:block pointer-events-none"
+      class="
+      absolute
+      w-3.5 h-3.5 ml-0.5
+      hidden peer-checked:block pointer-events-none"
       fill="none"
       height="9"
       viewBox="0 0 10 9"
@@ -66,7 +72,7 @@ exports[`Checkbox Component renders correctly without a label 1`] = `
 </div>
 `;
 
-exports[`Checkbox Component renders with custom class names 1`] = `
+exports[`Checkbox Component > renders with custom class names 1`] = `
 <div>
   <div
     class="flex flex-row items-center gap-x-3.25"
@@ -83,7 +89,10 @@ exports[`Checkbox Component renders with custom class names 1`] = `
       Custom Class
     </label>
     <svg
-      class=" absolute w-3.5 h-3.5 ml-0.5 hidden peer-checked:block pointer-events-none"
+      class="
+      absolute
+      w-3.5 h-3.5 ml-0.5
+      hidden peer-checked:block pointer-events-none"
       fill="none"
       height="9"
       viewBox="0 0 10 9"

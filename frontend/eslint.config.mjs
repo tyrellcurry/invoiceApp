@@ -1,25 +1,51 @@
-import nextCoreWebVitals from 'eslint-config-next/core-web-vitals';
-import nextTypescript from 'eslint-config-next/typescript';
+import tseslint from 'typescript-eslint';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import importPlugin from 'eslint-plugin-import';
 import unusedImports from 'eslint-plugin-unused-imports';
 import storybook from 'eslint-plugin-storybook';
+import globals from 'globals';
 
 const eslintConfig = [
   {
-    ignores: ['.next/**', 'storybook-static/**', 'coverage/**', 'node_modules/**'],
+    ignores: [
+      'dist/**',
+      '.next/**',
+      '.swc/**',
+      'storybook-static/**',
+      'coverage/**',
+      'node_modules/**',
+    ],
   },
-  // Next.js 16 ships native flat configs, so we consume them directly instead
-  // of bridging the legacy shareable configs through FlatCompat. These already
-  // register the `react`, `react-hooks`, `@next/next` and `@typescript-eslint`
-  // plugins, so we must not redefine them below.
-  ...nextCoreWebVitals,
-  ...nextTypescript,
-  ...storybook.configs['flat/recommended'],
   {
-    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    files: ['**/*.{js,mjs,jsx,ts,tsx}'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+      globals: { ...globals.browser, ...globals.node },
+    },
     plugins: {
+      '@typescript-eslint': tseslint.plugin,
+      react,
+      'react-hooks': reactHooks,
+      import: importPlugin,
       'unused-imports': unusedImports,
     },
+    settings: {
+      react: { version: 'detect' },
+      'import/resolver': {
+        typescript: true,
+        node: true,
+      },
+    },
     rules: {
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       'unused-imports/no-unused-imports': 'error',
@@ -66,8 +92,8 @@ const eslintConfig = [
       ],
     },
   },
+  ...storybook.configs['flat/recommended'],
   // Bulletproof-react unidirectional architecture: shared -> features -> app.
-  // Enforced via the `import` plugin already registered by eslint-config-next.
   {
     files: ['src/**/*.{js,jsx,ts,tsx}'],
     rules: {

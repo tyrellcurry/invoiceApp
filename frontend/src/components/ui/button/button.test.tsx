@@ -43,7 +43,7 @@ describe('Button Component - Unit Tests', () => {
   });
 
   it('`onClick` event triggers when button is clicked', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<Button data-testid={testId} onClick={handleClick} />);
     const element = screen.getByTestId(testId);
     fireEvent.click(element);
@@ -76,7 +76,7 @@ describe('Button Component - Unit Tests', () => {
   });
 
   it('renders disbled button when `disabled` is passed and does not fire click event', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<Button data-testid={testId} disabled onClick={handleClick} />);
     const element = screen.getByTestId(testId);
     fireEvent.click(element);

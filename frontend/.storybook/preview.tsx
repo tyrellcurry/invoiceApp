@@ -1,15 +1,9 @@
 import React from 'react';
-import type { Preview } from '@storybook/nextjs';
+import type { Preview } from '@storybook/react-vite';
+import { MemoryRouter } from 'react-router';
 import '../src/styles/app.css';
+import '@fontsource-variable/lexend';
 import { withThemeByClassName } from '@storybook/addon-themes';
-
-import { Lexend } from 'next/font/google';
-
-const lexend = Lexend({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-lexend',
-});
 
 const preview: Preview = {
   decorators: [
@@ -21,9 +15,11 @@ const preview: Preview = {
       defaultTheme: 'Light',
     }),
     (Story) => (
-      <main className={`${lexend.variable} font-sans`}>
-        <Story />
-      </main>
+      <MemoryRouter>
+        <main className="font-sans">
+          <Story />
+        </main>
+      </MemoryRouter>
     ),
   ],
   parameters: {

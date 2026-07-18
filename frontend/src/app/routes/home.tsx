@@ -1,8 +1,6 @@
-'use client';
-
 import { useMemo, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { Link } from '@/lib/i18n/routing';
+import { useTranslations } from 'use-intl';
+import { Link } from 'react-router';
 import Flex from '@/components/ui/flex/flex';
 import InvoiceBar from '@/features/invoices/components/invoice-bar/invoice-bar';
 import type { FilterState } from '@/features/invoices/components/invoice-bar/invoice-bar.types';
@@ -82,7 +80,7 @@ const HomeView = () => {
         <Flex as="ul" direction="col" gapY={4}>
           {visibleInvoices.map((invoice) => (
             <li key={invoice.id}>
-              <Link className="block" href={`/invoices/${invoice.id}`}>
+              <Link className="block" to={`/invoices/${invoice.id}`}>
                 <Invoice
                   billingName={invoice.clientName}
                   dueText={t('due')}

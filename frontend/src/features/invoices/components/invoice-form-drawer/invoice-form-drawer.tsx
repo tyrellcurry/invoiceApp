@@ -11,7 +11,6 @@
  *
  * @returns {JSX.Element}
  */
-'use client';
 
 import { JSX, ReactNode, useEffect, useState } from 'react';
 import classNames from 'classnames';

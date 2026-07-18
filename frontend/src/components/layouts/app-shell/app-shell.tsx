@@ -10,10 +10,9 @@
  *
  * @returns {JSX.Element}
  */
-'use client';
 
 import { JSX, ReactNode } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from 'use-intl';
 import MainMenu from '@/components/layouts/main-menu/main-menu';
 import Container from '@/components/ui/container/container';
 import { useDarkMode } from '@/hooks/use-dark-mode';
