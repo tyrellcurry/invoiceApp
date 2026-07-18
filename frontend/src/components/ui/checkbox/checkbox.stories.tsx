@@ -1,4 +1,4 @@
-import type { StoryObj } from '@storybook/nextjs';
+import type { StoryObj } from '@storybook/react-vite';
 
 import Checkbox from '@/components/ui/checkbox/checkbox';
 

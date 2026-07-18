@@ -1,4 +1,4 @@
-import type { StoryObj } from '@storybook/nextjs';
+import type { StoryObj } from '@storybook/react-vite';
 import MainMenu from '@/components/layouts/main-menu/main-menu';
 import { DARK_MODE } from '@/config/constants';
 

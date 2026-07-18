@@ -1,4 +1,4 @@
-import type { StoryObj } from '@storybook/nextjs';
+import type { StoryObj } from '@storybook/react-vite';
 
 import InvoiceBar from '@/features/invoices/components/invoice-bar/invoice-bar';
 

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Invoice Component renders correctly with data passed to props 1`] = `
+exports[`Invoice Component > renders correctly with data passed to props 1`] = `
 <div>
   <div
     class="flex flex-row items-center justify-between hidden md:flex py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03"
@@ -70,7 +70,18 @@ exports[`Invoice Component renders correctly with data passed to props 1`] = `
         </div>
         <svg
           class="ml-3"
-        />
+          fill="none"
+          height="10"
+          viewBox="0 0 7 10"
+          width="7"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M1 1L5 5L1 9"
+            stroke="#7C5DFA"
+            stroke-width="2"
+          />
+        </svg>
       </div>
     </div>
   </div>

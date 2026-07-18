@@ -1,4 +1,4 @@
-import type { StoryObj } from '@storybook/nextjs';
+import type { StoryObj } from '@storybook/react-vite';
 
 import Text from '@/components/ui/text/text';
 

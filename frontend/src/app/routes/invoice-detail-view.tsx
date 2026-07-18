@@ -1,8 +1,6 @@
-'use client';
-
 import { JSX, useMemo, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { useRouter } from '@/lib/i18n/routing';
+import { useTranslations } from 'use-intl';
+import { useNavigate } from 'react-router';
 import Container from '@/components/ui/container/container';
 import DeleteInvoiceDialog from '@/features/invoices/components/delete-invoice-dialog/delete-invoice-dialog';
 import InvoiceDetails from '@/features/invoices/components/invoice-details/invoice-details';
@@ -15,7 +13,7 @@ import { invoiceToFormValues } from '@/features/invoices/utils/invoice-form-valu
 const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
   const t = useTranslations('InvoiceDetails');
   const tDelete = useTranslations('DeleteInvoice');
-  const router = useRouter();
+  const navigate = useNavigate();
   const { labels: formLabels, paymentTermOptions } = useInvoiceFormLabels();
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -36,7 +34,7 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
   // @TODO: delete via `features/invoices/api` once a backend exists.
   const handleConfirmDelete = () => {
     setIsDeleting(false);
-    router.push('/');
+    navigate('/');
   };
 
   return (
@@ -73,7 +71,7 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
         }}
         onDelete={() => setIsDeleting(true)}
         onEdit={() => setIsEditing(true)}
-        onGoBack={() => router.push('/')}
+        onGoBack={() => navigate('/')}
       />
 
       <InvoiceFormDrawer

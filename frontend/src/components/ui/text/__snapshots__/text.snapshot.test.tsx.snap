@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Text Component renders correctly with a custom tag and variant 1`] = `
+exports[`Text Component > renders correctly with a custom tag and variant 1`] = `
 <div>
   <h1
     class="text text--h1 custom-class"
@@ -10,7 +10,7 @@ exports[`Text Component renders correctly with a custom tag and variant 1`] = `
 </div>
 `;
 
-exports[`Text Component renders correctly with custom children 1`] = `
+exports[`Text Component > renders correctly with custom children 1`] = `
 <div>
   <div
     class="text text--body"
@@ -20,7 +20,7 @@ exports[`Text Component renders correctly with custom children 1`] = `
 </div>
 `;
 
-exports[`Text Component renders correctly with default props 1`] = `
+exports[`Text Component > renders correctly with default props 1`] = `
 <div>
   <div
     class="text text--body"
@@ -30,7 +30,7 @@ exports[`Text Component renders correctly with default props 1`] = `
 </div>
 `;
 
-exports[`Text Component renders correctly with kicker variant 1`] = `
+exports[`Text Component > renders correctly with kicker variant 1`] = `
 <div>
   <div
     class="text text--kicker"

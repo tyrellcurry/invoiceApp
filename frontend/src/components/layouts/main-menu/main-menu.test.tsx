@@ -1,25 +1,28 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
 import MainMenu from '@/components/layouts/main-menu/main-menu';
 
 describe('Main Menu Component - Unit Tests', () => {
   const testId = 'text-test-id';
   const RenderMainMenu = (darkMode?: string) =>
     render(
-      <MainMenu
-        darkmode={darkMode || 'dark'}
-        darkmodeToggle={() => {}}
-        data-testid={testId}
-        darkmodeBtn={{
-          darkAria: 'lorem-dark',
-          lightAria: 'lorem-light',
-        }}
-        profile={{
-          profileImage: '/assets/profile-default.png',
-          profileImageAlt: 'lorem ipsum',
-          link: 'google.ca',
-        }}
-      />
+      <MemoryRouter>
+        <MainMenu
+          darkmode={darkMode || 'dark'}
+          darkmodeToggle={() => {}}
+          data-testid={testId}
+          darkmodeBtn={{
+            darkAria: 'lorem-dark',
+            lightAria: 'lorem-light',
+          }}
+          profile={{
+            profileImage: '/assets/profile-default.png',
+            profileImageAlt: 'lorem ipsum',
+            link: '/profile',
+          }}
+        />
+      </MemoryRouter>
     );
 
   it('renders with the correct tag', () => {
@@ -77,6 +80,6 @@ describe('Main Menu Component - Unit Tests', () => {
 
     // Find the link
     const profileLink = screen.getByTestId('profile-link');
-    expect(profileLink).toHaveAttribute('href', 'google.ca');
+    expect(profileLink).toHaveAttribute('href', '/profile');
   });
 });

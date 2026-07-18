@@ -1,3 +1,3 @@
 {
-  "src/**/*.{js,jsx,ts,tsx,scss,css,md}": ["eslint", "prettier --write", "jest --findRelatedTests --passWithNoTests"]
+  "src/**/*.{js,jsx,ts,tsx,scss,css,md}": ["eslint", "prettier --write", "vitest related --run --passWithNoTests"]
 }
