@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react';
+import { ComponentPropsWithoutRef, ElementType, ReactNode, RefObject } from 'react';
 
 export type FlexDirection = 'row' | 'col' | 'row-reverse' | 'col-reverse';
 export type FlexAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
@@ -25,4 +25,5 @@ export interface IFlexProps extends ComponentPropsWithoutRef<'div'> {
   gapY?: Spacing;
   className?: string;
   children?: ReactNode;
+  ref?: RefObject<HTMLDivElement | null>;
 }

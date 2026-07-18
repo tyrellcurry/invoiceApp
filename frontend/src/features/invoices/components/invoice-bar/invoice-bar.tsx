@@ -56,7 +56,7 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
       <Container className="contents md:flex md:items-center md:gap-x-10">
         <Grid
           align="center"
-          className="relative order-3 w-full justify-items-start md:order-none md:w-auto md:justify-items-center"
+          className="relative order-3 w-full justify-items-start md:order-0 md:w-auto md:justify-items-center"
         >
           <Button
             className="flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"
@@ -76,8 +76,10 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
 
           {/* Children */}
           {isVisible && (
-            <div
-              className="absolute bg-white drop-shadow-xl p-6 w-45 lg:w-55 top-6 rounded-lg dark:bg-blue-04 z-10"
+            <Flex
+              className="absolute bg-white drop-shadow-xl p-6 w-45 lg:w-55 top-8 rounded-lg dark:bg-blue-04 z-10"
+              direction="col"
+              gap={2}
               ref={elementRef}
             >
               {filterKeys.map((key) => (
@@ -89,11 +91,11 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
                   />
                 </Container>
               ))}
-            </div>
+            </Flex>
           )}
         </Grid>
         <Button
-          className="order-2 p-1.5 md:order-none md:p-2 gap-x-2 items-center pr-3.75 text-xl md:text-lg"
+          className="order-2 p-1.5 md:order-0 md:p-2 gap-x-2 items-center pr-3.75 text-xl md:text-lg"
           iconLeft={'circle-plus'}
           iconLeftClassName="min-w-8 min-h-8 max-h-8 max-h-8"
           variant="primary"
