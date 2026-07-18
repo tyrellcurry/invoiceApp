@@ -1,4 +1,3 @@
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import InvoiceBar from '@/features/invoices/components/invoice-bar/invoice-bar';
 

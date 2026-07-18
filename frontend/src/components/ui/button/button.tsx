@@ -17,10 +17,10 @@
  * @returns {JSX.Element}
  */
 
-import React, { JSX } from 'react';
+import classNames from 'classnames';
+import { ComponentPropsWithoutRef, JSX } from 'react';
 import { IButtonProps } from '@/components/ui/button/button.types';
 import Icon from '@/components/ui/icon/icon';
-import classNames from 'classnames';
 
 const Button = (props: IButtonProps): JSX.Element => {
   const {
@@ -68,14 +68,14 @@ const Button = (props: IButtonProps): JSX.Element => {
 
   if (href) {
     return (
-      <a {...(rest as React.ComponentPropsWithoutRef<'a'>)} className={className} href={href}>
+      <a {...(rest as ComponentPropsWithoutRef<'a'>)} className={className} href={href}>
         {renderButtonContent()}
       </a>
     );
   }
 
   return (
-    <button {...(rest as React.ComponentPropsWithoutRef<'button'>)} className={className}>
+    <button {...(rest as ComponentPropsWithoutRef<'button'>)} className={className}>
       {renderButtonContent()}
     </button>
   );

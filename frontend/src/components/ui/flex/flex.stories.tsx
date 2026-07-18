@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ReactNode } from 'react';
 
 import Flex from '@/components/ui/flex/flex';
 
-const Box = ({ children }: { children: React.ReactNode }) => (
+const Box = ({ children }: { children: ReactNode }) => (
   <div className="bg-blue-01 text-white rounded-md px-4 py-3 text-center">{children}</div>
 );
 

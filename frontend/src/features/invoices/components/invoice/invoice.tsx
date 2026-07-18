@@ -16,10 +16,10 @@
  * @returns {JSX.Element}
  */
 import { JSX } from 'react';
-import { IInvoiceProps } from '@/features/invoices/types/invoice';
 import Container from '@/components/ui/container/container';
-import MobileView from '@/features/invoices/components/invoice/mobile-view';
 import DesktopView from '@/features/invoices/components/invoice/desktop-view';
+import MobileView from '@/features/invoices/components/invoice/mobile-view';
+import { IInvoiceProps } from '@/features/invoices/types/invoice';
 
 const Invoice = (props: IInvoiceProps): JSX.Element => {
   return (

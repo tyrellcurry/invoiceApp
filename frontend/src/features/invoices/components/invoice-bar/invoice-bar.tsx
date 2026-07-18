@@ -1,16 +1,16 @@
-import { JSX } from 'react';
-import {
-  FilterState,
-  IInvoiceBarProps,
-} from '@/features/invoices/components/invoice-bar/invoice-bar.types';
 import classNames from 'classnames';
+import { ChangeEvent, JSX } from 'react';
 import Button from '@/components/ui/button/button';
+import Checkbox from '@/components/ui/checkbox/checkbox';
 import Container from '@/components/ui/container/container';
 import Flex from '@/components/ui/flex/flex';
 import Grid from '@/components/ui/grid/grid';
 import Text from '@/components/ui/text/text';
+import {
+  FilterState,
+  IInvoiceBarProps,
+} from '@/features/invoices/components/invoice-bar/invoice-bar.types';
 import useVisibilityToggle from '@/hooks/use-visibility-toggle';
-import Checkbox from '@/components/ui/checkbox/checkbox';
 
 const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
   const {
@@ -27,12 +27,11 @@ const InvoiceBar = (props: IInvoiceBarProps): JSX.Element => {
 
   const { isVisible, setIsVisible, elementRef } = useVisibilityToggle();
 
-  const handleFilterChange =
-    (key: keyof FilterState) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (setFilters) {
-        setFilters({ ...filters, [key]: event.target.checked });
-      }
-    };
+  const handleFilterChange = (key: keyof FilterState) => (event: ChangeEvent<HTMLInputElement>) => {
+    if (setFilters) {
+      setFilters({ ...filters, [key]: event.target.checked });
+    }
+  };
 
   const filterKeys: (keyof FilterState)[] = ['draft', 'pending', 'paid'];
 

@@ -9,18 +9,18 @@
  * @returns {JSX.Element}
  */
 
-import React, { JSX } from 'react';
-import { IIconProps } from '@/components/ui/icon/icon.types';
+import { ElementType, JSX } from 'react';
+import ChevronDown from '@/components/ui/icon/assets/chevron-down.svg';
+import ChevronRight from '@/components/ui/icon/assets/chevron-right.svg';
+import CirclePlus from '@/components/ui/icon/assets/circle-plus.svg';
 import Moon from '@/components/ui/icon/assets/dm-moon.svg';
 import Sun from '@/components/ui/icon/assets/dm-sun.svg';
 import MenuLogoBtn from '@/components/ui/icon/assets/menu-logo-btn.svg';
-import ChevronRight from '@/components/ui/icon/assets/chevron-right.svg';
-import ChevronDown from '@/components/ui/icon/assets/chevron-down.svg';
-import CirclePlus from '@/components/ui/icon/assets/circle-plus.svg';
 import Trash from '@/components/ui/icon/assets/trash.svg';
+import { IIconProps } from '@/components/ui/icon/icon.types';
 
 const Icon = ({ name, ...props }: IIconProps): JSX.Element => {
-  let ComponentToRender: React.ElementType | null = null;
+  let ComponentToRender: ElementType | null = null;
 
   switch (name) {
     case 'dm-moon':

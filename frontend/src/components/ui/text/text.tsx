@@ -12,10 +12,9 @@
  * @returns {JSX.Element}
  */
 
-import React from 'react';
+import classNames from 'classnames';
 import { JSX } from 'react';
 import { ITextProps } from '@/components/ui/text/text.types';
-import classNames from 'classnames';
 
 const textVariants = {
   h1: 'text--h1',

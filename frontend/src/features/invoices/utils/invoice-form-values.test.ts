@@ -1,8 +1,8 @@
+import { getInvoiceById } from '@/features/invoices/data/sample-invoices';
 import {
   emptyInvoiceFormValues,
   invoiceToFormValues,
 } from '@/features/invoices/utils/invoice-form-values';
-import { getInvoiceById } from '@/features/invoices/data/sample-invoices';
 
 describe('emptyInvoiceFormValues', () => {
   it('returns blank fields and no items', () => {

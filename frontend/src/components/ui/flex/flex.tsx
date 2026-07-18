@@ -21,8 +21,8 @@
  *
  * @returns {JSX.Element}
  */
-import { JSX } from 'react';
 import classNames from 'classnames';
+import { JSX } from 'react';
 import {
   FlexAlign,
   FlexDirection,

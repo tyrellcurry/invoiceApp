@@ -10,8 +10,8 @@
  *
  * @returns {JSX.Element}
  */
-import { JSX } from 'react';
 import classNames from 'classnames';
+import { JSX } from 'react';
 import Button from '@/components/ui/button/button';
 import Container from '@/components/ui/container/container';
 import Flex from '@/components/ui/flex/flex';
