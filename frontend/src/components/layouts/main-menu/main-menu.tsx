@@ -11,7 +11,7 @@ const MainMenu = (props: IMainMenuProps): JSX.Element => {
     <Flex
       align="stretch"
       as="nav"
-      className="bg-gray-09 lg:flex-col lg:w-fit lg:rounded-r-[20px] lg:rounded-tr-3xl lg:h-screen lg:fixed lg:left-0"
+      className="bg-gray-09 lg:flex-col lg:w-fit lg:rounded-r-[20px] lg:rounded-tr-3xl lg:h-screen lg:fixed lg:left-0 lg:z-20"
       justify="between"
       {...rest}
     >

@@ -136,7 +136,7 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
     <Container
       aria-hidden={!open}
       className={classNames(
-        'fixed inset-0 z-50',
+        'fixed inset-0 z-10',
         open || isMounted ? 'visible' : 'invisible',
         open ? 'pointer-events-auto' : 'pointer-events-none'
       )}
@@ -158,8 +158,8 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
         direction="col"
         role="dialog"
         className={classNames(
-          'absolute left-0 top-0 h-full w-full max-w-154 bg-white dark:bg-gray-12 lg:left-25.75 lg:rounded-r-[20px] transition-transform duration-300',
-          open ? 'translate-x-0' : '-translate-x-[calc(100%_+_104px)]'
+          'absolute left-0 top-0 h-full w-full max-w-170 bg-white dark:bg-gray-12 lg:left-15 lg:rounded-r-[20px] transition-transform duration-300',
+          open ? 'translate-x-0' : '-translate-x-[calc(100%+104px)]'
         )}
         aria-modal
         onTransitionEnd={() => {
@@ -169,7 +169,7 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
         }}
       >
         <Text
-          className="text-gray-08 dark:text-white px-6 pt-8 md:px-12 md:pt-12"
+          className="text-gray-08 dark:text-white px-6 pt-8 md:px-14 md:pt-12"
           tag={'h2'}
           variant="h2"
         >
@@ -177,7 +177,7 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
         </Text>
 
         <form
-          className="flex-1 overflow-y-auto px-6 md:px-12 pb-8"
+          className="flex-1 overflow-y-auto px-6 md:px-14 pb-8"
           id="invoice-form"
           onSubmit={(event) => {
             event.preventDefault();
@@ -402,7 +402,7 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
         </form>
 
         {/* Footer */}
-        <Container className="px-6 md:px-12 py-6 shadow-[0_-10px_10px_-10px_rgba(72,84,159,0.1)]">
+        <Container className="px-6 md:px-14 py-6 shadow-[0_-10px_10px_-10px_rgba(72,84,159,0.1)]">
           {mode === 'edit' ? (
             <Flex className="md:justify-end" gap={2}>
               <Button

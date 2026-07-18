@@ -3,7 +3,7 @@
 exports[`Main Menu Component renders correctly with default props 1`] = `
 <div>
   <nav
-    class="flex flex-row items-stretch justify-between bg-gray-09 lg:flex-col lg:w-fit lg:rounded-r-[20px] lg:rounded-tr-3xl lg:h-screen lg:fixed lg:left-0"
+    class="flex flex-row items-stretch justify-between bg-gray-09 lg:flex-col lg:w-fit lg:rounded-r-[20px] lg:rounded-tr-3xl lg:h-screen lg:fixed lg:left-0 lg:z-20"
   >
     <a
       class="btn btn--custom w-12.5 h-12.5 xs:w-18 xs:h-18 md:w-20 md:h-20"
