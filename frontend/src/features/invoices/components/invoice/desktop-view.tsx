@@ -1,10 +1,10 @@
+import classNames from 'classnames';
 import { JSX } from 'react';
-import { IInvoiceProps } from '@/features/invoices/types/invoice';
 import Container from '@/components/ui/container/container';
 import Flex from '@/components/ui/flex/flex';
-import Text from '@/components/ui/text/text';
-import classNames from 'classnames';
 import Icon from '@/components/ui/icon/icon';
+import Text from '@/components/ui/text/text';
+import { IInvoiceProps } from '@/features/invoices/types/invoice';
 import {
   formatInvoiceAmount,
   getCurrencySymbol,

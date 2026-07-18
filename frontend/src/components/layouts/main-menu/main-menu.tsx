@@ -1,8 +1,8 @@
-import React, { JSX } from 'react';
+import { JSX } from 'react';
+import { Link } from 'react-router';
 import { IMainMenuProps } from '@/components/layouts/main-menu/main-menu.types';
 import Button from '@/components/ui/button/button';
 import Flex from '@/components/ui/flex/flex';
-import { Link } from 'react-router';
 import { DARK_MODE } from '@/config/constants';
 const MainMenu = (props: IMainMenuProps): JSX.Element => {
   const { darkmode, darkmodeToggle, profile, darkmodeBtn, ...rest } = props;

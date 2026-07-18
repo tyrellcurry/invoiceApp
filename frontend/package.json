@@ -8,6 +8,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prepare": "cd ../ && husky frontend/.husky",
     "test": "vitest run",
     "test:watch": "vitest",

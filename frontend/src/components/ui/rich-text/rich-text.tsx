@@ -10,9 +10,9 @@
  * @returns {JSX.Element}
  */
 
+import classNames from 'classnames';
 import { JSX } from 'react';
 import { IRichTextProps } from '@/components/ui/rich-text/rich-text.types';
-import classNames from 'classnames';
 
 const RichText = (props: IRichTextProps): JSX.Element => {
   const { className: propsClassName, value, ...rest } = props;

@@ -17,8 +17,8 @@
  *
  * @returns {JSX.Element}
  */
-import { JSX } from 'react';
 import classNames from 'classnames';
+import { JSX } from 'react';
 import { FlexAlign, Spacing } from '@/components/ui/flex/flex.types';
 import { GridCols, IGridProps } from '@/components/ui/grid/grid.types';
 

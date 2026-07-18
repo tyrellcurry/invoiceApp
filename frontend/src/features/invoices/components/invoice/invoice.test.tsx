@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Invoice from '@/features/invoices/components/invoice/invoice';
 import { InvoiceStatus } from '../../types/invoice';

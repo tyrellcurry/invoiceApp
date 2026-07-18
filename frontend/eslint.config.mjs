@@ -1,10 +1,10 @@
-import tseslint from 'typescript-eslint';
+import importPlugin from 'eslint-plugin-import';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import importPlugin from 'eslint-plugin-import';
-import unusedImports from 'eslint-plugin-unused-imports';
 import storybook from 'eslint-plugin-storybook';
+import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 const eslintConfig = [
   {
@@ -59,6 +59,7 @@ const eslintConfig = [
         },
       ],
 
+      // Sort the named members within a single import ({ b, a } -> { a, b }).
       'sort-imports': [
         'error',
         {
@@ -66,6 +67,18 @@ const eslintConfig = [
           ignoreDeclarationSort: true,
           ignoreMemberSort: false,
           memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+        },
+      ],
+
+      // Order the import statements themselves: external, then @/ internal,
+      // then relative — alphabetised within each group. Auto-fixable.
+      'import/order': [
+        'error',
+        {
+          groups: [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']],
+          pathGroups: [{ pattern: '@/**', group: 'internal' }],
+          alphabetize: { order: 'asc', caseInsensitive: true },
+          'newlines-between': 'ignore',
         },
       ],
 

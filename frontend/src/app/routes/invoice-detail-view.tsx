@@ -1,6 +1,6 @@
 import { JSX, useMemo, useState } from 'react';
-import { useTranslations } from 'use-intl';
 import { useNavigate } from 'react-router';
+import { useTranslations } from 'use-intl';
 import Container from '@/components/ui/container/container';
 import DeleteInvoiceDialog from '@/features/invoices/components/delete-invoice-dialog/delete-invoice-dialog';
 import InvoiceDetails from '@/features/invoices/components/invoice-details/invoice-details';

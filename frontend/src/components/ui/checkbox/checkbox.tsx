@@ -10,10 +10,10 @@
  * @returns {JSX.Element}
  */
 
+import { JSX } from 'react';
 import { ICheckboxProps } from '@/components/ui/checkbox/checkbox.types';
 import Flex from '@/components/ui/flex/flex';
 import Text from '@/components/ui/text/text';
-import { JSX } from 'react';
 
 const Checkbox = (props: ICheckboxProps): JSX.Element => {
   const { labelId, label, ...rest } = props;

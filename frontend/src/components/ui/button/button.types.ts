@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, JSX } from 'react';
+import { ComponentPropsWithoutRef, JSX, ReactNode } from 'react';
 import { IIconProps } from '@/components/ui/icon/icon.types';
 
 interface BaseButtonProps {
@@ -7,7 +7,7 @@ interface BaseButtonProps {
   iconLeftClassName?: string;
   iconRight?: IIconProps['name'] | JSX.Element;
   iconRightClassName?: string;
-  label?: React.ReactNode;
+  label?: ReactNode;
   variant?: 'primary' | 'secondary' | 'dark' | 'danger' | 'custom';
 }
 

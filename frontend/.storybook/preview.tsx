@@ -1,9 +1,8 @@
-import React from 'react';
+import { withThemeByClassName } from '@storybook/addon-themes';
 import type { Preview } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router';
 import '../src/styles/app.css';
 import '@fontsource-variable/lexend';
-import { withThemeByClassName } from '@storybook/addon-themes';
 
 const preview: Preview = {
   decorators: [
