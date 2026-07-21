@@ -3,6 +3,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
@@ -25,6 +26,8 @@ func Connect(databaseURL string) (*sql.DB, error) {
 		time.Sleep(time.Second)
 	}
 
-	db.Close()
-	return nil, fmt.Errorf("database not ready: %w", pingErr)
+	return nil, errors.Join(
+		fmt.Errorf("database not ready: %w", pingErr),
+		db.Close(),
+	)
 }
