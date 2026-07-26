@@ -1,2 +1,2 @@
-# Local-only Claude skills (kept out of the remote)
-.claude/skills/
+# Local-only Claude config
+.claude/
