@@ -1,4 +1,6 @@
 -- Keeps updated_at honest: DEFAULT now() only fires on INSERT.
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 CREATE FUNCTION set_updated_at() RETURNS TRIGGER AS $$
 BEGIN
     NEW.updated_at = now();
@@ -8,7 +10,8 @@ $$ LANGUAGE plpgsql;
 
 CREATE TABLE invoices (
     -- Surrogate key. The human-readable "RT3080" the UI shows is `reference`,
-    -- which is only unique per owner once accounts exist.
+    -- which is globally unique in this schema (if/when accounts exist, this may
+    -- become unique per owner instead).
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     reference       TEXT NOT NULL UNIQUE,
 
