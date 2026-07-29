@@ -1,5 +1,5 @@
-import importPlugin from 'eslint-plugin-import';
-import react from 'eslint-plugin-react';
+import importPlugin from 'eslint-plugin-import-x';
+import perfectionist from 'eslint-plugin-perfectionist';
 import reactHooks from 'eslint-plugin-react-hooks';
 import storybook from 'eslint-plugin-storybook';
 import unusedImports from 'eslint-plugin-unused-imports';
@@ -30,14 +30,13 @@ const eslintConfig = [
     },
     plugins: {
       '@typescript-eslint': tseslint.plugin,
-      react,
       'react-hooks': reactHooks,
-      import: importPlugin,
+      'import-x': importPlugin,
+      perfectionist,
       'unused-imports': unusedImports,
     },
     settings: {
-      react: { version: 'detect' },
-      'import/resolver': {
+      'import-x/resolver': {
         typescript: true,
         node: true,
       },
@@ -72,7 +71,7 @@ const eslintConfig = [
 
       // Order the import statements themselves: external, then @/ internal,
       // then relative — alphabetised within each group. Auto-fixable.
-      'import/order': [
+      'import-x/order': [
         'error',
         {
           groups: [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']],
@@ -82,25 +81,16 @@ const eslintConfig = [
         },
       ],
 
-      'react/jsx-sort-props': [
+      // Replaces react/jsx-sort-props. Same intent: alphabetical, with
+      // multiline then shorthand then callback props pushed to the end.
+      'perfectionist/sort-jsx-props': [
         'error',
         {
-          callbacksLast: true,
-          shorthandFirst: false,
-          shorthandLast: true,
-          multiline: 'last',
+          type: 'alphabetical',
+          order: 'asc',
           ignoreCase: true,
-          noSortAlphabetically: false,
-        },
-      ],
-
-      'react/sort-prop-types': [
-        'error',
-        {
-          callbacksLast: true,
-          ignoreCase: true,
-          requiredFirst: false,
-          sortShapeProp: true,
+          groups: ['prop', 'multiline-prop', 'shorthand-prop', 'callback'],
+          customGroups: [{ groupName: 'callback', elementNamePattern: '^on[A-Z]' }],
         },
       ],
     },
@@ -110,7 +100,7 @@ const eslintConfig = [
   {
     files: ['src/**/*.{js,jsx,ts,tsx}'],
     rules: {
-      'import/no-restricted-paths': [
+      'import-x/no-restricted-paths': [
         'error',
         {
           zones: [
