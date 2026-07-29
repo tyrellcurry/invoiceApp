@@ -1,3 +1,4 @@
+// Package migrations manages the DB setup via SQL.
 package migrations
 
 import "embed"
