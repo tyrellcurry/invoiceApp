@@ -1,6 +1,10 @@
 import { expect, invoiceList, test, visibleButton } from './fixtures';
 
 test('deletes an invoice from its detail page', async ({ page, createInvoice }) => {
+  // A second, untouched invoice keeps the list non-empty after the delete,
+  // so the assertion below exercises "the deleted one is gone" rather than
+  // incidentally landing on the empty state.
+  const other = await createInvoice({ clientName: 'Client To Keep Around', status: 'DRAFT' });
   const invoice = await createInvoice({ clientName: 'Client To Delete', status: 'DRAFT' });
 
   await page.goto(`/invoices/${invoice.id}`);
@@ -14,6 +18,7 @@ test('deletes an invoice from its detail page', async ({ page, createInvoice }) 
   await dialog.locator('button:visible', { hasText: /^Delete$/ }).click();
 
   await expect(page.getByRole('heading', { name: 'Invoices' })).toBeVisible();
+  await expect(invoiceList(page)).toContainText(other.reference);
   await expect(invoiceList(page)).not.toContainText(invoice.reference);
 });
 

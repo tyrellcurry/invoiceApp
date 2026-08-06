@@ -1,4 +1,5 @@
-import { ApiError, apiRequest } from '@/features/invoices/api/client';
+import { ApiError, apiRequest } from '@/lib/api-client';
+import { clearToken, setToken } from '@/lib/session-token';
 
 const mockFetch = (response: Partial<Response> & { json?: () => Promise<unknown> }) => {
   vi.stubGlobal(
@@ -11,6 +12,14 @@ const mockFetch = (response: Partial<Response> & { json?: () => Promise<unknown>
     })
   );
 };
+
+beforeEach(() => {
+  clearToken();
+  Object.defineProperty(window, 'location', {
+    value: { ...window.location, href: 'http://localhost:5173/invoices/1' },
+    writable: true,
+  });
+});
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -28,6 +37,29 @@ describe('apiRequest', () => {
         headers: expect.objectContaining({ 'Content-Type': 'application/json' }),
       })
     );
+  });
+
+  it('attaches the stored session token as a bearer header', async () => {
+    setToken('the-token', new Date(Date.now() + 60_000).toISOString());
+    mockFetch({ json: async () => ({}) });
+
+    await apiRequest('/invoices');
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        headers: expect.objectContaining({ Authorization: 'Bearer the-token' }),
+      })
+    );
+  });
+
+  it('sends no Authorization header when there is no stored token', async () => {
+    mockFetch({ json: async () => ({}) });
+
+    await apiRequest('/invoices');
+
+    const headers = vi.mocked(fetch).mock.calls[0][1]?.headers as Record<string, string>;
+    expect(headers.Authorization).toBeUndefined();
   });
 
   it('returns the decoded JSON body on success', async () => {
@@ -72,5 +104,26 @@ describe('apiRequest', () => {
       status: 500,
       message: 'Request failed with status 500',
     });
+  });
+
+  it('clears the token and sends the browser home on a 401 from a non-auth route', async () => {
+    setToken('stale-token', new Date(Date.now() + 60_000).toISOString());
+    mockFetch({
+      ok: false,
+      status: 401,
+      json: async () => ({ error: 'invalid or expired session' }),
+    });
+
+    await expect(apiRequest('/invoices')).rejects.toMatchObject({ status: 401 });
+
+    expect(window.location.href).toBe('/');
+  });
+
+  it('does not redirect on a 401 from /auth/* (that is an expected "not signed in" response)', async () => {
+    mockFetch({ ok: false, status: 401, json: async () => ({ authenticated: false }) });
+
+    await expect(apiRequest('/auth/me')).rejects.toMatchObject({ status: 401 });
+
+    expect(window.location.href).toBe('http://localhost:5173/invoices/1');
   });
 });

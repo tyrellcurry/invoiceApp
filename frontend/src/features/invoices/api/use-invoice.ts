@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ApiError } from '@/features/invoices/api/client';
 import { getInvoice } from '@/features/invoices/api/get-invoice';
 import { Invoice } from '@/features/invoices/types/invoice';
+import { ApiError } from '@/lib/api-client';
 
 interface UseInvoiceResult {
   invoice: Invoice | undefined;

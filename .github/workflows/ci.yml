@@ -126,14 +126,7 @@ jobs:
   e2e:
     name: E2E tests
     needs: changes
-    # Temporarily disabled: this PR adds required auth to every /invoices
-    # endpoint, which the current (pre-auth) frontend and E2E specs don't
-    # send yet — editing this file also flags the frontend as "changed" via
-    # the paths-filter below, so scoping this job to frontend-only changes
-    # doesn't skip it here. Restore
-    # `needs.changes.outputs.frontend == 'true' || needs.changes.outputs.backend == 'true'`
-    # once the paired frontend PR (login gate + auth-aware specs) lands.
-    if: false
+    if: needs.changes.outputs.frontend == 'true' || needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:

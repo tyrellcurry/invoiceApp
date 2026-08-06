@@ -2,6 +2,11 @@ import { test as base, Page } from '@playwright/test';
 
 const apiURL = process.env.E2E_API_URL ?? 'http://localhost:8080';
 
+interface GuestSession {
+  token: string;
+  expiresAt: string;
+}
+
 export interface CreatedInvoice {
   id: string;
   reference: string;
@@ -19,24 +24,52 @@ interface CreateInvoicePayload {
 }
 
 interface Fixtures {
-  /** Creates an invoice directly via the API (bypassing the UI) for test setup. */
+  /**
+   * The guest session `page` is signed into for this test (see the `page`
+   * override below). Exposed so `createInvoice` can create data under the
+   * same session the page is using, and to build API requests directly
+   * when a test needs to.
+   */
+  guestSession: GuestSession;
+  /** Creates an invoice directly via the API (bypassing the UI) for test setup, owned by guestSession. */
   createInvoice: (payload: CreateInvoicePayload) => Promise<CreatedInvoice>;
 }
 
 /**
- * Extends the base Playwright test with a `createInvoice` fixture for
- * seeding data outside the UI under test, with automatic cleanup: every
- * invoice a test creates is deleted via the API once the test finishes,
- * pass or fail, so specs never leak data into the next run.
+ * Every test gets its own guest session (every endpoint under test requires
+ * one now), injected into the page's localStorage before any app script
+ * runs so specs start already past the splash gate. The session is revoked
+ * on teardown, which cascade-deletes every invoice created under it — no
+ * per-invoice cleanup needed.
  */
 export const test = base.extend<Fixtures>({
-  createInvoice: async ({}, use) => {
-    const created: CreatedInvoice[] = [];
+  guestSession: async ({}, use) => {
+    const response = await fetch(`${apiURL}/auth/guest`, { method: 'POST' });
+    const session = (await response.json()) as GuestSession;
 
+    await use(session);
+
+    await fetch(`${apiURL}/auth/logout`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${session.token}` },
+    }).catch(() => {});
+  },
+
+  page: async ({ page, guestSession }, use) => {
+    await page.addInitScript((session) => {
+      window.localStorage.setItem(
+        'invoiceapp.session',
+        JSON.stringify({ token: session.token, expiresAt: session.expiresAt })
+      );
+    }, guestSession);
+    await use(page);
+  },
+
+  createInvoice: async ({ guestSession }, use) => {
     await use(async (payload) => {
       const response = await fetch(`${apiURL}/invoices`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${guestSession.token}` },
         body: JSON.stringify({
           clientEmail: '',
           description: '',
@@ -46,14 +79,8 @@ export const test = base.extend<Fixtures>({
           ...payload,
         }),
       });
-      const invoice = (await response.json()) as CreatedInvoice;
-      created.push(invoice);
-      return invoice;
+      return (await response.json()) as CreatedInvoice;
     });
-
-    await Promise.all(
-      created.map((invoice) => fetch(`${apiURL}/invoices/${invoice.id}`, { method: 'DELETE' }))
-    );
   },
 });
 

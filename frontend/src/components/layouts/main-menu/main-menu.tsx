@@ -5,7 +5,16 @@ import Button from '@/components/ui/button/button';
 import Flex from '@/components/ui/flex/flex';
 import { DARK_MODE } from '@/config/constants';
 const MainMenu = (props: IMainMenuProps): JSX.Element => {
-  const { darkmode, darkmodeToggle, profile, darkmodeBtn, ...rest } = props;
+  const {
+    darkmode,
+    darkmodeToggle,
+    profile,
+    darkmodeBtn,
+    userEmail,
+    logoutLabel,
+    onLogout,
+    ...rest
+  } = props;
   return (
     <Flex
       align="stretch"
@@ -42,6 +51,15 @@ const MainMenu = (props: IMainMenuProps): JSX.Element => {
             src={!!profile?.profileImage ? profile?.profileImage : '/assets/profile-default.png'}
           />
         </Link>
+        {onLogout && (
+          <Button
+            className="h-fit self-center whitespace-nowrap text-[13px] font-medium text-gray-07 hover:text-gray-05"
+            label={logoutLabel}
+            title={userEmail}
+            variant="custom"
+            onClick={onLogout}
+          />
+        )}
       </Flex>
     </Flex>
   );

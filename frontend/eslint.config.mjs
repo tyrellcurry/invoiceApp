@@ -118,6 +118,11 @@ const eslintConfig = [
               from: './src/features',
               except: ['./invoices'],
             },
+            {
+              target: './src/features/auth',
+              from: './src/features',
+              except: ['./auth'],
+            },
             // Features cannot reach up into the app layer.
             {
               target: './src/features',
