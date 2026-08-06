@@ -12,6 +12,7 @@
     "prepare": "cd ../ && husky frontend/.husky",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.2.1",
+    "@playwright/test": "^1.62.1",
     "@storybook/addon-docs": "^10.5.0",
     "@storybook/addon-onboarding": "^10.5.0",
     "@storybook/addon-themes": "^10.5.0",
