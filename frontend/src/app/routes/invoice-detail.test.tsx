@@ -4,7 +4,7 @@ import { IntlProvider } from 'use-intl';
 import InvoiceDetailRoute from '@/app/routes/invoice-detail';
 import { deleteInvoice } from '@/features/invoices/api/delete-invoice';
 import { getInvoice } from '@/features/invoices/api/get-invoice';
-import { markInvoiceAsPaid } from '@/features/invoices/api/mark-invoice-as-paid';
+import { setInvoiceStatus } from '@/features/invoices/api/set-invoice-status';
 import { updateInvoice } from '@/features/invoices/api/update-invoice';
 import { InvoiceStatus } from '@/features/invoices/types/invoice';
 import en from '../../../messages/en.json';
@@ -12,7 +12,7 @@ import en from '../../../messages/en.json';
 vi.mock('@/features/invoices/api/get-invoice', () => ({ getInvoice: vi.fn() }));
 vi.mock('@/features/invoices/api/update-invoice', () => ({ updateInvoice: vi.fn() }));
 vi.mock('@/features/invoices/api/delete-invoice', () => ({ deleteInvoice: vi.fn() }));
-vi.mock('@/features/invoices/api/mark-invoice-as-paid', () => ({ markInvoiceAsPaid: vi.fn() }));
+vi.mock('@/features/invoices/api/set-invoice-status', () => ({ setInvoiceStatus: vi.fn() }));
 
 const invoiceFixture = {
   id: 'a1',
@@ -72,15 +72,58 @@ it('marks the invoice as paid and refetches it', async () => {
   vi.mocked(getInvoice)
     .mockResolvedValueOnce(invoiceFixture)
     .mockResolvedValueOnce({ ...invoiceFixture, status: InvoiceStatus.PAID });
-  vi.mocked(markInvoiceAsPaid).mockResolvedValue({ ...invoiceFixture, status: InvoiceStatus.PAID });
+  vi.mocked(setInvoiceStatus).mockResolvedValue({ ...invoiceFixture, status: InvoiceStatus.PAID });
 
   renderDetailRoute();
   await waitFor(() => expect(screen.getByText('Jensen Huang')).toBeInTheDocument());
 
   fireEvent.click(screen.getAllByRole('button', { name: /mark as paid/i })[0]);
 
-  await waitFor(() => expect(markInvoiceAsPaid).toHaveBeenCalledWith('a1'));
+  await waitFor(() => expect(setInvoiceStatus).toHaveBeenCalledWith('a1', InvoiceStatus.PAID));
   await waitFor(() => expect(getInvoice).toHaveBeenCalledTimes(2));
+});
+
+it('offers revert to pending instead of mark as paid for a paid invoice', async () => {
+  const paidFixture = { ...invoiceFixture, status: InvoiceStatus.PAID };
+  vi.mocked(getInvoice)
+    .mockResolvedValueOnce(paidFixture)
+    .mockResolvedValueOnce({ ...invoiceFixture, status: InvoiceStatus.PENDING });
+  vi.mocked(setInvoiceStatus).mockResolvedValue({
+    ...invoiceFixture,
+    status: InvoiceStatus.PENDING,
+  });
+
+  renderDetailRoute();
+  await waitFor(() => expect(screen.getByText('Jensen Huang')).toBeInTheDocument());
+
+  expect(screen.queryByRole('button', { name: /mark as paid/i })).not.toBeInTheDocument();
+
+  fireEvent.click(screen.getAllByRole('button', { name: /revert to pending/i })[0]);
+
+  await waitFor(() => expect(setInvoiceStatus).toHaveBeenCalledWith('a1', InvoiceStatus.PENDING));
+  await waitFor(() => expect(getInvoice).toHaveBeenCalledTimes(2));
+});
+
+it('changes the status from the edit drawer', async () => {
+  vi.mocked(getInvoice).mockResolvedValue(invoiceFixture);
+  vi.mocked(updateInvoice).mockResolvedValue({ ...invoiceFixture, status: InvoiceStatus.PAID });
+
+  renderDetailRoute();
+  await waitFor(() => expect(screen.getByText('Jensen Huang')).toBeInTheDocument());
+
+  fireEvent.click(screen.getAllByRole('button', { name: /^edit$/i })[0]);
+  fireEvent.change(screen.getByLabelText(/^status$/i), {
+    target: { value: InvoiceStatus.PAID },
+  });
+  fireEvent.click(screen.getByRole('button', { name: /save changes/i }));
+
+  await waitFor(() =>
+    expect(updateInvoice).toHaveBeenCalledWith(
+      'a1',
+      expect.objectContaining({ status: InvoiceStatus.PAID }),
+      InvoiceStatus.PAID
+    )
+  );
 });
 
 it('edits the invoice and refetches it', async () => {
@@ -94,10 +137,13 @@ it('edits the invoice and refetches it', async () => {
   fireEvent.change(screen.getByLabelText(/client's name/i), { target: { value: 'Jensen H.' } });
   fireEvent.click(screen.getByRole('button', { name: /save changes/i }));
 
+  // The invoice's existing status rides along unchanged when only other
+  // fields are edited.
   await waitFor(() =>
     expect(updateInvoice).toHaveBeenCalledWith(
       'a1',
-      expect.objectContaining({ clientName: 'Jensen H.' })
+      expect.objectContaining({ clientName: 'Jensen H.' }),
+      InvoiceStatus.PENDING
     )
   );
   await waitFor(() => expect(getInvoice).toHaveBeenCalledTimes(2));

@@ -27,6 +27,7 @@ const labels = {
   edit: 'Edit',
   delete: 'Delete',
   markAsPaid: 'Mark as Paid',
+  revertToPending: 'Revert to Pending',
   billTo: 'Bill To',
   sentTo: 'Sent to',
   invoiceDate: 'Invoice Date',

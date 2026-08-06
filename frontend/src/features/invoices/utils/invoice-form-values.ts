@@ -1,9 +1,10 @@
 import { InvoiceFormValues } from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer.types';
-import { Invoice } from '@/features/invoices/types/invoice';
+import { Invoice, InvoiceStatus } from '@/features/invoices/types/invoice';
 import { toDateInputValue } from '@/features/invoices/utils/invoice-date';
 
 /** Blank form values for creating a new invoice. */
 export const emptyInvoiceFormValues = (): InvoiceFormValues => ({
+  status: InvoiceStatus.DRAFT,
   senderStreet: '',
   senderCity: '',
   senderPostCode: '',
@@ -22,6 +23,7 @@ export const emptyInvoiceFormValues = (): InvoiceFormValues => ({
 
 /** Maps an existing invoice to editable form values (for the edit drawer). */
 export const invoiceToFormValues = (invoice: Invoice): InvoiceFormValues => ({
+  status: invoice.status,
   senderStreet: invoice.senderAddress.street,
   senderCity: invoice.senderAddress.city,
   senderPostCode: invoice.senderAddress.postCode,

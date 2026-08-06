@@ -67,6 +67,7 @@ describe('fromApiInvoice', () => {
 
 describe('toApiInvoicePayload', () => {
   const formValues: InvoiceFormValues = {
+    status: InvoiceStatus.DRAFT,
     senderStreet: '19 Union Terrace',
     senderCity: 'London',
     senderPostCode: 'E1 3EZ',

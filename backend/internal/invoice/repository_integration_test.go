@@ -244,6 +244,7 @@ func TestPostgresRepositoryUpdate(t *testing.T) {
 
 	updated := created
 	updated.ClientName = "Alysa W. Werner"
+	updated.Status = StatusPaid
 	updated.Items = []LineItem{
 		{Name: "Logo Concept", Quantity: 1, Price: 10204},
 		{Name: "Business Card", Quantity: 3, Price: 500},
@@ -256,6 +257,9 @@ func TestPostgresRepositoryUpdate(t *testing.T) {
 	}
 	if got.ClientName != "Alysa W. Werner" {
 		t.Errorf("ClientName = %q, want updated value", got.ClientName)
+	}
+	if got.Status != StatusPaid {
+		t.Errorf("Status = %q, want %q (Update persists status)", got.Status, StatusPaid)
 	}
 	if len(got.Items) != 2 || got.AmountDue != 11704 {
 		t.Errorf("Items/AmountDue = %+v/%d, want 2 items and 11704", got.Items, got.AmountDue)

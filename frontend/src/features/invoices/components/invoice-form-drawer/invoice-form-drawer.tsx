@@ -24,6 +24,7 @@ import {
   InvoiceFormItem,
   InvoiceFormValues,
 } from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer.types';
+import { InvoiceStatus } from '@/features/invoices/types/invoice';
 import {
   formatInvoiceAmount,
   getCurrencySymbol,
@@ -183,6 +184,23 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
             onSubmit(values);
           }}
         >
+          {/* Status. Edit mode only: in create mode the footer's Save as Draft /
+              Save & Send buttons are what choose the status. */}
+          {mode === 'edit' && (
+            <Field className="mt-6" htmlFor="invoice-status" label={labels.status}>
+              <select
+                className={inputClass}
+                id="invoice-status"
+                value={values.status}
+                onChange={(event) => setField('status', event.target.value as InvoiceStatus)}
+              >
+                <option value={InvoiceStatus.DRAFT}>{labels.statusDraft}</option>
+                <option value={InvoiceStatus.PENDING}>{labels.statusPending}</option>
+                <option value={InvoiceStatus.PAID}>{labels.statusPaid}</option>
+              </select>
+            </Field>
+          )}
+
           {/* Bill From */}
           <Text className={classNames(sectionHeadingClass, 'mt-6')} tag={'p'}>
             {labels.billFrom}

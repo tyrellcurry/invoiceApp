@@ -14,6 +14,10 @@ export const useInvoiceFormLabels = (): {
   const labels: InvoiceFormLabels = {
     editTitle: t('editTitle'),
     createTitle: t('createTitle'),
+    status: t('status'),
+    statusDraft: t('statusDraft'),
+    statusPending: t('statusPending'),
+    statusPaid: t('statusPaid'),
     billFrom: t('billFrom'),
     billTo: t('billTo'),
     streetAddress: t('streetAddress'),

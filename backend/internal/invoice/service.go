@@ -83,8 +83,9 @@ func (s *Service) Create(ctx context.Context, owner auth.Owner, input Invoice) (
 }
 
 // Update overwrites an existing invoice's editable fields, recomputing its
-// amount due and payment due date, if it's owned by owner. The status is
-// left unchanged; use MarkAsPaid to change it.
+// amount due and payment due date, if it's owned by owner. A status may be
+// supplied to change it as part of the same edit; leaving it empty keeps the
+// current one.
 func (s *Service) Update(ctx context.Context, owner auth.Owner, id string, input Invoice) (Invoice, error) {
 	existing, err := s.repo.Get(ctx, owner, id)
 	if err != nil {
@@ -93,10 +94,15 @@ func (s *Service) Update(ctx context.Context, owner auth.Owner, id string, input
 	if err := validateEditableFields(input); err != nil {
 		return Invoice{}, err
 	}
+	if input.Status == "" {
+		input.Status = existing.Status
+	} else if !input.Status.Valid() {
+		return Invoice{}, validationErrorf("status must be one of %s, %s or %s",
+			StatusDraft, StatusPending, StatusPaid)
+	}
 
 	input.ID = id
 	input.Reference = existing.Reference
-	input.Status = existing.Status
 	input.AmountDue = input.Total()
 	input.PaymentDue = computePaymentDue(input.InvoiceDate, input.PaymentTerms)
 
@@ -108,9 +114,15 @@ func (s *Service) Delete(ctx context.Context, owner auth.Owner, id string) error
 	return s.repo.Delete(ctx, owner, id)
 }
 
-// MarkAsPaid transitions an owned invoice's status to PAID.
-func (s *Service) MarkAsPaid(ctx context.Context, owner auth.Owner, id string) (Invoice, error) {
-	return s.repo.UpdateStatus(ctx, owner, id, StatusPaid)
+// SetStatus transitions an owned invoice to status, which must be one of the
+// three recognised statuses. Every transition is permitted, so a PAID invoice
+// can be reverted to PENDING.
+func (s *Service) SetStatus(ctx context.Context, owner auth.Owner, id string, status Status) (Invoice, error) {
+	if !status.Valid() {
+		return Invoice{}, validationErrorf("status must be one of %s, %s or %s",
+			StatusDraft, StatusPending, StatusPaid)
+	}
+	return s.repo.UpdateStatus(ctx, owner, id, status)
 }
 
 // validateEditableFields checks the fields a caller may set when creating or
