@@ -2,6 +2,10 @@ import { JSX, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslations } from 'use-intl';
 import Container from '@/components/ui/container/container';
+import Text from '@/components/ui/text/text';
+import { deleteInvoice } from '@/features/invoices/api/delete-invoice';
+import { markInvoiceAsPaid } from '@/features/invoices/api/mark-invoice-as-paid';
+import { updateInvoice } from '@/features/invoices/api/update-invoice';
 import DeleteInvoiceDialog from '@/features/invoices/components/delete-invoice-dialog/delete-invoice-dialog';
 import InvoiceDetails from '@/features/invoices/components/invoice-details/invoice-details';
 import InvoiceFormDrawer from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer';
@@ -10,13 +14,22 @@ import { useInvoiceFormLabels } from '@/features/invoices/hooks/use-invoice-form
 import { Invoice, InvoiceStatus } from '@/features/invoices/types/invoice';
 import { invoiceToFormValues } from '@/features/invoices/utils/invoice-form-values';
 
-const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
+const InvoiceDetailView = ({
+  invoice,
+  onInvoiceChange,
+}: {
+  invoice: Invoice;
+  /** Called after a successful edit, delete or mark-as-paid so the caller can refetch. */
+  onInvoiceChange: () => void;
+}): JSX.Element => {
   const t = useTranslations('InvoiceDetails');
+  const tForm = useTranslations('InvoiceForm');
   const tDelete = useTranslations('DeleteInvoice');
   const navigate = useNavigate();
   const { labels: formLabels, paymentTermOptions } = useInvoiceFormLabels();
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const formValues = useMemo(() => invoiceToFormValues(invoice), [invoice]);
 
@@ -26,20 +39,41 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
     [InvoiceStatus.PAID]: t('statusPaid'),
   };
 
-  // @TODO: persist edits via `features/invoices/api` once a backend exists.
-  const handleSubmit = (_values: InvoiceFormValues) => {
-    setIsEditing(false);
+  const handleSubmit = async (values: InvoiceFormValues) => {
+    setActionError(null);
+    try {
+      await updateInvoice(invoice.id, values);
+      setIsEditing(false);
+      onInvoiceChange();
+    } catch {
+      setActionError(tForm('submitError'));
+    }
   };
 
-  // @TODO: delete via `features/invoices/api` once a backend exists.
-  const handleConfirmDelete = () => {
-    setIsDeleting(false);
-    navigate('/');
+  const handleConfirmDelete = async () => {
+    setActionError(null);
+    try {
+      await deleteInvoice(invoice.id);
+      setIsDeleting(false);
+      navigate('/');
+    } catch {
+      setIsDeleting(false);
+      setActionError(t('actionError'));
+    }
+  };
+
+  const handleMarkAsPaid = async () => {
+    setActionError(null);
+    try {
+      await markInvoiceAsPaid(invoice.id);
+      onInvoiceChange();
+    } catch {
+      setActionError(t('actionError'));
+    }
   };
 
   return (
     <Container className="mx-auto max-w-182.5">
-      {/* @TODO: wire onMarkAsPaid once the invoice mutation flow exists. */}
       <InvoiceDetails
         clientAddress={invoice.clientAddress}
         clientEmail={invoice.clientEmail}
@@ -47,7 +81,7 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
         description={invoice.description}
         invoiceAmountDue={invoice.amountDue}
         invoiceDate={invoice.invoiceDate}
-        invoiceId={invoice.id}
+        invoiceId={invoice.reference}
         invoiceStatus={invoice.status}
         items={invoice.items}
         paymentDue={invoice.paymentDue}
@@ -72,29 +106,39 @@ const InvoiceDetailView = ({ invoice }: { invoice: Invoice }): JSX.Element => {
         onDelete={() => setIsDeleting(true)}
         onEdit={() => setIsEditing(true)}
         onGoBack={() => navigate('/')}
+        onMarkAsPaid={() => void handleMarkAsPaid()}
       />
+
+      {actionError && (
+        <Text className="text-red-08 mt-4 text-center" tag={'p'}>
+          {actionError}
+        </Text>
+      )}
 
       <InvoiceFormDrawer
         initialValues={formValues}
-        invoiceId={invoice.id}
+        invoiceId={invoice.reference}
         labels={formLabels}
         mode="edit"
         open={isEditing}
         paymentTermOptions={paymentTermOptions}
-        onClose={() => setIsEditing(false)}
-        onSubmit={handleSubmit}
+        onClose={() => {
+          setIsEditing(false);
+          setActionError(null);
+        }}
+        onSubmit={(values) => void handleSubmit(values)}
       />
 
       <DeleteInvoiceDialog
         open={isDeleting}
         labels={{
           title: tDelete('title'),
-          message: tDelete('message', { id: invoice.id }),
+          message: tDelete('message', { id: invoice.reference }),
           cancel: tDelete('cancel'),
           delete: tDelete('delete'),
         }}
         onCancel={() => setIsDeleting(false)}
-        onConfirm={handleConfirmDelete}
+        onConfirm={() => void handleConfirmDelete()}
       />
     </Container>
   );
