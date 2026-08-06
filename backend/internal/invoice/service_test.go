@@ -1,0 +1,321 @@
+package invoice
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"testing"
+)
+
+// fakeRepository is an in-memory Repository used to test Service without a
+// database.
+type fakeRepository struct {
+	invoices   map[string]Invoice
+	nextID     int
+	createErrs []error
+	getErr     error
+}
+
+func newFakeRepository() *fakeRepository {
+	return &fakeRepository{invoices: map[string]Invoice{}}
+}
+
+func (f *fakeRepository) List(_ context.Context) ([]Invoice, error) {
+	out := make([]Invoice, 0, len(f.invoices))
+	for _, inv := range f.invoices {
+		out = append(out, inv)
+	}
+	return out, nil
+}
+
+func (f *fakeRepository) Get(_ context.Context, id string) (Invoice, error) {
+	if f.getErr != nil {
+		return Invoice{}, f.getErr
+	}
+	inv, ok := f.invoices[id]
+	if !ok {
+		return Invoice{}, ErrNotFound
+	}
+	return inv, nil
+}
+
+func (f *fakeRepository) Create(_ context.Context, inv Invoice) (Invoice, error) {
+	if len(f.createErrs) > 0 {
+		err := f.createErrs[0]
+		f.createErrs = f.createErrs[1:]
+		if err != nil {
+			return Invoice{}, err
+		}
+	}
+	f.nextID++
+	inv.ID = fmt.Sprintf("id-%d", f.nextID)
+	f.invoices[inv.ID] = inv
+	return inv, nil
+}
+
+func (f *fakeRepository) Update(_ context.Context, inv Invoice) (Invoice, error) {
+	if _, ok := f.invoices[inv.ID]; !ok {
+		return Invoice{}, ErrNotFound
+	}
+	f.invoices[inv.ID] = inv
+	return inv, nil
+}
+
+func (f *fakeRepository) Delete(_ context.Context, id string) error {
+	if _, ok := f.invoices[id]; !ok {
+		return ErrNotFound
+	}
+	delete(f.invoices, id)
+	return nil
+}
+
+func (f *fakeRepository) UpdateStatus(_ context.Context, id string, status Status) (Invoice, error) {
+	inv, ok := f.invoices[id]
+	if !ok {
+		return Invoice{}, ErrNotFound
+	}
+	inv.Status = status
+	f.invoices[id] = inv
+	return inv, nil
+}
+
+func strPtr(s string) *string { return &s }
+func intPtr(i int) *int       { return &i }
+
+func validCreateInput() Invoice {
+	return Invoice{
+		ClientName:  "Jensen Huang",
+		Description: "Re-branding",
+		Items: []LineItem{
+			{Name: "Brand Guidelines", Quantity: 1, Price: 180090},
+		},
+	}
+}
+
+func TestServiceCreate(t *testing.T) {
+	t.Run("defaults status to draft and computes amount due", func(t *testing.T) {
+		repo := newFakeRepository()
+		svc := NewService(repo)
+
+		got, err := svc.Create(context.Background(), validCreateInput())
+		if err != nil {
+			t.Fatalf("Create() error = %v", err)
+		}
+		if got.Status != StatusDraft {
+			t.Errorf("Status = %q, want %q", got.Status, StatusDraft)
+		}
+		if got.AmountDue != 180090 {
+			t.Errorf("AmountDue = %d, want 180090", got.AmountDue)
+		}
+		if len(got.Reference) != 6 {
+			t.Errorf("Reference = %q, want length 6", got.Reference)
+		}
+		if got.PaymentDue != nil {
+			t.Errorf("PaymentDue = %v, want nil (no invoice date set)", *got.PaymentDue)
+		}
+	})
+
+	t.Run("computes payment due from invoice date and terms", func(t *testing.T) {
+		repo := newFakeRepository()
+		svc := NewService(repo)
+
+		input := validCreateInput()
+		input.Status = StatusPending
+		input.InvoiceDate = strPtr("2021-08-21")
+		input.PaymentTerms = intPtr(30)
+
+		got, err := svc.Create(context.Background(), input)
+		if err != nil {
+			t.Fatalf("Create() error = %v", err)
+		}
+		if got.PaymentDue == nil || *got.PaymentDue != "2021-09-20" {
+			t.Errorf("PaymentDue = %v, want 2021-09-20", got.PaymentDue)
+		}
+	})
+
+	t.Run("rejects a paid status", func(t *testing.T) {
+		repo := newFakeRepository()
+		svc := NewService(repo)
+
+		input := validCreateInput()
+		input.Status = StatusPaid
+
+		_, err := svc.Create(context.Background(), input)
+		var validationErr *ValidationError
+		if !errors.As(err, &validationErr) {
+			t.Fatalf("Create() error = %v, want *ValidationError", err)
+		}
+	})
+
+	t.Run("rejects missing client name", func(t *testing.T) {
+		repo := newFakeRepository()
+		svc := NewService(repo)
+
+		input := validCreateInput()
+		input.ClientName = ""
+
+		_, err := svc.Create(context.Background(), input)
+		var validationErr *ValidationError
+		if !errors.As(err, &validationErr) {
+			t.Fatalf("Create() error = %v, want *ValidationError", err)
+		}
+	})
+
+	t.Run("rejects a zero quantity item", func(t *testing.T) {
+		repo := newFakeRepository()
+		svc := NewService(repo)
+
+		input := validCreateInput()
+		input.Items[0].Quantity = 0
+
+		_, err := svc.Create(context.Background(), input)
+		var validationErr *ValidationError
+		if !errors.As(err, &validationErr) {
+			t.Fatalf("Create() error = %v, want *ValidationError", err)
+		}
+	})
+
+	t.Run("retries on a duplicate reference", func(t *testing.T) {
+		repo := newFakeRepository()
+		repo.createErrs = []error{errDuplicateReference, errDuplicateReference}
+		svc := NewService(repo)
+
+		got, err := svc.Create(context.Background(), validCreateInput())
+		if err != nil {
+			t.Fatalf("Create() error = %v", err)
+		}
+		if got.ID == "" {
+			t.Error("expected invoice to be created after retrying")
+		}
+	})
+
+	t.Run("gives up after exhausting reference attempts", func(t *testing.T) {
+		repo := newFakeRepository()
+		errs := make([]error, maxReferenceAttempts)
+		for i := range errs {
+			errs[i] = errDuplicateReference
+		}
+		repo.createErrs = errs
+		svc := NewService(repo)
+
+		_, err := svc.Create(context.Background(), validCreateInput())
+		if err == nil {
+			t.Fatal("expected an error after exhausting reference attempts")
+		}
+	})
+}
+
+func TestServiceUpdate(t *testing.T) {
+	t.Run("recomputes amount due and preserves status and reference", func(t *testing.T) {
+		repo := newFakeRepository()
+		repo.invoices["id-1"] = Invoice{
+			ID:        "id-1",
+			Reference: "RT3080",
+			Status:    StatusPending,
+			AmountDue: 100,
+		}
+		svc := NewService(repo)
+
+		input := validCreateInput()
+		input.Items = []LineItem{{Name: "Consulting", Quantity: 2, Price: 5000}}
+
+		got, err := svc.Update(context.Background(), "id-1", input)
+		if err != nil {
+			t.Fatalf("Update() error = %v", err)
+		}
+		if got.AmountDue != 10000 {
+			t.Errorf("AmountDue = %d, want 10000", got.AmountDue)
+		}
+		if got.Status != StatusPending {
+			t.Errorf("Status = %q, want %q (unchanged)", got.Status, StatusPending)
+		}
+		if got.Reference != "RT3080" {
+			t.Errorf("Reference = %q, want RT3080 (unchanged)", got.Reference)
+		}
+	})
+
+	t.Run("returns ErrNotFound for a missing invoice", func(t *testing.T) {
+		repo := newFakeRepository()
+		svc := NewService(repo)
+
+		_, err := svc.Update(context.Background(), "missing", validCreateInput())
+		if !errors.Is(err, ErrNotFound) {
+			t.Fatalf("Update() error = %v, want ErrNotFound", err)
+		}
+	})
+
+	t.Run("validates before updating", func(t *testing.T) {
+		repo := newFakeRepository()
+		repo.invoices["id-1"] = Invoice{ID: "id-1", Reference: "RT3080", Status: StatusDraft}
+		svc := NewService(repo)
+
+		input := validCreateInput()
+		input.ClientName = ""
+
+		_, err := svc.Update(context.Background(), "id-1", input)
+		var validationErr *ValidationError
+		if !errors.As(err, &validationErr) {
+			t.Fatalf("Update() error = %v, want *ValidationError", err)
+		}
+	})
+}
+
+func TestServiceDelete(t *testing.T) {
+	repo := newFakeRepository()
+	repo.invoices["id-1"] = Invoice{ID: "id-1"}
+	svc := NewService(repo)
+
+	if err := svc.Delete(context.Background(), "id-1"); err != nil {
+		t.Fatalf("Delete() error = %v", err)
+	}
+	if _, ok := repo.invoices["id-1"]; ok {
+		t.Error("expected invoice to be removed")
+	}
+
+	if err := svc.Delete(context.Background(), "id-1"); !errors.Is(err, ErrNotFound) {
+		t.Errorf("Delete() error = %v, want ErrNotFound", err)
+	}
+}
+
+func TestServiceMarkAsPaid(t *testing.T) {
+	repo := newFakeRepository()
+	repo.invoices["id-1"] = Invoice{ID: "id-1", Status: StatusPending}
+	svc := NewService(repo)
+
+	got, err := svc.MarkAsPaid(context.Background(), "id-1")
+	if err != nil {
+		t.Fatalf("MarkAsPaid() error = %v", err)
+	}
+	if got.Status != StatusPaid {
+		t.Errorf("Status = %q, want %q", got.Status, StatusPaid)
+	}
+
+	if _, err := svc.MarkAsPaid(context.Background(), "missing"); !errors.Is(err, ErrNotFound) {
+		t.Errorf("MarkAsPaid() error = %v, want ErrNotFound", err)
+	}
+}
+
+func TestComputePaymentDue(t *testing.T) {
+	tests := []struct {
+		name         string
+		invoiceDate  *string
+		paymentTerms *int
+		want         *string
+	}{
+		{"nil invoice date", nil, intPtr(30), nil},
+		{"nil payment terms", strPtr("2021-08-21"), nil, nil},
+		{"adds terms in days", strPtr("2021-08-21"), intPtr(30), strPtr("2021-09-20")},
+		{"crosses a year boundary", strPtr("2021-12-20"), intPtr(14), strPtr("2022-01-03")},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := computePaymentDue(tt.invoiceDate, tt.paymentTerms)
+			switch {
+			case tt.want == nil && got != nil:
+				t.Errorf("computePaymentDue() = %v, want nil", *got)
+			case tt.want != nil && (got == nil || *got != *tt.want):
+				t.Errorf("computePaymentDue() = %v, want %v", got, *tt.want)
+			}
+		})
+	}
+}
