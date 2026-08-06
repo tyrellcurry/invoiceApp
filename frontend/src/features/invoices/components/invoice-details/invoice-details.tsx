@@ -22,10 +22,7 @@ import {
   InvoiceAddress,
 } from '@/features/invoices/components/invoice-details/invoice-details.types';
 import { InvoiceStatus } from '@/features/invoices/types/invoice';
-import {
-  formatInvoiceAmount,
-  getCurrencySymbol,
-} from '@/features/invoices/utils/format-invoice-amount';
+import { formatCurrencyAmount } from '@/features/invoices/utils/format-invoice-amount';
 import { getInvoiceStatusStyles } from '@/features/invoices/utils/get-invoice-status-styles';
 import { getLineItemTotal } from '@/features/invoices/utils/get-line-item-total';
 
@@ -69,7 +66,6 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
     onRevertToPending,
   } = props;
 
-  const currency = getCurrencySymbol(localeAmountDue);
   const statusStyles = getInvoiceStatusStyles(invoiceStatus);
   // A paid invoice has nothing left to mark as paid, so the primary action
   // becomes the inverse: send it back to pending.
@@ -229,20 +225,23 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
                     className="text-gray-07 font-bold row-start-2 dark:text-gray-06 md:row-start-auto md:text-center"
                     tag={'span'}
                   >
-                    <span className="md:hidden">{`${item.quantity} x ${currency} ${formatInvoiceAmount(item.price, localeAmountDue)}`}</span>
+                    <span className="break-words md:hidden">{`${item.quantity} x ${formatCurrencyAmount(item.price, localeAmountDue)}`}</span>
                     <span className="hidden md:inline">{item.quantity}</span>
                   </Text>
                   <Text
-                    className="hidden text-gray-07 font-bold text-right dark:text-gray-06 md:block"
+                    className="hidden min-w-0 text-gray-07 font-bold text-right break-words dark:text-gray-06 md:block"
                     tag={'span'}
                   >
-                    {`${currency} ${formatInvoiceAmount(item.price, localeAmountDue)}`}
+                    {formatCurrencyAmount(item.price, localeAmountDue)}
                   </Text>
                   <Text
-                    className="font-bold text-gray-08 text-right row-start-1 col-start-2 dark:text-white md:row-start-auto md:col-start-auto"
+                    className="text-gray-08 row-start-1 col-start-2 min-w-0 text-right break-words font-bold dark:text-white md:row-start-auto md:col-start-auto"
                     tag={'span'}
                   >
-                    {`${currency} ${formatInvoiceAmount(getLineItemTotal(item.quantity, item.price), localeAmountDue)}`}
+                    {formatCurrencyAmount(
+                      getLineItemTotal(item.quantity, item.price),
+                      localeAmountDue
+                    )}
                   </Text>
                 </Grid>
               ))}
@@ -258,8 +257,11 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
             <Text className="text-white" tag={'span'}>
               {labels.amountDue}
             </Text>
-            <Text className="font-bold text-white text-2xl" tag={'span'}>
-              {`${currency} ${formatInvoiceAmount(invoiceAmountDue, localeAmountDue)}`}
+            <Text
+              className="min-w-0 text-right text-2xl font-bold break-words text-white"
+              tag={'span'}
+            >
+              {formatCurrencyAmount(invoiceAmountDue, localeAmountDue)}
             </Text>
           </Flex>
         </Container>

@@ -1,4 +1,8 @@
-import { formatInvoiceAmount, getCurrencySymbol } from './format-invoice-amount';
+import {
+  formatCurrencyAmount,
+  formatInvoiceAmount,
+  getCurrencySymbol,
+} from './format-invoice-amount';
 
 describe('getCurrencySymbol', () => {
   it('returns the dollar sign for en', () => {
@@ -24,5 +28,17 @@ describe('formatInvoiceAmount', () => {
     expect(formatInvoiceAmount(1234.5, 'fr')).toBe(
       (1234.5).toLocaleString('fr', { minimumFractionDigits: 2 })
     );
+  });
+});
+
+describe('formatCurrencyAmount', () => {
+  it('joins the symbol and amount with a non-breaking space, not a plain one', () => {
+    const result = formatCurrencyAmount(1234.5, 'en');
+
+    // Written as explicit escapes, not literal characters, so the
+    // assertion stays legible and can't be silently normalized back to a
+    // plain space by an editor.
+    expect(result).toBe('$\u00A01,234.50');
+    expect(result).not.toBe('$\u0020' + '1,234.50');
   });
 });
