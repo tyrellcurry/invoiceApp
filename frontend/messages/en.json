@@ -15,9 +15,11 @@
     "madeWith": "Made with ❤️ by",
     "authorName": "Tyrell Curry"
   },
-  "PreloadBanner": {
-    "message": "Your account has been preloaded with 3 example invoices.",
-    "dismiss": "Dismiss"
+  "WelcomeModal": {
+    "title": "Welcome!",
+    "message": "Your account has been preloaded with 3 example invoices, so you have something to explore right away.",
+    "dismiss": "Got it",
+    "close": "Close"
   },
   "Dashboard": {
     "title": "Invoices",

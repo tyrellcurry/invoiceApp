@@ -10,8 +10,8 @@ import { useTranslations } from 'use-intl';
 import AppShell from '@/components/layouts/app-shell/app-shell';
 import { AUTHOR_URL } from '@/config/constants';
 import { googleLoginUrl } from '@/features/auth/api/google-login-url';
-import PreloadBanner from '@/features/auth/components/preload-banner/preload-banner';
 import SplashScreen from '@/features/auth/components/splash-screen/splash-screen';
+import WelcomeModal from '@/features/auth/components/welcome-modal/welcome-modal';
 import { useSession } from '@/features/auth/hooks/use-session';
 
 const SessionGate = (): JSX.Element | null => {
@@ -54,7 +54,7 @@ const SessionGate = (): JSX.Element | null => {
 
   return (
     <AppShell userEmail={user?.email} userImage={user?.picture} onLogout={() => void logout()}>
-      <PreloadBanner />
+      <WelcomeModal />
       <Outlet />
     </AppShell>
   );

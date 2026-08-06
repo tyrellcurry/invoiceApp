@@ -24,24 +24,38 @@ test('continuing without logging in reveals the app', async ({ page }) => {
   expect(stored).not.toBeNull();
 
   // Every fresh guest session is preloaded with 3 example invoices, flagged
-  // by a dismissable banner.
+  // by a welcome modal.
+  await expect(page.getByRole('dialog', { name: 'Welcome!' })).toBeVisible();
   await expect(page.getByText(/preloaded with 3 example invoices/i)).toBeVisible();
   await expect(page.getByText('There are 3 total invoices')).toBeVisible();
 });
 
-test('dismissing the preload banner hides it and it stays hidden after reload', async ({ page }) => {
+test('dismissing the welcome modal via the bottom button hides it and it stays hidden after reload', async ({
+  page,
+}) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Continue without logging in' }).click();
 
-  const banner = page.getByText(/preloaded with 3 example invoices/i);
-  await expect(banner).toBeVisible();
+  const modal = page.getByRole('dialog', { name: 'Welcome!' });
+  await expect(modal).toBeVisible();
 
-  await page.getByRole('button', { name: /dismiss/i }).click();
-  await expect(banner).not.toBeVisible();
+  await page.getByRole('button', { name: 'Got it' }).click();
+  await expect(modal).not.toBeVisible();
 
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Invoices' })).toBeVisible();
-  await expect(banner).not.toBeVisible();
+  await expect(modal).not.toBeVisible();
+});
+
+test('dismissing the welcome modal via the close button also hides it', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Continue without logging in' }).click();
+
+  const modal = page.getByRole('dialog', { name: 'Welcome!' });
+  await expect(modal).toBeVisible();
+
+  await page.getByRole('button', { name: 'Close' }).click();
+  await expect(modal).not.toBeVisible();
 });
 
 test('reloading with a stored session skips the splash screen', async ({ page }) => {

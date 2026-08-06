@@ -7,8 +7,8 @@
  */
 import { JSX, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { markPreloaded } from '@/lib/preload-banner';
 import { setToken } from '@/lib/session-token';
+import { markPreloaded } from '@/lib/welcome-modal';
 
 const AuthCallbackRoute = (): JSX.Element => {
   const navigate = useNavigate();
