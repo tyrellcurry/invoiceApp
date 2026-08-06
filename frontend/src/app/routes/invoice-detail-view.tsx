@@ -4,7 +4,7 @@ import { useTranslations } from 'use-intl';
 import Container from '@/components/ui/container/container';
 import Text from '@/components/ui/text/text';
 import { deleteInvoice } from '@/features/invoices/api/delete-invoice';
-import { markInvoiceAsPaid } from '@/features/invoices/api/mark-invoice-as-paid';
+import { setInvoiceStatus } from '@/features/invoices/api/set-invoice-status';
 import { updateInvoice } from '@/features/invoices/api/update-invoice';
 import DeleteInvoiceDialog from '@/features/invoices/components/delete-invoice-dialog/delete-invoice-dialog';
 import InvoiceDetails from '@/features/invoices/components/invoice-details/invoice-details';
@@ -42,7 +42,7 @@ const InvoiceDetailView = ({
   const handleSubmit = async (values: InvoiceFormValues) => {
     setActionError(null);
     try {
-      await updateInvoice(invoice.id, values);
+      await updateInvoice(invoice.id, values, values.status);
       setIsEditing(false);
       onInvoiceChange();
     } catch {
@@ -62,10 +62,10 @@ const InvoiceDetailView = ({
     }
   };
 
-  const handleMarkAsPaid = async () => {
+  const handleStatusChange = async (status: InvoiceStatus) => {
     setActionError(null);
     try {
-      await markInvoiceAsPaid(invoice.id);
+      await setInvoiceStatus(invoice.id, status);
       onInvoiceChange();
     } catch {
       setActionError(t('actionError'));
@@ -93,6 +93,7 @@ const InvoiceDetailView = ({
           edit: t('edit'),
           delete: t('delete'),
           markAsPaid: t('markAsPaid'),
+          revertToPending: t('revertToPending'),
           billTo: t('billTo'),
           sentTo: t('sentTo'),
           invoiceDate: t('invoiceDate'),
@@ -106,7 +107,8 @@ const InvoiceDetailView = ({
         onDelete={() => setIsDeleting(true)}
         onEdit={() => setIsEditing(true)}
         onGoBack={() => navigate('/')}
-        onMarkAsPaid={() => void handleMarkAsPaid()}
+        onMarkAsPaid={() => void handleStatusChange(InvoiceStatus.PAID)}
+        onRevertToPending={() => void handleStatusChange(InvoiceStatus.PENDING)}
       />
 
       {actionError && (

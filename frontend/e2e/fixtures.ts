@@ -102,3 +102,10 @@ export const visibleButton = (page: Page, name: string | RegExp) =>
  * query matches both elements.
  */
 export const invoiceList = (page: Page) => page.locator('ul');
+
+/**
+ * Locates the status badge on the invoice detail page. Not a plain text
+ * query: the (closed, but always-mounted) edit drawer renders a status
+ * `<select>` whose `<option>`s carry the very same words.
+ */
+export const invoiceStatusBadge = (page: Page) => page.getByTestId('invoice-status');

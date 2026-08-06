@@ -1,4 +1,4 @@
-import { InvoiceLocale } from '@/features/invoices/types/invoice';
+import { InvoiceLocale, InvoiceStatus } from '@/features/invoices/types/invoice';
 
 export type InvoiceFormMode = 'create' | 'edit';
 
@@ -10,6 +10,12 @@ export interface InvoiceFormItem {
 
 /** Editable values held by the drawer form. */
 export interface InvoiceFormValues {
+  /**
+   * Edit mode only: the drawer exposes a status selector, and the caller
+   * sends this along with the update. Ignored in create mode, where the
+   * footer's Save as Draft / Save & Send buttons pick the status instead.
+   */
+  status: InvoiceStatus;
   senderStreet: string;
   senderCity: string;
   senderPostCode: string;
@@ -32,6 +38,10 @@ export interface InvoiceFormValues {
 export interface InvoiceFormLabels {
   editTitle: string;
   createTitle: string;
+  status: string;
+  statusDraft: string;
+  statusPending: string;
+  statusPaid: string;
   billFrom: string;
   billTo: string;
   streetAddress: string;

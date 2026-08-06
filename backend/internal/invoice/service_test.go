@@ -291,6 +291,38 @@ func TestServiceUpdate(t *testing.T) {
 		}
 	})
 
+	t.Run("applies a supplied status", func(t *testing.T) {
+		repo := newFakeRepository()
+		repo.seed("id-1", guestOwner, Invoice{Reference: "RT3080", Status: StatusDraft})
+		svc := NewService(repo)
+
+		input := validCreateInput()
+		input.Status = StatusPaid
+
+		got, err := svc.Update(context.Background(), guestOwner, "id-1", input)
+		if err != nil {
+			t.Fatalf("Update() error = %v", err)
+		}
+		if got.Status != StatusPaid {
+			t.Errorf("Status = %q, want %q", got.Status, StatusPaid)
+		}
+	})
+
+	t.Run("rejects an unrecognised status", func(t *testing.T) {
+		repo := newFakeRepository()
+		repo.seed("id-1", guestOwner, Invoice{Reference: "RT3080", Status: StatusDraft})
+		svc := NewService(repo)
+
+		input := validCreateInput()
+		input.Status = Status("ARCHIVED")
+
+		_, err := svc.Update(context.Background(), guestOwner, "id-1", input)
+		var validationErr *ValidationError
+		if !errors.As(err, &validationErr) {
+			t.Fatalf("Update() error = %v, want *ValidationError", err)
+		}
+	})
+
 	t.Run("returns ErrNotFound for a missing invoice", func(t *testing.T) {
 		repo := newFakeRepository()
 		svc := NewService(repo)
@@ -349,26 +381,59 @@ func TestServiceDelete(t *testing.T) {
 	}
 }
 
-func TestServiceMarkAsPaid(t *testing.T) {
-	repo := newFakeRepository()
-	repo.seed("id-1", guestOwner, Invoice{Status: StatusPending})
-	svc := NewService(repo)
+func TestServiceSetStatus(t *testing.T) {
+	t.Run("scopes to the owner and rejects a missing invoice", func(t *testing.T) {
+		repo := newFakeRepository()
+		repo.seed("id-1", guestOwner, Invoice{Status: StatusPending})
+		svc := NewService(repo)
 
-	if _, err := svc.MarkAsPaid(context.Background(), otherGuestOwner, "id-1"); !errors.Is(err, ErrNotFound) {
-		t.Fatalf("MarkAsPaid() by a different owner error = %v, want ErrNotFound", err)
-	}
+		if _, err := svc.SetStatus(context.Background(), otherGuestOwner, "id-1", StatusPaid); !errors.Is(err, ErrNotFound) {
+			t.Fatalf("SetStatus() by a different owner error = %v, want ErrNotFound", err)
+		}
+		if _, err := svc.SetStatus(context.Background(), guestOwner, "missing", StatusPaid); !errors.Is(err, ErrNotFound) {
+			t.Errorf("SetStatus() for a missing invoice error = %v, want ErrNotFound", err)
+		}
+	})
 
-	got, err := svc.MarkAsPaid(context.Background(), guestOwner, "id-1")
-	if err != nil {
-		t.Fatalf("MarkAsPaid() error = %v", err)
-	}
-	if got.Status != StatusPaid {
-		t.Errorf("Status = %q, want %q", got.Status, StatusPaid)
-	}
+	t.Run("applies every valid transition, including reverting a paid invoice", func(t *testing.T) {
+		tests := []struct {
+			name string
+			from Status
+			to   Status
+		}{
+			{"pending to paid", StatusPending, StatusPaid},
+			{"paid back to pending", StatusPaid, StatusPending},
+			{"pending to draft", StatusPending, StatusDraft},
+			{"draft to paid", StatusDraft, StatusPaid},
+		}
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				repo := newFakeRepository()
+				repo.seed("id-1", guestOwner, Invoice{Status: tt.from})
+				svc := NewService(repo)
 
-	if _, err := svc.MarkAsPaid(context.Background(), guestOwner, "missing"); !errors.Is(err, ErrNotFound) {
-		t.Errorf("MarkAsPaid() error = %v, want ErrNotFound", err)
-	}
+				got, err := svc.SetStatus(context.Background(), guestOwner, "id-1", tt.to)
+				if err != nil {
+					t.Fatalf("SetStatus() error = %v", err)
+				}
+				if got.Status != tt.to {
+					t.Errorf("Status = %q, want %q", got.Status, tt.to)
+				}
+			})
+		}
+	})
+
+	t.Run("rejects an unrecognised status", func(t *testing.T) {
+		repo := newFakeRepository()
+		repo.seed("id-1", guestOwner, Invoice{Status: StatusPending})
+		svc := NewService(repo)
+
+		_, err := svc.SetStatus(context.Background(), guestOwner, "id-1", Status("ARCHIVED"))
+		var validationErr *ValidationError
+		if !errors.As(err, &validationErr) {
+			t.Fatalf("SetStatus() error = %v, want *ValidationError", err)
+		}
+	})
 }
 
 func TestServiceSeedExamples(t *testing.T) {

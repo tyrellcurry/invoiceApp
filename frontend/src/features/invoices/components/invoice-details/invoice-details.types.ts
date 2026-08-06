@@ -15,6 +15,7 @@ export interface InvoiceDetailsLabels {
   edit: string;
   delete: string;
   markAsPaid: string;
+  revertToPending: string;
   billTo: string;
   sentTo: string;
   invoiceDate: string;
@@ -43,5 +44,8 @@ export interface IInvoiceDetailsProps {
   onGoBack?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
+  /** Marks a non-paid invoice as paid. */
   onMarkAsPaid?: () => void;
+  /** Reverts an already-paid invoice back to pending. */
+  onRevertToPending?: () => void;
 }

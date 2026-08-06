@@ -7,11 +7,16 @@ import type {
   InvoiceFormValues,
   PaymentTermOption,
 } from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer.types';
+import { InvoiceStatus } from '@/features/invoices/types/invoice';
 import { emptyInvoiceFormValues } from '@/features/invoices/utils/invoice-form-values';
 
 const labels: InvoiceFormLabels = {
   editTitle: 'Edit',
   createTitle: 'New Invoice',
+  status: 'Status',
+  statusDraft: 'Draft',
+  statusPending: 'Pending',
+  statusPaid: 'Paid',
   billFrom: 'Bill From',
   billTo: 'Bill To',
   streetAddress: 'Street Address',
@@ -45,6 +50,7 @@ const paymentTermOptions: PaymentTermOption[] = [
 ];
 
 const editValues: InvoiceFormValues = {
+  status: InvoiceStatus.PENDING,
   senderStreet: '19 Union Terrace',
   senderCity: 'London',
   senderPostCode: 'E1 3EZ',

@@ -21,6 +21,7 @@ import {
   IInvoiceDetailsProps,
   InvoiceAddress,
 } from '@/features/invoices/components/invoice-details/invoice-details.types';
+import { InvoiceStatus } from '@/features/invoices/types/invoice';
 import {
   formatInvoiceAmount,
   getCurrencySymbol,
@@ -65,10 +66,14 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
     onEdit,
     onDelete,
     onMarkAsPaid,
+    onRevertToPending,
   } = props;
 
   const currency = getCurrencySymbol(localeAmountDue);
   const statusStyles = getInvoiceStatusStyles(invoiceStatus);
+  // A paid invoice has nothing left to mark as paid, so the primary action
+  // becomes the inverse: send it back to pending.
+  const isPaid = invoiceStatus === InvoiceStatus.PAID;
 
   const actions = (
     <Flex align="center" className="md:flex-row md:gap-x-2" direction="col" gap={2}>
@@ -88,9 +93,9 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
       </Flex>
       <Button
         className="w-full justify-center md:w-fit"
-        label={labels.markAsPaid}
+        label={isPaid ? labels.revertToPending : labels.markAsPaid}
         variant="primary"
-        onClick={onMarkAsPaid}
+        onClick={isPaid ? onRevertToPending : onMarkAsPaid}
       />
     </Flex>
   );
@@ -123,7 +128,7 @@ const InvoiceDetails = (props: IInvoiceDetailsProps): JSX.Element => {
             justify="center"
           >
             <div className={classNames('w-2 h-2 rounded-full', statusStyles.dot)} />
-            <Text className="font-bold" tag={'span'}>
+            <Text className="font-bold" data-testid="invoice-status" tag={'span'}>
               {labels.statusText}
             </Text>
           </Flex>

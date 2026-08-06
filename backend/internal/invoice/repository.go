@@ -156,8 +156,9 @@ func (r *PostgresRepository) Create(ctx context.Context, owner auth.Owner, inv I
 	return inv, nil
 }
 
-// Update overwrites an invoice's editable fields and replaces its items, if
-// it's owned by owner. Reference, status and id are not touched here.
+// Update overwrites an invoice's editable fields (including its status) and
+// replaces its items, if it's owned by owner. Reference and id are not
+// touched here.
 func (r *PostgresRepository) Update(ctx context.Context, owner auth.Owner, inv Invoice) (Invoice, error) {
 	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
@@ -173,14 +174,14 @@ func (r *PostgresRepository) Update(ctx context.Context, owner auth.Owner, inv I
 			sender_street = $5, sender_city = $6, sender_postcode = $7, sender_country = $8,
 			client_name = $9, client_email = $10, client_street = $11, client_city = $12,
 			client_postcode = $13, client_country = $14,
-			amount_due = $15
-		WHERE id = $16 AND `+column+` = $17`,
+			amount_due = $15, status = $16
+		WHERE id = $17 AND `+column+` = $18`,
 		inv.Description,
 		nullableDate(inv.InvoiceDate), nullableInt(inv.PaymentTerms), nullableDate(inv.PaymentDue),
 		inv.SenderAddress.Street, inv.SenderAddress.City, inv.SenderAddress.PostCode, inv.SenderAddress.Country,
 		inv.ClientName, inv.ClientEmail, inv.ClientAddress.Street, inv.ClientAddress.City,
 		inv.ClientAddress.PostCode, inv.ClientAddress.Country,
-		inv.AmountDue, inv.ID, value,
+		inv.AmountDue, inv.Status, inv.ID, value,
 	)
 	if err != nil {
 		return Invoice{}, fmt.Errorf("update invoice %s: %w", inv.ID, err)

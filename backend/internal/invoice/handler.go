@@ -25,7 +25,7 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /invoices/{id}", h.get)
 	mux.HandleFunc("PUT /invoices/{id}", h.update)
 	mux.HandleFunc("DELETE /invoices/{id}", h.delete)
-	mux.HandleFunc("POST /invoices/{id}/mark-as-paid", h.markAsPaid)
+	mux.HandleFunc("POST /invoices/{id}/status", h.setStatus)
 }
 
 func (h *Handler) list(w http.ResponseWriter, r *http.Request) {
@@ -92,9 +92,20 @@ func (h *Handler) delete(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (h *Handler) markAsPaid(w http.ResponseWriter, r *http.Request) {
+// statusRequest is the body of POST /invoices/{id}/status.
+type statusRequest struct {
+	Status Status `json:"status"`
+}
+
+func (h *Handler) setStatus(w http.ResponseWriter, r *http.Request) {
 	owner := auth.OwnerFromContext(r.Context())
-	updated, err := h.svc.MarkAsPaid(r.Context(), owner, r.PathValue("id"))
+	var input statusRequest
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		writeJSON(w, http.StatusBadRequest, errorBody{Error: "invalid request body"})
+		return
+	}
+
+	updated, err := h.svc.SetStatus(r.Context(), owner, r.PathValue("id"), input.Status)
 	if err != nil {
 		writeError(w, err)
 		return

@@ -6,6 +6,7 @@ import { apiRequest } from '@/lib/api-client';
 vi.mock('@/lib/api-client', () => ({ apiRequest: vi.fn() }));
 
 const formValues: InvoiceFormValues = {
+  status: InvoiceStatus.DRAFT,
   senderStreet: '',
   senderCity: '',
   senderPostCode: '',

@@ -39,6 +39,7 @@
     "edit": "Edit",
     "delete": "Delete",
     "markAsPaid": "Mark as Paid",
+    "revertToPending": "Revert to Pending",
     "billTo": "Bill To",
     "sentTo": "Sent to",
     "invoiceDate": "Invoice Date",
@@ -58,6 +59,10 @@
   "InvoiceForm": {
     "editTitle": "Edit",
     "createTitle": "New Invoice",
+    "status": "Status",
+    "statusDraft": "Draft",
+    "statusPending": "Pending",
+    "statusPaid": "Paid",
     "billFrom": "Bill From",
     "billTo": "Bill To",
     "streetAddress": "Street Address",
