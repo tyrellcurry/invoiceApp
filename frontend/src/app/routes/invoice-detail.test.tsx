@@ -149,6 +149,25 @@ it('edits the invoice and refetches it', async () => {
   await waitFor(() => expect(getInvoice).toHaveBeenCalledTimes(2));
 });
 
+it('shows an error inside the still-open drawer when editing fails', async () => {
+  vi.mocked(getInvoice).mockResolvedValue(invoiceFixture);
+  vi.mocked(updateInvoice).mockRejectedValue(new Error('server error'));
+
+  renderDetailRoute();
+  await waitFor(() => expect(screen.getByText('Jensen Huang')).toBeInTheDocument());
+
+  fireEvent.click(screen.getAllByRole('button', { name: /^edit$/i })[0]);
+  fireEvent.change(screen.getByLabelText(/client's name/i), { target: { value: 'Jensen H.' } });
+  fireEvent.click(screen.getByRole('button', { name: /save changes/i }));
+
+  const dialog = screen.getByRole('dialog', { name: /^edit/i });
+  await waitFor(() =>
+    expect(within(dialog).getByText(/couldn't save this invoice/i)).toBeInTheDocument()
+  );
+  // The drawer stays open with the attempted edit still in place.
+  expect(screen.getByLabelText(/client's name/i)).toHaveValue('Jensen H.');
+});
+
 it('deletes the invoice and navigates home', async () => {
   vi.mocked(getInvoice).mockResolvedValue(invoiceFixture);
   vi.mocked(deleteInvoice).mockResolvedValue(undefined);

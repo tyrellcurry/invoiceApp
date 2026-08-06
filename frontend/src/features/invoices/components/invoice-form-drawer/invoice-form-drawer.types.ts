@@ -82,6 +82,8 @@ export interface IInvoiceFormDrawerProps {
   paymentTermOptions: PaymentTermOption[];
   localeAmountDue?: InvoiceLocale;
   labels: InvoiceFormLabels;
+  /** Shown above the footer's button row when a submit attempt has failed. */
+  error?: string | null;
   onClose: () => void;
   /** Edit mode: Save Changes. Create mode: Save & Send. */
   onSubmit: (values: InvoiceFormValues) => void;

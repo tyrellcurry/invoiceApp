@@ -23,6 +23,7 @@ const STATUS_TO_FILTER_KEY: Record<InvoiceStatus, keyof FilterState> = {
 
 const HomeView = () => {
   const t = useTranslations('Dashboard');
+  const tForm = useTranslations('InvoiceForm');
   const { labels: formLabels, paymentTermOptions } = useInvoiceFormLabels();
   const { invoices, isLoading, error, refetch } = useInvoices();
   const [filters, setFilters] = useState<FilterState>({
@@ -42,7 +43,7 @@ const HomeView = () => {
       setIsCreating(false);
       refetch();
     } catch {
-      setCreateError(t('loadError'));
+      setCreateError(tForm('submitError'));
     }
   };
 
@@ -114,6 +115,7 @@ const HomeView = () => {
       )}
 
       <InvoiceFormDrawer
+        error={createError}
         initialValues={emptyValues}
         labels={formLabels}
         mode="create"
@@ -126,11 +128,6 @@ const HomeView = () => {
         onSaveDraft={(values) => void submitNewInvoice(values, InvoiceStatus.DRAFT)}
         onSubmit={(values) => void submitNewInvoice(values, InvoiceStatus.PENDING)}
       />
-      {createError && (
-        <Text className="text-red-08 fixed bottom-4 left-1/2 -translate-x-1/2" tag={'p'}>
-          {createError}
-        </Text>
-      )}
     </Flex>
   );
 };

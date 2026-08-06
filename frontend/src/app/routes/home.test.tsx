@@ -97,6 +97,6 @@ it('keeps the drawer open and shows an error when create fails', async () => {
   fireEvent.change(screen.getByLabelText(/client's name/i), { target: { value: 'Jensen Huang' } });
   fireEvent.click(screen.getAllByRole('button', { name: /save as draft/i })[0]);
 
-  await waitFor(() => expect(screen.getByText(/couldn't load invoices/i)).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByText(/couldn't save this invoice/i)).toBeInTheDocument());
   expect(screen.getByLabelText(/client's name/i)).toBeInTheDocument();
 });
