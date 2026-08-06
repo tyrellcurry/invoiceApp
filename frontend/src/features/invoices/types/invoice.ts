@@ -19,9 +19,12 @@ export interface InvoiceLineItem {
   price: number;
 }
 
-/** Full invoice record @TODO:(stands in for the API model until a backend exists). */
+/** Full invoice record, as consumed throughout the frontend. */
 export interface Invoice {
+  /** Surrogate key (UUID). Used for routing and API calls. */
   id: string;
+  /** Human-readable invoice number shown in the UI (e.g. "RT3080"). */
+  reference: string;
   description: string;
   status: InvoiceStatus;
   invoiceDate: string;

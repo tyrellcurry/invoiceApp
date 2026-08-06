@@ -17,7 +17,9 @@
     "statusPaid": "Paid",
     "due": "Due",
     "emptyTitle": "There is nothing here",
-    "emptyDescription": "Create an invoice by clicking the <bold>New Invoice</bold> button and get started"
+    "emptyDescription": "Create an invoice by clicking the <bold>New Invoice</bold> button and get started",
+    "loading": "Loading invoices…",
+    "loadError": "Couldn't load invoices. Please try again."
   },
   "InvoiceDetails": {
     "goBack": "Go back",
@@ -36,7 +38,10 @@
     "amountDue": "Amount Due",
     "statusDraft": "Draft",
     "statusPending": "Pending",
-    "statusPaid": "Paid"
+    "statusPaid": "Paid",
+    "loading": "Loading invoice…",
+    "loadError": "Couldn't load this invoice. Please try again.",
+    "actionError": "Something went wrong. Please try again."
   },
   "InvoiceForm": {
     "editTitle": "Edit",
@@ -67,7 +72,8 @@
     "term1": "Net 1 Day",
     "term7": "Net 7 Days",
     "term14": "Net 14 Days",
-    "term30": "Net 30 Days"
+    "term30": "Net 30 Days",
+    "submitError": "Couldn't save this invoice. Please try again."
   },
   "DeleteInvoice": {
     "title": "Confirm Deletion",
