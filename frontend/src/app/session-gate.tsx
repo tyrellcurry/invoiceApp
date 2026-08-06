@@ -39,14 +39,8 @@ const SessionGate = (): JSX.Element | null => {
         googleLoginUrl={googleLoginUrl}
         isContinuingAsGuest={isContinuingAsGuest}
         labels={{
-          kicker: t('kicker'),
           title: t('title'),
           description: t('description'),
-          features: [
-            { title: t('featureCreateTitle'), description: t('featureCreateDescription') },
-            { title: t('featureTrackTitle'), description: t('featureTrackDescription') },
-            { title: t('featureStartTitle'), description: t('featureStartDescription') },
-          ],
           continueWithGoogle: t('continueWithGoogle'),
           continueAsGuest: t('continueAsGuest'),
           guestWarning: t('guestWarning'),
