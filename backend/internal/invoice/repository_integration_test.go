@@ -12,7 +12,9 @@ import (
 	"context"
 	"database/sql"
 	"testing"
+	"time"
 
+	"github.com/tyrellcurry/invoiceApp/internal/auth"
 	"github.com/tyrellcurry/invoiceApp/internal/config"
 	"github.com/tyrellcurry/invoiceApp/internal/database"
 )
@@ -37,19 +39,34 @@ func TestMain(m *testing.M) {
 	m.Run()
 }
 
-// resetDB clears every invoice (and, via ON DELETE CASCADE, every item)
-// before a test so tests don't see each other's data or the seed fixtures.
+// resetDB clears every invoice (and, via ON DELETE CASCADE, every item) and
+// every session/user before a test, so tests don't see each other's data.
 func resetDB(t *testing.T) {
 	t.Helper()
-	if _, err := testDB.ExecContext(context.Background(), "TRUNCATE invoices RESTART IDENTITY CASCADE"); err != nil {
+	if _, err := testDB.ExecContext(context.Background(),
+		"TRUNCATE invoices, sessions, users RESTART IDENTITY CASCADE"); err != nil {
 		t.Fatalf("reset db: %v", err)
 	}
+}
+
+// newGuestOwner creates a real guest session row (invoices.session_id has a
+// foreign key into sessions, so a fake id won't satisfy it) and returns the
+// Owner a request from it would resolve to.
+func newGuestOwner(t *testing.T) auth.Owner {
+	t.Helper()
+	authRepo := auth.NewPostgresRepository(testDB)
+	session, err := authRepo.CreateSession(context.Background(), nil, time.Now().Add(time.Hour))
+	if err != nil {
+		t.Fatalf("create guest session: %v", err)
+	}
+	return auth.Owner{SessionID: session.ID}
 }
 
 func TestPostgresRepositoryCreateAndGet(t *testing.T) {
 	resetDB(t)
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
+	owner := newGuestOwner(t)
 
 	input := Invoice{
 		Reference:     "RT3080",
@@ -69,7 +86,7 @@ func TestPostgresRepositoryCreateAndGet(t *testing.T) {
 		AmountDue: 190090,
 	}
 
-	created, err := repo.Create(ctx, input)
+	created, err := repo.Create(ctx, owner, input)
 	if err != nil {
 		t.Fatalf("Create() error = %v", err)
 	}
@@ -77,7 +94,7 @@ func TestPostgresRepositoryCreateAndGet(t *testing.T) {
 		t.Fatal("expected a generated id")
 	}
 
-	got, err := repo.Get(ctx, created.ID)
+	got, err := repo.Get(ctx, owner, created.ID)
 	if err != nil {
 		t.Fatalf("Get() error = %v", err)
 	}
@@ -99,8 +116,9 @@ func TestPostgresRepositoryCreateDraftWithNullableFields(t *testing.T) {
 	resetDB(t)
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
+	owner := newGuestOwner(t)
 
-	created, err := repo.Create(ctx, Invoice{
+	created, err := repo.Create(ctx, owner, Invoice{
 		Reference:  "RG0314",
 		Status:     StatusDraft,
 		ClientName: "John Morrison",
@@ -110,7 +128,7 @@ func TestPostgresRepositoryCreateDraftWithNullableFields(t *testing.T) {
 		t.Fatalf("Create() error = %v", err)
 	}
 
-	got, err := repo.Get(ctx, created.ID)
+	got, err := repo.Get(ctx, owner, created.ID)
 	if err != nil {
 		t.Fatalf("Get() error = %v", err)
 	}
@@ -125,10 +143,28 @@ func TestPostgresRepositoryCreateDraftWithNullableFields(t *testing.T) {
 func TestPostgresRepositoryGetNotFound(t *testing.T) {
 	resetDB(t)
 	repo := NewPostgresRepository(testDB)
+	owner := newGuestOwner(t)
 
-	_, err := repo.Get(context.Background(), "00000000-0000-0000-0000-000000000000")
+	_, err := repo.Get(context.Background(), owner, "00000000-0000-0000-0000-000000000000")
 	if err != ErrNotFound {
 		t.Fatalf("Get() error = %v, want ErrNotFound", err)
+	}
+}
+
+func TestPostgresRepositoryGetWrongOwner(t *testing.T) {
+	resetDB(t)
+	repo := NewPostgresRepository(testDB)
+	ctx := context.Background()
+	owner := newGuestOwner(t)
+	otherOwner := newGuestOwner(t)
+
+	created, err := repo.Create(ctx, owner, Invoice{Reference: "RT3080", Status: StatusDraft, ClientName: "Jensen Huang"})
+	if err != nil {
+		t.Fatalf("Create() error = %v", err)
+	}
+
+	if _, err := repo.Get(ctx, otherOwner, created.ID); err != ErrNotFound {
+		t.Fatalf("Get() by a different owner error = %v, want ErrNotFound", err)
 	}
 }
 
@@ -136,12 +172,13 @@ func TestPostgresRepositoryCreateDuplicateReference(t *testing.T) {
 	resetDB(t)
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
+	owner := newGuestOwner(t)
 
 	inv := Invoice{Reference: "XM9141", Status: StatusDraft, ClientName: "Alex Grim"}
-	if _, err := repo.Create(ctx, inv); err != nil {
+	if _, err := repo.Create(ctx, owner, inv); err != nil {
 		t.Fatalf("first Create() error = %v", err)
 	}
-	if _, err := repo.Create(ctx, inv); err != errDuplicateReference {
+	if _, err := repo.Create(ctx, owner, inv); err != errDuplicateReference {
 		t.Fatalf("second Create() error = %v, want errDuplicateReference", err)
 	}
 }
@@ -150,28 +187,33 @@ func TestPostgresRepositoryList(t *testing.T) {
 	resetDB(t)
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
+	owner := newGuestOwner(t)
+	otherOwner := newGuestOwner(t)
 
-	first, err := repo.Create(ctx, Invoice{
+	first, err := repo.Create(ctx, owner, Invoice{
 		Reference: "RT3080", Status: StatusPaid, ClientName: "Jensen Huang",
 		Items: []LineItem{{Name: "Brand Guidelines", Quantity: 1, Price: 180090}},
 	})
 	if err != nil {
 		t.Fatalf("Create() error = %v", err)
 	}
-	second, err := repo.Create(ctx, Invoice{
+	second, err := repo.Create(ctx, owner, Invoice{
 		Reference: "XM9141", Status: StatusPending, ClientName: "Alex Grim",
 		Items: []LineItem{{Name: "Banner Design", Quantity: 1, Price: 15600}},
 	})
 	if err != nil {
 		t.Fatalf("Create() error = %v", err)
 	}
+	if _, err := repo.Create(ctx, otherOwner, Invoice{Reference: "FV2353", Status: StatusDraft, ClientName: "Someone Else"}); err != nil {
+		t.Fatalf("Create() for otherOwner error = %v", err)
+	}
 
-	list, err := repo.List(ctx)
+	list, err := repo.List(ctx, owner)
 	if err != nil {
 		t.Fatalf("List() error = %v", err)
 	}
 	if len(list) != 2 {
-		t.Fatalf("List() returned %d invoices, want 2", len(list))
+		t.Fatalf("List() returned %d invoices, want 2 (owner's own, not otherOwner's)", len(list))
 	}
 
 	byID := map[string]Invoice{}
@@ -190,8 +232,9 @@ func TestPostgresRepositoryUpdate(t *testing.T) {
 	resetDB(t)
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
+	owner := newGuestOwner(t)
 
-	created, err := repo.Create(ctx, Invoice{
+	created, err := repo.Create(ctx, owner, Invoice{
 		Reference: "FV2353", Status: StatusPending, ClientName: "Alysa Werner",
 		Items: []LineItem{{Name: "Logo Concept", Quantity: 1, Price: 10204}},
 	})
@@ -207,7 +250,7 @@ func TestPostgresRepositoryUpdate(t *testing.T) {
 	}
 	updated.AmountDue = updated.Total()
 
-	got, err := repo.Update(ctx, updated)
+	got, err := repo.Update(ctx, owner, updated)
 	if err != nil {
 		t.Fatalf("Update() error = %v", err)
 	}
@@ -222,10 +265,30 @@ func TestPostgresRepositoryUpdate(t *testing.T) {
 func TestPostgresRepositoryUpdateNotFound(t *testing.T) {
 	resetDB(t)
 	repo := NewPostgresRepository(testDB)
+	owner := newGuestOwner(t)
 
-	_, err := repo.Update(context.Background(), Invoice{ID: "00000000-0000-0000-0000-000000000000", ClientName: "Nobody"})
+	_, err := repo.Update(context.Background(), owner, Invoice{ID: "00000000-0000-0000-0000-000000000000", ClientName: "Nobody"})
 	if err != ErrNotFound {
 		t.Fatalf("Update() error = %v, want ErrNotFound", err)
+	}
+}
+
+func TestPostgresRepositoryUpdateWrongOwner(t *testing.T) {
+	resetDB(t)
+	repo := NewPostgresRepository(testDB)
+	ctx := context.Background()
+	owner := newGuestOwner(t)
+	otherOwner := newGuestOwner(t)
+
+	created, err := repo.Create(ctx, owner, Invoice{Reference: "XA5478", Status: StatusDraft, ClientName: "Thomas Wayne"})
+	if err != nil {
+		t.Fatalf("Create() error = %v", err)
+	}
+
+	updated := created
+	updated.ClientName = "Hacked"
+	if _, err := repo.Update(ctx, otherOwner, updated); err != ErrNotFound {
+		t.Fatalf("Update() by a different owner error = %v, want ErrNotFound", err)
 	}
 }
 
@@ -233,8 +296,9 @@ func TestPostgresRepositoryDelete(t *testing.T) {
 	resetDB(t)
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
+	owner := newGuestOwner(t)
 
-	created, err := repo.Create(ctx, Invoice{
+	created, err := repo.Create(ctx, owner, Invoice{
 		Reference: "XA5478", Status: StatusDraft, ClientName: "Thomas Wayne",
 		Items: []LineItem{{Name: "Consulting Hours", Quantity: 10, Price: 25000}},
 	})
@@ -242,10 +306,10 @@ func TestPostgresRepositoryDelete(t *testing.T) {
 		t.Fatalf("Create() error = %v", err)
 	}
 
-	if err := repo.Delete(ctx, created.ID); err != nil {
+	if err := repo.Delete(ctx, owner, created.ID); err != nil {
 		t.Fatalf("Delete() error = %v", err)
 	}
-	if _, err := repo.Get(ctx, created.ID); err != ErrNotFound {
+	if _, err := repo.Get(ctx, owner, created.ID); err != ErrNotFound {
 		t.Fatalf("Get() after delete error = %v, want ErrNotFound", err)
 	}
 
@@ -257,7 +321,7 @@ func TestPostgresRepositoryDelete(t *testing.T) {
 		t.Errorf("invoice_items count = %d, want 0 (cascade delete)", itemCount)
 	}
 
-	if err := repo.Delete(ctx, created.ID); err != ErrNotFound {
+	if err := repo.Delete(ctx, owner, created.ID); err != ErrNotFound {
 		t.Fatalf("second Delete() error = %v, want ErrNotFound", err)
 	}
 }
@@ -266,13 +330,14 @@ func TestPostgresRepositoryUpdateStatus(t *testing.T) {
 	resetDB(t)
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
+	owner := newGuestOwner(t)
 
-	created, err := repo.Create(ctx, Invoice{Reference: "RT3080", Status: StatusPending, ClientName: "Jensen Huang"})
+	created, err := repo.Create(ctx, owner, Invoice{Reference: "RT3080", Status: StatusPending, ClientName: "Jensen Huang"})
 	if err != nil {
 		t.Fatalf("Create() error = %v", err)
 	}
 
-	got, err := repo.UpdateStatus(ctx, created.ID, StatusPaid)
+	got, err := repo.UpdateStatus(ctx, owner, created.ID, StatusPaid)
 	if err != nil {
 		t.Fatalf("UpdateStatus() error = %v", err)
 	}
@@ -280,7 +345,36 @@ func TestPostgresRepositoryUpdateStatus(t *testing.T) {
 		t.Errorf("Status = %q, want %q", got.Status, StatusPaid)
 	}
 
-	if _, err := repo.UpdateStatus(ctx, "00000000-0000-0000-0000-000000000000", StatusPaid); err != ErrNotFound {
+	if _, err := repo.UpdateStatus(ctx, owner, "00000000-0000-0000-0000-000000000000", StatusPaid); err != ErrNotFound {
 		t.Fatalf("UpdateStatus() on missing id error = %v, want ErrNotFound", err)
+	}
+}
+
+// TestSessionCascadeDeletesGuestInvoices proves the whole point of tying a
+// guest invoice to session_id ON DELETE CASCADE: deleting the session (what
+// the periodic sweep does to expired ones) removes its invoices too.
+func TestSessionCascadeDeletesGuestInvoices(t *testing.T) {
+	resetDB(t)
+	repo := NewPostgresRepository(testDB)
+	authRepo := auth.NewPostgresRepository(testDB)
+	ctx := context.Background()
+
+	session, err := authRepo.CreateSession(ctx, nil, time.Now().Add(time.Hour))
+	if err != nil {
+		t.Fatalf("CreateSession() error = %v", err)
+	}
+	owner := auth.Owner{SessionID: session.ID}
+
+	created, err := repo.Create(ctx, owner, Invoice{Reference: "RT3080", Status: StatusDraft, ClientName: "Jensen Huang"})
+	if err != nil {
+		t.Fatalf("Create() error = %v", err)
+	}
+
+	if err := authRepo.DeleteSession(ctx, session.ID); err != nil {
+		t.Fatalf("DeleteSession() error = %v", err)
+	}
+
+	if _, err := repo.Get(ctx, owner, created.ID); err != ErrNotFound {
+		t.Fatalf("Get() after session deletion error = %v, want ErrNotFound (cascade delete)", err)
 	}
 }
