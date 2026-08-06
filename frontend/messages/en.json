@@ -12,6 +12,10 @@
     "continueAsGuest": "Continue without logging in",
     "guestWarning": "Without an account, any invoices you create or edit will be deleted when your session ends."
   },
+  "PreloadBanner": {
+    "message": "Your account has been preloaded with 3 example invoices.",
+    "dismiss": "Dismiss"
+  },
   "Dashboard": {
     "title": "Invoices",
     "totalMobile": "{count} invoices",

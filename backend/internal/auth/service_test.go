@@ -29,18 +29,31 @@ func newFakeRepository() *fakeRepository {
 	}
 }
 
-func (f *fakeRepository) UpsertUserByGoogleSub(_ context.Context, googleSub, email, name string) (User, error) {
+func (f *fakeRepository) UpsertUserByGoogleSub(_ context.Context, googleSub, email, name string) (User, bool, error) {
 	if u, ok := f.usersByGoogleSub[googleSub]; ok {
 		u.Email, u.Name = email, name
 		f.usersByGoogleSub[googleSub] = u
 		f.usersByID[u.ID] = u
-		return u, nil
+		return u, false, nil
 	}
 	f.nextUserID++
 	u := User{ID: fmt.Sprintf("user-%d", f.nextUserID), GoogleSub: googleSub, Email: email, Name: name}
 	f.usersByGoogleSub[googleSub] = u
 	f.usersByID[u.ID] = u
-	return u, nil
+	return u, true, nil
+}
+
+// fakeSeeder is an in-memory InvoiceSeeder used to verify Service seeds
+// example invoices for the right owner at the right time, without a real
+// invoice.Service.
+type fakeSeeder struct {
+	calls []Owner
+	err   error
+}
+
+func (f *fakeSeeder) SeedExamples(_ context.Context, owner Owner) error {
+	f.calls = append(f.calls, owner)
+	return f.err
 }
 
 func (f *fakeRepository) GetUser(_ context.Context, id string) (User, error) {
@@ -83,7 +96,8 @@ func (f *fakeRepository) DeleteExpiredSessions(_ context.Context) (int64, error)
 }
 
 func TestServiceContinueAsGuest(t *testing.T) {
-	svc := NewService(newFakeRepository(), "client-id", "client-secret", "http://localhost/callback")
+	seeder := &fakeSeeder{}
+	svc := NewService(newFakeRepository(), seeder, "client-id", "client-secret", "http://localhost/callback")
 
 	session, err := svc.ContinueAsGuest(context.Background())
 	if err != nil {
@@ -94,6 +108,18 @@ func TestServiceContinueAsGuest(t *testing.T) {
 	}
 	if !session.ExpiresAt.After(time.Now()) {
 		t.Errorf("ExpiresAt = %v, want a time in the future", session.ExpiresAt)
+	}
+	if len(seeder.calls) != 1 || seeder.calls[0].SessionID != session.ID {
+		t.Errorf("seeder.calls = %+v, want a single call scoped to the new session", seeder.calls)
+	}
+}
+
+func TestServiceContinueAsGuestPropagatesSeedFailure(t *testing.T) {
+	seeder := &fakeSeeder{err: errors.New("seed failed")}
+	svc := NewService(newFakeRepository(), seeder, "client-id", "client-secret", "http://localhost/callback")
+
+	if _, err := svc.ContinueAsGuest(context.Background()); err == nil {
+		t.Fatal("expected an error when seeding fails")
 	}
 }
 
@@ -124,16 +150,20 @@ func TestServiceHandleGoogleCallback(t *testing.T) {
 		defer server.Close()
 
 		repo := newFakeRepository()
-		svc := NewService(repo, "client-id", "client-secret", "http://localhost/callback")
+		seeder := &fakeSeeder{}
+		svc := NewService(repo, seeder, "client-id", "client-secret", "http://localhost/callback")
 		svc.tokenURL = server.URL + "/token"
 		svc.tokenInfoURL = server.URL + "/tokeninfo"
 
-		session, err := svc.HandleGoogleCallback(context.Background(), "auth-code")
+		session, isNewUser, err := svc.HandleGoogleCallback(context.Background(), "auth-code")
 		if err != nil {
 			t.Fatalf("HandleGoogleCallback() error = %v", err)
 		}
 		if session.UserID == nil {
 			t.Fatal("UserID = nil, want the signed-in user's id")
+		}
+		if !isNewUser {
+			t.Error("isNewUser = false, want true for a first-ever sign-in")
 		}
 		user, err := svc.GetUser(context.Background(), *session.UserID)
 		if err != nil {
@@ -142,29 +172,39 @@ func TestServiceHandleGoogleCallback(t *testing.T) {
 		if user.Email != "jensenh@mail.com" || user.GoogleSub != "google-sub-1" {
 			t.Errorf("user = %+v, want the claims from the id token", user)
 		}
+		if len(seeder.calls) != 1 || seeder.calls[0].UserID == nil || *seeder.calls[0].UserID != user.ID {
+			t.Errorf("seeder.calls = %+v, want a single call scoped to the new user", seeder.calls)
+		}
 	})
 
-	t.Run("signing in twice reuses the same user", func(t *testing.T) {
+	t.Run("signing in twice reuses the same user and only seeds once", func(t *testing.T) {
 		server := googleTestServer(t, "fake-id-token", googleClaims{
 			Sub: "google-sub-1", Email: "jensenh@mail.com", Name: "Jensen Huang", Aud: "client-id",
 		})
 		defer server.Close()
 
 		repo := newFakeRepository()
-		svc := NewService(repo, "client-id", "client-secret", "http://localhost/callback")
+		seeder := &fakeSeeder{}
+		svc := NewService(repo, seeder, "client-id", "client-secret", "http://localhost/callback")
 		svc.tokenURL = server.URL + "/token"
 		svc.tokenInfoURL = server.URL + "/tokeninfo"
 
-		first, err := svc.HandleGoogleCallback(context.Background(), "auth-code-1")
+		first, firstIsNew, err := svc.HandleGoogleCallback(context.Background(), "auth-code-1")
 		if err != nil {
 			t.Fatalf("first HandleGoogleCallback() error = %v", err)
 		}
-		second, err := svc.HandleGoogleCallback(context.Background(), "auth-code-2")
+		second, secondIsNew, err := svc.HandleGoogleCallback(context.Background(), "auth-code-2")
 		if err != nil {
 			t.Fatalf("second HandleGoogleCallback() error = %v", err)
 		}
 		if *first.UserID != *second.UserID {
 			t.Errorf("UserID = %s then %s, want the same user both times", *first.UserID, *second.UserID)
+		}
+		if !firstIsNew || secondIsNew {
+			t.Errorf("isNewUser = %v then %v, want true then false", firstIsNew, secondIsNew)
+		}
+		if len(seeder.calls) != 1 {
+			t.Errorf("seeder.calls = %+v, want exactly one call (only the first sign-in)", seeder.calls)
 		}
 	})
 
@@ -174,11 +214,11 @@ func TestServiceHandleGoogleCallback(t *testing.T) {
 		})
 		defer server.Close()
 
-		svc := NewService(newFakeRepository(), "client-id", "client-secret", "http://localhost/callback")
+		svc := NewService(newFakeRepository(), &fakeSeeder{}, "client-id", "client-secret", "http://localhost/callback")
 		svc.tokenURL = server.URL + "/token"
 		svc.tokenInfoURL = server.URL + "/tokeninfo"
 
-		if _, err := svc.HandleGoogleCallback(context.Background(), "auth-code"); err == nil {
+		if _, _, err := svc.HandleGoogleCallback(context.Background(), "auth-code"); err == nil {
 			t.Fatal("expected an error for an audience mismatch")
 		}
 	})
@@ -189,11 +229,11 @@ func TestServiceHandleGoogleCallback(t *testing.T) {
 		}))
 		defer server.Close()
 
-		svc := NewService(newFakeRepository(), "client-id", "client-secret", "http://localhost/callback")
+		svc := NewService(newFakeRepository(), &fakeSeeder{}, "client-id", "client-secret", "http://localhost/callback")
 		svc.tokenURL = server.URL + "/token"
 		svc.tokenInfoURL = server.URL + "/tokeninfo"
 
-		if _, err := svc.HandleGoogleCallback(context.Background(), "auth-code"); err == nil {
+		if _, _, err := svc.HandleGoogleCallback(context.Background(), "auth-code"); err == nil {
 			t.Fatal("expected an error when Google's token endpoint fails")
 		}
 	})
@@ -201,7 +241,7 @@ func TestServiceHandleGoogleCallback(t *testing.T) {
 
 func TestServiceGetSession(t *testing.T) {
 	repo := newFakeRepository()
-	svc := NewService(repo, "client-id", "client-secret", "http://localhost/callback")
+	svc := NewService(repo, &fakeSeeder{}, "client-id", "client-secret", "http://localhost/callback")
 
 	valid, err := repo.CreateSession(context.Background(), nil, time.Now().Add(time.Hour))
 	if err != nil {
@@ -226,7 +266,7 @@ func TestServiceGetSession(t *testing.T) {
 
 func TestServiceLogout(t *testing.T) {
 	repo := newFakeRepository()
-	svc := NewService(repo, "client-id", "client-secret", "http://localhost/callback")
+	svc := NewService(repo, &fakeSeeder{}, "client-id", "client-secret", "http://localhost/callback")
 
 	session, err := repo.CreateSession(context.Background(), nil, time.Now().Add(time.Hour))
 	if err != nil {
@@ -242,7 +282,7 @@ func TestServiceLogout(t *testing.T) {
 
 func TestServiceSweep(t *testing.T) {
 	repo := newFakeRepository()
-	svc := NewService(repo, "client-id", "client-secret", "http://localhost/callback")
+	svc := NewService(repo, &fakeSeeder{}, "client-id", "client-secret", "http://localhost/callback")
 
 	if _, err := repo.CreateSession(context.Background(), nil, time.Now().Add(-time.Hour)); err != nil {
 		t.Fatalf("CreateSession() error = %v", err)

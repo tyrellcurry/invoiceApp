@@ -6,9 +6,9 @@ test.describe('invoice list', () => {
     await expect(page.getByRole('heading', { name: 'Invoices' })).toBeVisible();
   });
 
-  test('shows the empty state for a fresh session', async ({ page }) => {
-    await expect(page.getByText('There are 0 total invoices')).toBeVisible();
-    await expect(page.getByText('There is nothing here')).toBeVisible();
+  test('shows the preloaded example invoices for a fresh session', async ({ page }) => {
+    await expect(page.getByText('There are 3 total invoices')).toBeVisible();
+    await expect(page.getByText('There is nothing here')).not.toBeVisible();
   });
 
   test('shows only this session own invoices', async ({ page, createInvoice }) => {
@@ -16,7 +16,8 @@ test.describe('invoice list', () => {
     await createInvoice({ clientName: 'Alex Grim', status: 'PENDING', description: 'Graphic Design' });
     await page.reload();
 
-    await expect(page.getByText('There are 2 total invoices')).toBeVisible();
+    // 3 preloaded examples plus the 2 created here.
+    await expect(page.getByText('There are 5 total invoices')).toBeVisible();
     const list = invoiceList(page);
     await expect(list).toContainText('Jensen Huang');
     await expect(list).toContainText('Alex Grim');
@@ -26,7 +27,7 @@ test.describe('invoice list', () => {
     const draft = await createInvoice({ clientName: 'John Morrison', status: 'DRAFT' });
     const pending = await createInvoice({ clientName: 'Alex Grim', status: 'PENDING' });
     await page.reload();
-    await expect(page.getByText('There are 2 total invoices')).toBeVisible();
+    await expect(page.getByText('There are 5 total invoices')).toBeVisible();
 
     await page.getByRole('button', { name: 'Filter by status' }).click();
     await page.getByRole('checkbox', { name: 'Draft' }).check();

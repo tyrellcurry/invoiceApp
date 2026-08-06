@@ -32,13 +32,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	authRepo := auth.NewPostgresRepository(db)
-	authSvc := auth.NewService(authRepo, cfg.GoogleClientID, cfg.GoogleClientSecret, cfg.GoogleRedirectURL)
-	authHandler := auth.NewHandler(authSvc, cfg.FrontendURL)
-
 	invoiceRepo := invoice.NewPostgresRepository(db)
 	invoiceSvc := invoice.NewService(invoiceRepo)
 	invoiceHandler := invoice.NewHandler(invoiceSvc)
+
+	authRepo := auth.NewPostgresRepository(db)
+	authSvc := auth.NewService(authRepo, invoiceSvc, cfg.GoogleClientID, cfg.GoogleClientSecret, cfg.GoogleRedirectURL)
+	authHandler := auth.NewHandler(authSvc, cfg.FrontendURL)
 
 	mux := http.NewServeMux()
 	authHandler.RegisterRoutes(mux)

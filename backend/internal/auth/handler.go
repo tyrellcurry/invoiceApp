@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -72,14 +73,15 @@ func (h *Handler) googleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, err := h.svc.HandleGoogleCallback(r.Context(), code)
+	session, isNewUser, err := h.svc.HandleGoogleCallback(r.Context(), code)
 	if err != nil {
 		http.Error(w, "google sign-in failed", http.StatusBadGateway)
 		return
 	}
 
 	redirectURL := h.frontendURL + "/auth/callback#token=" + session.ID +
-		"&expiresAt=" + session.ExpiresAt.UTC().Format(time.RFC3339)
+		"&expiresAt=" + session.ExpiresAt.UTC().Format(time.RFC3339) +
+		"&preloaded=" + strconv.FormatBool(isNewUser)
 	http.Redirect(w, r, redirectURL, http.StatusFound)
 }
 
@@ -89,7 +91,8 @@ func (h *Handler) guest(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
 	}
-	writeSession(w, session)
+	// Every guest session is brand new, so it was always just preloaded.
+	writeSession(w, session, true)
 }
 
 func (h *Handler) logout(w http.ResponseWriter, r *http.Request) {
@@ -142,10 +145,13 @@ func (h *Handler) me(w http.ResponseWriter, r *http.Request) {
 type sessionResponse struct {
 	Token     string    `json:"token"`
 	ExpiresAt time.Time `json:"expiresAt"`
+	// Preloaded reports whether this session's owner was just pre-populated
+	// with the example invoices, so the frontend knows to show the banner.
+	Preloaded bool `json:"preloaded"`
 }
 
-func writeSession(w http.ResponseWriter, session Session) {
-	writeJSON(w, http.StatusOK, sessionResponse{Token: session.ID, ExpiresAt: session.ExpiresAt})
+func writeSession(w http.ResponseWriter, session Session, preloaded bool) {
+	writeJSON(w, http.StatusOK, sessionResponse{Token: session.ID, ExpiresAt: session.ExpiresAt, Preloaded: preloaded})
 }
 
 func writeJSON(w http.ResponseWriter, status int, body any) {
