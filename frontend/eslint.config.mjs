@@ -96,6 +96,14 @@ const eslintConfig = [
     },
   },
   ...storybook.configs['flat/recommended'],
+  // Playwright fixtures call a `use(...)` teardown callback; eslint-plugin-react-hooks
+  // mistakes that for the React `use()` hook and demands a "use"-prefixed function name.
+  {
+    files: ['e2e/**/*.{js,ts}'],
+    rules: {
+      'react-hooks/rules-of-hooks': 'off',
+    },
+  },
   // Bulletproof-react unidirectional architecture: shared -> features -> app.
   {
     files: ['src/**/*.{js,jsx,ts,tsx}'],

@@ -21,5 +21,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
     // SVGs are transformed to components by vite-plugin-svgr in tests too.
+    // e2e/ holds Playwright specs (npm run test:e2e), not vitest ones.
+    exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**'],
   },
 });
