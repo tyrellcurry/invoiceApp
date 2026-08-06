@@ -7,11 +7,20 @@
     "logout": "Log out"
   },
   "Splash": {
-    "title": "Welcome to Invoice App",
-    "description": "Sign in with Google to keep your invoices, or continue without an account.",
+    "kicker": "Invoice App",
+    "title": "Invoicing without the busywork",
+    "description": "Draft it, send it, get paid. Track every invoice from first draft to final payment in one place.",
+    "featureCreateTitle": "Build in seconds",
+    "featureCreateDescription": "Add line items and terms, and the totals and due dates work themselves out.",
+    "featureTrackTitle": "Know where things stand",
+    "featureTrackDescription": "Filter by draft, pending or paid to see what still needs chasing.",
+    "featureStartTitle": "Start with examples",
+    "featureStartDescription": "Your account comes preloaded with sample invoices, so nothing starts empty.",
     "continueWithGoogle": "Continue with Google",
     "continueAsGuest": "Continue without logging in",
-    "guestWarning": "Without an account, any invoices you create or edit will be deleted when your session ends."
+    "guestWarning": "Without an account, any invoices you create or edit will be deleted when your session ends.",
+    "madeWith": "Made with ❤️ by",
+    "authorName": "Tyrell Curry"
   },
   "PreloadBanner": {
     "message": "Your account has been preloaded with 3 example invoices.",

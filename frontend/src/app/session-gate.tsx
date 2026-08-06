@@ -8,6 +8,7 @@ import { JSX, useState } from 'react';
 import { Outlet } from 'react-router';
 import { useTranslations } from 'use-intl';
 import AppShell from '@/components/layouts/app-shell/app-shell';
+import { AUTHOR_URL } from '@/config/constants';
 import { googleLoginUrl } from '@/features/auth/api/google-login-url';
 import PreloadBanner from '@/features/auth/components/preload-banner/preload-banner';
 import SplashScreen from '@/features/auth/components/splash-screen/splash-screen';
@@ -34,14 +35,23 @@ const SessionGate = (): JSX.Element | null => {
 
     return (
       <SplashScreen
+        authorUrl={AUTHOR_URL}
         googleLoginUrl={googleLoginUrl}
         isContinuingAsGuest={isContinuingAsGuest}
         labels={{
+          kicker: t('kicker'),
           title: t('title'),
           description: t('description'),
+          features: [
+            { title: t('featureCreateTitle'), description: t('featureCreateDescription') },
+            { title: t('featureTrackTitle'), description: t('featureTrackDescription') },
+            { title: t('featureStartTitle'), description: t('featureStartDescription') },
+          ],
           continueWithGoogle: t('continueWithGoogle'),
           continueAsGuest: t('continueAsGuest'),
           guestWarning: t('guestWarning'),
+          madeWith: t('madeWith'),
+          authorName: t('authorName'),
         }}
         onContinueAsGuest={() => void handleContinueAsGuest()}
       />
