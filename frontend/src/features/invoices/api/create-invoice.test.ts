@@ -1,9 +1,9 @@
-import { apiRequest } from '@/features/invoices/api/client';
 import { createInvoice } from '@/features/invoices/api/create-invoice';
 import { InvoiceFormValues } from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer.types';
 import { InvoiceStatus } from '@/features/invoices/types/invoice';
+import { apiRequest } from '@/lib/api-client';
 
-vi.mock('@/features/invoices/api/client', () => ({ apiRequest: vi.fn() }));
+vi.mock('@/lib/api-client', () => ({ apiRequest: vi.fn() }));
 
 const formValues: InvoiceFormValues = {
   senderStreet: '',

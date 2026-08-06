@@ -24,5 +24,5 @@ test('creates an invoice as a draft from the list page', async ({ page }) => {
   await visibleButton(page, /^Delete$/).click();
   await page.getByRole('alertdialog').locator('button:visible', { hasText: /^Delete$/ }).click();
   await expect(page.getByRole('heading', { name: 'Invoices' })).toBeVisible();
-  await expect(page.getByText('There are 5 total invoices')).toBeVisible();
+  await expect(page.getByText('There are 0 total invoices')).toBeVisible();
 });

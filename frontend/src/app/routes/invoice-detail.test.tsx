@@ -60,7 +60,7 @@ beforeEach(() => {
 });
 
 it('shows a not-found page for a missing invoice', async () => {
-  const { ApiError } = await import('@/features/invoices/api/client');
+  const { ApiError } = await import('@/lib/api-client');
   vi.mocked(getInvoice).mockRejectedValue(new ApiError(404, 'invoice not found'));
 
   renderDetailRoute();

@@ -12,4 +12,8 @@ export interface IMainMenuProps {
     darkAria?: string;
     lightAria?: string;
   };
+  /** Shown as a title on the logout button when signed in with Google. */
+  userEmail?: string;
+  logoutLabel?: string;
+  onLogout?: () => void;
 }

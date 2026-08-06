@@ -1,8 +1,8 @@
-import { apiRequest } from '@/features/invoices/api/client';
 import { markInvoiceAsPaid } from '@/features/invoices/api/mark-invoice-as-paid';
 import { InvoiceStatus } from '@/features/invoices/types/invoice';
+import { apiRequest } from '@/lib/api-client';
 
-vi.mock('@/features/invoices/api/client', () => ({ apiRequest: vi.fn() }));
+vi.mock('@/lib/api-client', () => ({ apiRequest: vi.fn() }));
 
 it('POSTs /invoices/{id}/mark-as-paid and maps the response', async () => {
   vi.mocked(apiRequest).mockResolvedValue({

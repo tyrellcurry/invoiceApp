@@ -30,13 +30,14 @@ func OwnerFromContext(ctx context.Context) Owner {
 // It's meant to wrap the whole top-level mux (both /auth/* and /invoices*
 // routes registered on it) rather than a sub-mux, since the stdlib
 // ServeMux doesn't make mounting one mux inside another at multiple
-// patterns clean. The /auth/* routes are deliberately public — signing in
-// or continuing as a guest can't require already having a session — so
+// patterns clean. The /auth/* routes and /healthz are deliberately public —
+// signing in or continuing as a guest can't require already having a
+// session, and a health check needs to work with no session at all — so
 // requests to them skip straight through.
 func RequireSession(svc *Service) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if strings.HasPrefix(r.URL.Path, "/auth/") {
+			if strings.HasPrefix(r.URL.Path, "/auth/") || r.URL.Path == "/healthz" {
 				next.ServeHTTP(w, r)
 				return
 			}

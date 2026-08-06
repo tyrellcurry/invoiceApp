@@ -1,8 +1,8 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { ApiError } from '@/features/invoices/api/client';
 import { getInvoice } from '@/features/invoices/api/get-invoice';
 import { useInvoice } from '@/features/invoices/api/use-invoice';
 import { InvoiceStatus } from '@/features/invoices/types/invoice';
+import { ApiError } from '@/lib/api-client';
 
 vi.mock('@/features/invoices/api/get-invoice', () => ({ getInvoice: vi.fn() }));
 

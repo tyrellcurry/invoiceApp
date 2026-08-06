@@ -1,8 +1,8 @@
-import { apiRequest } from '@/features/invoices/api/client';
 import { getInvoice } from '@/features/invoices/api/get-invoice';
 import { InvoiceStatus } from '@/features/invoices/types/invoice';
+import { apiRequest } from '@/lib/api-client';
 
-vi.mock('@/features/invoices/api/client', () => ({ apiRequest: vi.fn() }));
+vi.mock('@/lib/api-client', () => ({ apiRequest: vi.fn() }));
 
 it('fetches /invoices/{id} and maps the result', async () => {
   vi.mocked(apiRequest).mockResolvedValue({

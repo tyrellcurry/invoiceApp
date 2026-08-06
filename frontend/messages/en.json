@@ -2,7 +2,15 @@
   "MainMenu": {
     "profileImageAlt": "Profile image",
     "switchToDark": "Switch to dark mode",
-    "switchToLight": "Switch to light mode"
+    "switchToLight": "Switch to light mode",
+    "logout": "Log out"
+  },
+  "Splash": {
+    "title": "Welcome to Invoice App",
+    "description": "Sign in with Google to keep your invoices, or continue without an account.",
+    "continueWithGoogle": "Continue with Google",
+    "continueAsGuest": "Continue without logging in",
+    "guestWarning": "Without an account, any invoices you create or edit will be deleted when your session ends."
   },
   "Dashboard": {
     "title": "Invoices",

@@ -1,4 +1,4 @@
-import { apiRequest } from '@/features/invoices/api/client';
+import { apiRequest } from '@/lib/api-client';
 
 /** Deletes an invoice. */
 export const deleteInvoice = (id: string): Promise<void> =>

@@ -43,6 +43,9 @@ func main() {
 	mux := http.NewServeMux()
 	authHandler.RegisterRoutes(mux)
 	invoiceHandler.RegisterRoutes(mux)
+	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
 
 	go sweepExpiredSessions(authSvc)
 
