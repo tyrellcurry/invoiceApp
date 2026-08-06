@@ -5,41 +5,64 @@ import (
 	"errors"
 	"fmt"
 	"testing"
+
+	"github.com/tyrellcurry/invoiceApp/internal/auth"
 )
 
 // fakeRepository is an in-memory Repository used to test Service without a
-// database.
+// database. It tracks an owner key per invoice so List/Get/Update/Delete/
+// UpdateStatus can exercise the same ownership scoping the real Postgres
+// repository does.
 type fakeRepository struct {
 	invoices   map[string]Invoice
+	owners     map[string]string
 	nextID     int
 	createErrs []error
 	getErr     error
 }
 
 func newFakeRepository() *fakeRepository {
-	return &fakeRepository{invoices: map[string]Invoice{}}
+	return &fakeRepository{invoices: map[string]Invoice{}, owners: map[string]string{}}
 }
 
-func (f *fakeRepository) List(_ context.Context) ([]Invoice, error) {
-	out := make([]Invoice, 0, len(f.invoices))
-	for _, inv := range f.invoices {
-		out = append(out, inv)
+// seed pre-populates an invoice owned by owner, for tests that need one to
+// already exist before calling the method under test.
+func (f *fakeRepository) seed(id string, owner auth.Owner, inv Invoice) {
+	inv.ID = id
+	f.invoices[id] = inv
+	f.owners[id] = ownerKey(owner)
+}
+
+func ownerKey(owner auth.Owner) string {
+	if owner.UserID != nil {
+		return "user:" + *owner.UserID
+	}
+	return "session:" + owner.SessionID
+}
+
+func (f *fakeRepository) List(_ context.Context, owner auth.Owner) ([]Invoice, error) {
+	key := ownerKey(owner)
+	var out []Invoice
+	for id, inv := range f.invoices {
+		if f.owners[id] == key {
+			out = append(out, inv)
+		}
 	}
 	return out, nil
 }
 
-func (f *fakeRepository) Get(_ context.Context, id string) (Invoice, error) {
+func (f *fakeRepository) Get(_ context.Context, owner auth.Owner, id string) (Invoice, error) {
 	if f.getErr != nil {
 		return Invoice{}, f.getErr
 	}
 	inv, ok := f.invoices[id]
-	if !ok {
+	if !ok || f.owners[id] != ownerKey(owner) {
 		return Invoice{}, ErrNotFound
 	}
 	return inv, nil
 }
 
-func (f *fakeRepository) Create(_ context.Context, inv Invoice) (Invoice, error) {
+func (f *fakeRepository) Create(_ context.Context, owner auth.Owner, inv Invoice) (Invoice, error) {
 	if len(f.createErrs) > 0 {
 		err := f.createErrs[0]
 		f.createErrs = f.createErrs[1:]
@@ -50,28 +73,30 @@ func (f *fakeRepository) Create(_ context.Context, inv Invoice) (Invoice, error)
 	f.nextID++
 	inv.ID = fmt.Sprintf("id-%d", f.nextID)
 	f.invoices[inv.ID] = inv
+	f.owners[inv.ID] = ownerKey(owner)
 	return inv, nil
 }
 
-func (f *fakeRepository) Update(_ context.Context, inv Invoice) (Invoice, error) {
-	if _, ok := f.invoices[inv.ID]; !ok {
+func (f *fakeRepository) Update(_ context.Context, owner auth.Owner, inv Invoice) (Invoice, error) {
+	if _, ok := f.invoices[inv.ID]; !ok || f.owners[inv.ID] != ownerKey(owner) {
 		return Invoice{}, ErrNotFound
 	}
 	f.invoices[inv.ID] = inv
 	return inv, nil
 }
 
-func (f *fakeRepository) Delete(_ context.Context, id string) error {
-	if _, ok := f.invoices[id]; !ok {
+func (f *fakeRepository) Delete(_ context.Context, owner auth.Owner, id string) error {
+	if _, ok := f.invoices[id]; !ok || f.owners[id] != ownerKey(owner) {
 		return ErrNotFound
 	}
 	delete(f.invoices, id)
+	delete(f.owners, id)
 	return nil
 }
 
-func (f *fakeRepository) UpdateStatus(_ context.Context, id string, status Status) (Invoice, error) {
+func (f *fakeRepository) UpdateStatus(_ context.Context, owner auth.Owner, id string, status Status) (Invoice, error) {
 	inv, ok := f.invoices[id]
-	if !ok {
+	if !ok || f.owners[id] != ownerKey(owner) {
 		return Invoice{}, ErrNotFound
 	}
 	inv.Status = status
@@ -81,6 +106,11 @@ func (f *fakeRepository) UpdateStatus(_ context.Context, id string, status Statu
 
 func strPtr(s string) *string { return &s }
 func intPtr(i int) *int       { return &i }
+
+// guestOwner and otherGuestOwner are two distinct guest owners, used to
+// exercise both "owns it" and "doesn't own it" paths.
+var guestOwner = auth.Owner{SessionID: "sess-1"}
+var otherGuestOwner = auth.Owner{SessionID: "sess-2"}
 
 func validCreateInput() Invoice {
 	return Invoice{
@@ -97,7 +127,7 @@ func TestServiceCreate(t *testing.T) {
 		repo := newFakeRepository()
 		svc := NewService(repo)
 
-		got, err := svc.Create(context.Background(), validCreateInput())
+		got, err := svc.Create(context.Background(), guestOwner, validCreateInput())
 		if err != nil {
 			t.Fatalf("Create() error = %v", err)
 		}
@@ -124,7 +154,7 @@ func TestServiceCreate(t *testing.T) {
 		input.InvoiceDate = strPtr("2021-08-21")
 		input.PaymentTerms = intPtr(30)
 
-		got, err := svc.Create(context.Background(), input)
+		got, err := svc.Create(context.Background(), guestOwner, input)
 		if err != nil {
 			t.Fatalf("Create() error = %v", err)
 		}
@@ -140,7 +170,7 @@ func TestServiceCreate(t *testing.T) {
 		input := validCreateInput()
 		input.Status = StatusPaid
 
-		_, err := svc.Create(context.Background(), input)
+		_, err := svc.Create(context.Background(), guestOwner, input)
 		var validationErr *ValidationError
 		if !errors.As(err, &validationErr) {
 			t.Fatalf("Create() error = %v, want *ValidationError", err)
@@ -154,7 +184,7 @@ func TestServiceCreate(t *testing.T) {
 		input := validCreateInput()
 		input.ClientName = ""
 
-		_, err := svc.Create(context.Background(), input)
+		_, err := svc.Create(context.Background(), guestOwner, input)
 		var validationErr *ValidationError
 		if !errors.As(err, &validationErr) {
 			t.Fatalf("Create() error = %v, want *ValidationError", err)
@@ -168,7 +198,7 @@ func TestServiceCreate(t *testing.T) {
 		input := validCreateInput()
 		input.Items[0].Quantity = 0
 
-		_, err := svc.Create(context.Background(), input)
+		_, err := svc.Create(context.Background(), guestOwner, input)
 		var validationErr *ValidationError
 		if !errors.As(err, &validationErr) {
 			t.Fatalf("Create() error = %v, want *ValidationError", err)
@@ -180,7 +210,7 @@ func TestServiceCreate(t *testing.T) {
 		repo.createErrs = []error{errDuplicateReference, errDuplicateReference}
 		svc := NewService(repo)
 
-		got, err := svc.Create(context.Background(), validCreateInput())
+		got, err := svc.Create(context.Background(), guestOwner, validCreateInput())
 		if err != nil {
 			t.Fatalf("Create() error = %v", err)
 		}
@@ -198,28 +228,55 @@ func TestServiceCreate(t *testing.T) {
 		repo.createErrs = errs
 		svc := NewService(repo)
 
-		_, err := svc.Create(context.Background(), validCreateInput())
+		_, err := svc.Create(context.Background(), guestOwner, validCreateInput())
 		if err == nil {
 			t.Fatal("expected an error after exhausting reference attempts")
 		}
 	})
 }
 
+func TestServiceList(t *testing.T) {
+	repo := newFakeRepository()
+	repo.seed("id-1", guestOwner, Invoice{Reference: "RT3080"})
+	repo.seed("id-2", otherGuestOwner, Invoice{Reference: "XM9141"})
+	svc := NewService(repo)
+
+	got, err := svc.List(context.Background(), guestOwner)
+	if err != nil {
+		t.Fatalf("List() error = %v", err)
+	}
+	if len(got) != 1 || got[0].Reference != "RT3080" {
+		t.Errorf("List() = %+v, want only guestOwner's invoice", got)
+	}
+}
+
+func TestServiceGet(t *testing.T) {
+	repo := newFakeRepository()
+	repo.seed("id-1", guestOwner, Invoice{Reference: "RT3080"})
+	svc := NewService(repo)
+
+	if _, err := svc.Get(context.Background(), guestOwner, "id-1"); err != nil {
+		t.Fatalf("Get() by owner error = %v", err)
+	}
+	if _, err := svc.Get(context.Background(), otherGuestOwner, "id-1"); !errors.Is(err, ErrNotFound) {
+		t.Errorf("Get() by a different owner error = %v, want ErrNotFound", err)
+	}
+}
+
 func TestServiceUpdate(t *testing.T) {
 	t.Run("recomputes amount due and preserves status and reference", func(t *testing.T) {
 		repo := newFakeRepository()
-		repo.invoices["id-1"] = Invoice{
-			ID:        "id-1",
+		repo.seed("id-1", guestOwner, Invoice{
 			Reference: "RT3080",
 			Status:    StatusPending,
 			AmountDue: 100,
-		}
+		})
 		svc := NewService(repo)
 
 		input := validCreateInput()
 		input.Items = []LineItem{{Name: "Consulting", Quantity: 2, Price: 5000}}
 
-		got, err := svc.Update(context.Background(), "id-1", input)
+		got, err := svc.Update(context.Background(), guestOwner, "id-1", input)
 		if err != nil {
 			t.Fatalf("Update() error = %v", err)
 		}
@@ -238,7 +295,18 @@ func TestServiceUpdate(t *testing.T) {
 		repo := newFakeRepository()
 		svc := NewService(repo)
 
-		_, err := svc.Update(context.Background(), "missing", validCreateInput())
+		_, err := svc.Update(context.Background(), guestOwner, "missing", validCreateInput())
+		if !errors.Is(err, ErrNotFound) {
+			t.Fatalf("Update() error = %v, want ErrNotFound", err)
+		}
+	})
+
+	t.Run("returns ErrNotFound for another owner's invoice", func(t *testing.T) {
+		repo := newFakeRepository()
+		repo.seed("id-1", otherGuestOwner, Invoice{Reference: "RT3080", Status: StatusDraft})
+		svc := NewService(repo)
+
+		_, err := svc.Update(context.Background(), guestOwner, "id-1", validCreateInput())
 		if !errors.Is(err, ErrNotFound) {
 			t.Fatalf("Update() error = %v, want ErrNotFound", err)
 		}
@@ -246,13 +314,13 @@ func TestServiceUpdate(t *testing.T) {
 
 	t.Run("validates before updating", func(t *testing.T) {
 		repo := newFakeRepository()
-		repo.invoices["id-1"] = Invoice{ID: "id-1", Reference: "RT3080", Status: StatusDraft}
+		repo.seed("id-1", guestOwner, Invoice{Reference: "RT3080", Status: StatusDraft})
 		svc := NewService(repo)
 
 		input := validCreateInput()
 		input.ClientName = ""
 
-		_, err := svc.Update(context.Background(), "id-1", input)
+		_, err := svc.Update(context.Background(), guestOwner, "id-1", input)
 		var validationErr *ValidationError
 		if !errors.As(err, &validationErr) {
 			t.Fatalf("Update() error = %v, want *ValidationError", err)
@@ -262,27 +330,35 @@ func TestServiceUpdate(t *testing.T) {
 
 func TestServiceDelete(t *testing.T) {
 	repo := newFakeRepository()
-	repo.invoices["id-1"] = Invoice{ID: "id-1"}
+	repo.seed("id-1", guestOwner, Invoice{})
 	svc := NewService(repo)
 
-	if err := svc.Delete(context.Background(), "id-1"); err != nil {
+	if err := svc.Delete(context.Background(), otherGuestOwner, "id-1"); !errors.Is(err, ErrNotFound) {
+		t.Fatalf("Delete() by a different owner error = %v, want ErrNotFound", err)
+	}
+
+	if err := svc.Delete(context.Background(), guestOwner, "id-1"); err != nil {
 		t.Fatalf("Delete() error = %v", err)
 	}
 	if _, ok := repo.invoices["id-1"]; ok {
 		t.Error("expected invoice to be removed")
 	}
 
-	if err := svc.Delete(context.Background(), "id-1"); !errors.Is(err, ErrNotFound) {
+	if err := svc.Delete(context.Background(), guestOwner, "id-1"); !errors.Is(err, ErrNotFound) {
 		t.Errorf("Delete() error = %v, want ErrNotFound", err)
 	}
 }
 
 func TestServiceMarkAsPaid(t *testing.T) {
 	repo := newFakeRepository()
-	repo.invoices["id-1"] = Invoice{ID: "id-1", Status: StatusPending}
+	repo.seed("id-1", guestOwner, Invoice{Status: StatusPending})
 	svc := NewService(repo)
 
-	got, err := svc.MarkAsPaid(context.Background(), "id-1")
+	if _, err := svc.MarkAsPaid(context.Background(), otherGuestOwner, "id-1"); !errors.Is(err, ErrNotFound) {
+		t.Fatalf("MarkAsPaid() by a different owner error = %v, want ErrNotFound", err)
+	}
+
+	got, err := svc.MarkAsPaid(context.Background(), guestOwner, "id-1")
 	if err != nil {
 		t.Fatalf("MarkAsPaid() error = %v", err)
 	}
@@ -290,7 +366,7 @@ func TestServiceMarkAsPaid(t *testing.T) {
 		t.Errorf("Status = %q, want %q", got.Status, StatusPaid)
 	}
 
-	if _, err := svc.MarkAsPaid(context.Background(), "missing"); !errors.Is(err, ErrNotFound) {
+	if _, err := svc.MarkAsPaid(context.Background(), guestOwner, "missing"); !errors.Is(err, ErrNotFound) {
 		t.Errorf("MarkAsPaid() error = %v, want ErrNotFound", err)
 	}
 }

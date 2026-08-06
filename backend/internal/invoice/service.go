@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+
+	"github.com/tyrellcurry/invoiceApp/internal/auth"
 )
 
 // maxReferenceAttempts bounds how many times Create retries after a
@@ -38,20 +40,20 @@ func NewService(repo Repository) *Service {
 	return &Service{repo: repo}
 }
 
-// List returns every invoice.
-func (s *Service) List(ctx context.Context) ([]Invoice, error) {
-	return s.repo.List(ctx)
+// List returns every invoice owned by owner.
+func (s *Service) List(ctx context.Context, owner auth.Owner) ([]Invoice, error) {
+	return s.repo.List(ctx, owner)
 }
 
-// Get returns the invoice with the given id, or ErrNotFound.
-func (s *Service) Get(ctx context.Context, id string) (Invoice, error) {
-	return s.repo.Get(ctx, id)
+// Get returns the invoice with the given id owned by owner, or ErrNotFound.
+func (s *Service) Get(ctx context.Context, owner auth.Owner, id string) (Invoice, error) {
+	return s.repo.Get(ctx, owner, id)
 }
 
 // Create validates input, computes its derived fields (amount due, payment
-// due date, a unique reference) and persists it. Status must be DRAFT or
-// PENDING; it defaults to DRAFT when empty.
-func (s *Service) Create(ctx context.Context, input Invoice) (Invoice, error) {
+// due date, a unique reference) and persists it as owned by owner. Status
+// must be DRAFT or PENDING; it defaults to DRAFT when empty.
+func (s *Service) Create(ctx context.Context, owner auth.Owner, input Invoice) (Invoice, error) {
 	if input.Status == "" {
 		input.Status = StatusDraft
 	}
@@ -68,7 +70,7 @@ func (s *Service) Create(ctx context.Context, input Invoice) (Invoice, error) {
 	var lastErr error
 	for attempt := 0; attempt < maxReferenceAttempts; attempt++ {
 		input.Reference = generateReference()
-		created, err := s.repo.Create(ctx, input)
+		created, err := s.repo.Create(ctx, owner, input)
 		if err == nil {
 			return created, nil
 		}
@@ -81,10 +83,10 @@ func (s *Service) Create(ctx context.Context, input Invoice) (Invoice, error) {
 }
 
 // Update overwrites an existing invoice's editable fields, recomputing its
-// amount due and payment due date. The status is left unchanged; use
-// MarkAsPaid to change it.
-func (s *Service) Update(ctx context.Context, id string, input Invoice) (Invoice, error) {
-	existing, err := s.repo.Get(ctx, id)
+// amount due and payment due date, if it's owned by owner. The status is
+// left unchanged; use MarkAsPaid to change it.
+func (s *Service) Update(ctx context.Context, owner auth.Owner, id string, input Invoice) (Invoice, error) {
+	existing, err := s.repo.Get(ctx, owner, id)
 	if err != nil {
 		return Invoice{}, err
 	}
@@ -98,17 +100,17 @@ func (s *Service) Update(ctx context.Context, id string, input Invoice) (Invoice
 	input.AmountDue = input.Total()
 	input.PaymentDue = computePaymentDue(input.InvoiceDate, input.PaymentTerms)
 
-	return s.repo.Update(ctx, input)
+	return s.repo.Update(ctx, owner, input)
 }
 
-// Delete removes an invoice.
-func (s *Service) Delete(ctx context.Context, id string) error {
-	return s.repo.Delete(ctx, id)
+// Delete removes an invoice owned by owner.
+func (s *Service) Delete(ctx context.Context, owner auth.Owner, id string) error {
+	return s.repo.Delete(ctx, owner, id)
 }
 
-// MarkAsPaid transitions an invoice's status to PAID.
-func (s *Service) MarkAsPaid(ctx context.Context, id string) (Invoice, error) {
-	return s.repo.UpdateStatus(ctx, id, StatusPaid)
+// MarkAsPaid transitions an owned invoice's status to PAID.
+func (s *Service) MarkAsPaid(ctx context.Context, owner auth.Owner, id string) (Invoice, error) {
+	return s.repo.UpdateStatus(ctx, owner, id, StatusPaid)
 }
 
 // validateEditableFields checks the fields a caller may set when creating or

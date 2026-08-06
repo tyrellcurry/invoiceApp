@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+
+	"github.com/tyrellcurry/invoiceApp/internal/auth"
 )
 
 // Handler exposes the invoice service over HTTP.
@@ -27,7 +29,8 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 }
 
 func (h *Handler) list(w http.ResponseWriter, r *http.Request) {
-	invoices, err := h.svc.List(r.Context())
+	owner := auth.OwnerFromContext(r.Context())
+	invoices, err := h.svc.List(r.Context(), owner)
 	if err != nil {
 		writeError(w, err)
 		return
@@ -39,7 +42,8 @@ func (h *Handler) list(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) get(w http.ResponseWriter, r *http.Request) {
-	inv, err := h.svc.Get(r.Context(), r.PathValue("id"))
+	owner := auth.OwnerFromContext(r.Context())
+	inv, err := h.svc.Get(r.Context(), owner, r.PathValue("id"))
 	if err != nil {
 		writeError(w, err)
 		return
@@ -48,13 +52,14 @@ func (h *Handler) get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) create(w http.ResponseWriter, r *http.Request) {
+	owner := auth.OwnerFromContext(r.Context())
 	var input Invoice
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		writeJSON(w, http.StatusBadRequest, errorBody{Error: "invalid request body"})
 		return
 	}
 
-	created, err := h.svc.Create(r.Context(), input)
+	created, err := h.svc.Create(r.Context(), owner, input)
 	if err != nil {
 		writeError(w, err)
 		return
@@ -63,13 +68,14 @@ func (h *Handler) create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) update(w http.ResponseWriter, r *http.Request) {
+	owner := auth.OwnerFromContext(r.Context())
 	var input Invoice
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		writeJSON(w, http.StatusBadRequest, errorBody{Error: "invalid request body"})
 		return
 	}
 
-	updated, err := h.svc.Update(r.Context(), r.PathValue("id"), input)
+	updated, err := h.svc.Update(r.Context(), owner, r.PathValue("id"), input)
 	if err != nil {
 		writeError(w, err)
 		return
@@ -78,7 +84,8 @@ func (h *Handler) update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) delete(w http.ResponseWriter, r *http.Request) {
-	if err := h.svc.Delete(r.Context(), r.PathValue("id")); err != nil {
+	owner := auth.OwnerFromContext(r.Context())
+	if err := h.svc.Delete(r.Context(), owner, r.PathValue("id")); err != nil {
 		writeError(w, err)
 		return
 	}
@@ -86,7 +93,8 @@ func (h *Handler) delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) markAsPaid(w http.ResponseWriter, r *http.Request) {
-	updated, err := h.svc.MarkAsPaid(r.Context(), r.PathValue("id"))
+	owner := auth.OwnerFromContext(r.Context())
+	updated, err := h.svc.MarkAsPaid(r.Context(), owner, r.PathValue("id"))
 	if err != nil {
 		writeError(w, err)
 		return
