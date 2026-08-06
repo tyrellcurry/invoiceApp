@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { continueAsGuest as continueAsGuestRequest } from '@/features/auth/api/continue-as-guest';
 import { getMe, MeUser } from '@/features/auth/api/get-me';
 import { logout as logoutRequest } from '@/features/auth/api/logout';
-import { markPreloaded } from '@/lib/preload-banner';
 import { clearToken, getToken, setToken } from '@/lib/session-token';
+import { markPreloaded } from '@/lib/welcome-modal';
 
 export type SessionStatus = 'loading' | 'authenticated' | 'guest' | 'anonymous';
 

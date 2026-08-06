@@ -3,8 +3,8 @@ import { continueAsGuest } from '@/features/auth/api/continue-as-guest';
 import { getMe } from '@/features/auth/api/get-me';
 import { logout } from '@/features/auth/api/logout';
 import { useSession } from '@/features/auth/hooks/use-session';
-import { shouldShowPreloadBanner } from '@/lib/preload-banner';
 import { getToken, setToken } from '@/lib/session-token';
+import { shouldShowWelcomeModal } from '@/lib/welcome-modal';
 
 vi.mock('@/features/auth/api/get-me', () => ({ getMe: vi.fn() }));
 vi.mock('@/features/auth/api/continue-as-guest', () => ({ continueAsGuest: vi.fn() }));
@@ -84,7 +84,7 @@ it('continueAsGuest stores the new token and becomes guest', async () => {
 
   expect(result.current.status).toBe('guest');
   expect(getToken()).toBe('new-guest-token');
-  expect(shouldShowPreloadBanner()).toBe(true);
+  expect(shouldShowWelcomeModal()).toBe(true);
 });
 
 it('logout clears the token and goes anonymous', async () => {
