@@ -9,6 +9,7 @@ import { Outlet } from 'react-router';
 import { useTranslations } from 'use-intl';
 import AppShell from '@/components/layouts/app-shell/app-shell';
 import { googleLoginUrl } from '@/features/auth/api/google-login-url';
+import PreloadBanner from '@/features/auth/components/preload-banner/preload-banner';
 import SplashScreen from '@/features/auth/components/splash-screen/splash-screen';
 import { useSession } from '@/features/auth/hooks/use-session';
 
@@ -49,6 +50,7 @@ const SessionGate = (): JSX.Element | null => {
 
   return (
     <AppShell userEmail={user?.email} onLogout={() => void logout()}>
+      <PreloadBanner />
       <Outlet />
     </AppShell>
   );

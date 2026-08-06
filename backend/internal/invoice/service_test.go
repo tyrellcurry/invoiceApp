@@ -371,6 +371,54 @@ func TestServiceMarkAsPaid(t *testing.T) {
 	}
 }
 
+func TestServiceSeedExamples(t *testing.T) {
+	repo := newFakeRepository()
+	svc := NewService(repo)
+
+	if err := svc.SeedExamples(context.Background(), guestOwner); err != nil {
+		t.Fatalf("SeedExamples() error = %v", err)
+	}
+
+	got, err := svc.List(context.Background(), guestOwner)
+	if err != nil {
+		t.Fatalf("List() error = %v", err)
+	}
+	if len(got) != len(exampleInvoices) {
+		t.Fatalf("List() = %d invoices, want %d", len(got), len(exampleInvoices))
+	}
+
+	statuses := map[Status]bool{}
+	refs := map[string]bool{}
+	for _, inv := range got {
+		statuses[inv.Status] = true
+		if refs[inv.Reference] {
+			t.Errorf("duplicate reference %q among seeded invoices", inv.Reference)
+		}
+		refs[inv.Reference] = true
+		if inv.AmountDue != inv.Total() {
+			t.Errorf("AmountDue = %d, want Total() = %d", inv.AmountDue, inv.Total())
+		}
+	}
+	for _, want := range []Status{StatusPaid, StatusPending, StatusDraft} {
+		if !statuses[want] {
+			t.Errorf("missing an example invoice with status %q", want)
+		}
+	}
+
+	// A second owner's seed run must not collide with the first's
+	// references, since invoices.reference is unique across every owner.
+	if err := svc.SeedExamples(context.Background(), otherGuestOwner); err != nil {
+		t.Fatalf("SeedExamples() for a second owner error = %v", err)
+	}
+	gotOther, err := svc.List(context.Background(), otherGuestOwner)
+	if err != nil {
+		t.Fatalf("List() for a second owner error = %v", err)
+	}
+	if len(gotOther) != len(exampleInvoices) {
+		t.Fatalf("List() for a second owner = %d invoices, want %d", len(gotOther), len(exampleInvoices))
+	}
+}
+
 func TestComputePaymentDue(t *testing.T) {
 	tests := []struct {
 		name         string

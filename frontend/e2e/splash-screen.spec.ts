@@ -22,6 +22,26 @@ test('continuing without logging in reveals the app', async ({ page }) => {
 
   const stored = await page.evaluate(() => window.localStorage.getItem('invoiceapp.session'));
   expect(stored).not.toBeNull();
+
+  // Every fresh guest session is preloaded with 3 example invoices, flagged
+  // by a dismissable banner.
+  await expect(page.getByText(/preloaded with 3 example invoices/i)).toBeVisible();
+  await expect(page.getByText('There are 3 total invoices')).toBeVisible();
+});
+
+test('dismissing the preload banner hides it and it stays hidden after reload', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Continue without logging in' }).click();
+
+  const banner = page.getByText(/preloaded with 3 example invoices/i);
+  await expect(banner).toBeVisible();
+
+  await page.getByRole('button', { name: /dismiss/i }).click();
+  await expect(banner).not.toBeVisible();
+
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Invoices' })).toBeVisible();
+  await expect(banner).not.toBeVisible();
 });
 
 test('reloading with a stored session skips the splash screen', async ({ page }) => {

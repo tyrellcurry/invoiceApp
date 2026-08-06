@@ -3,6 +3,7 @@ import { continueAsGuest } from '@/features/auth/api/continue-as-guest';
 import { getMe } from '@/features/auth/api/get-me';
 import { logout } from '@/features/auth/api/logout';
 import { useSession } from '@/features/auth/hooks/use-session';
+import { shouldShowPreloadBanner } from '@/lib/preload-banner';
 import { getToken, setToken } from '@/lib/session-token';
 
 vi.mock('@/features/auth/api/get-me', () => ({ getMe: vi.fn() }));
@@ -69,6 +70,7 @@ it('continueAsGuest stores the new token and becomes guest', async () => {
   vi.mocked(continueAsGuest).mockResolvedValue({
     token: 'new-guest-token',
     expiresAt: new Date(Date.now() + 60_000).toISOString(),
+    preloaded: true,
   });
 
   const { result } = renderHook(() => useSession());
@@ -78,6 +80,7 @@ it('continueAsGuest stores the new token and becomes guest', async () => {
 
   expect(result.current.status).toBe('guest');
   expect(getToken()).toBe('new-guest-token');
+  expect(shouldShowPreloadBanner()).toBe(true);
 });
 
 it('logout clears the token and goes anonymous', async () => {

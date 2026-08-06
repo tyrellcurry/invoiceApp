@@ -48,14 +48,20 @@ func TestPostgresRepositoryUpsertUserByGoogleSub(t *testing.T) {
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
 
-	created, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensenh@mail.com", "Jensen Huang")
+	created, isNew, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensenh@mail.com", "Jensen Huang")
 	if err != nil {
 		t.Fatalf("first UpsertUserByGoogleSub() error = %v", err)
 	}
+	if !isNew {
+		t.Error("first UpsertUserByGoogleSub() isNew = false, want true")
+	}
 
-	updated, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensen.h@mail.com", "Jensen H.")
+	updated, isNew, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensen.h@mail.com", "Jensen H.")
 	if err != nil {
 		t.Fatalf("second UpsertUserByGoogleSub() error = %v", err)
+	}
+	if isNew {
+		t.Error("second UpsertUserByGoogleSub() isNew = true, want false (existing user)")
 	}
 	if updated.ID != created.ID {
 		t.Errorf("ID = %q, want %q (same user, not a duplicate)", updated.ID, created.ID)
@@ -117,7 +123,7 @@ func TestPostgresRepositoryAuthenticatedSession(t *testing.T) {
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
 
-	user, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensenh@mail.com", "Jensen Huang")
+	user, _, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensenh@mail.com", "Jensen Huang")
 	if err != nil {
 		t.Fatalf("UpsertUserByGoogleSub() error = %v", err)
 	}

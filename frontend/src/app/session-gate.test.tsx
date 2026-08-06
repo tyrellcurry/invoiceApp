@@ -39,6 +39,7 @@ it('continuing as a guest reveals the app', async () => {
   vi.mocked(continueAsGuest).mockResolvedValue({
     token: 'guest-token',
     expiresAt: new Date(Date.now() + 60_000).toISOString(),
+    preloaded: true,
   });
 
   renderGate();
@@ -48,6 +49,7 @@ it('continuing as a guest reveals the app', async () => {
 
   await waitFor(() => expect(screen.getByText('App content')).toBeInTheDocument());
   expect(getToken()).toBe('guest-token');
+  expect(screen.getByText(/preloaded with 3 example invoices/i)).toBeInTheDocument();
 });
 
 it('renders the app directly for an already-valid session', async () => {

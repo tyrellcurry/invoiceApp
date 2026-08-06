@@ -24,9 +24,18 @@ const (
 	googleTokenInfoURL = "https://oauth2.googleapis.com/tokeninfo"
 )
 
+// InvoiceSeeder pre-populates a newly created owner's account with example
+// invoices, so it isn't empty at first look. Implemented by *invoice.Service;
+// declared here (the consumer) rather than there, per this project's
+// interfaces-at-the-consumer convention.
+type InvoiceSeeder interface {
+	SeedExamples(ctx context.Context, owner Owner) error
+}
+
 // Service implements sign-in (Google and guest) and session lifecycle.
 type Service struct {
 	repo         Repository
+	seeder       InvoiceSeeder
 	clientID     string
 	clientSecret string
 	redirectURL  string
@@ -38,10 +47,12 @@ type Service struct {
 }
 
 // NewService returns a Service backed by repo, configured with the Google
-// OAuth client credentials and the backend's own callback URL.
-func NewService(repo Repository, clientID, clientSecret, redirectURL string) *Service {
+// OAuth client credentials and the backend's own callback URL. seeder
+// pre-populates example invoices for newly created owners.
+func NewService(repo Repository, seeder InvoiceSeeder, clientID, clientSecret, redirectURL string) *Service {
 	return &Service{
 		repo:         repo,
+		seeder:       seeder,
 		clientID:     clientID,
 		clientSecret: clientSecret,
 		redirectURL:  redirectURL,
@@ -51,9 +62,17 @@ func NewService(repo Repository, clientID, clientSecret, redirectURL string) *Se
 	}
 }
 
-// ContinueAsGuest creates a short-lived, unowned session.
+// ContinueAsGuest creates a short-lived, unowned session, pre-populated with
+// the example invoices since every guest session starts fresh.
 func (s *Service) ContinueAsGuest(ctx context.Context) (Session, error) {
-	return s.repo.CreateSession(ctx, nil, time.Now().Add(guestSessionTTL))
+	session, err := s.repo.CreateSession(ctx, nil, time.Now().Add(guestSessionTTL))
+	if err != nil {
+		return Session{}, err
+	}
+	if err := s.seeder.SeedExamples(ctx, Owner{SessionID: session.ID}); err != nil {
+		return Session{}, fmt.Errorf("continue as guest: %w", err)
+	}
+	return session, nil
 }
 
 // GoogleAuthURL returns the URL to send the browser to for Google's consent
@@ -73,24 +92,36 @@ func (s *Service) GoogleAuthURL(state string) string {
 
 // HandleGoogleCallback exchanges an authorization code for Google tokens,
 // verifies the resulting ID token, upserts the corresponding user, and
-// creates a long-lived, permanent session for them.
-func (s *Service) HandleGoogleCallback(ctx context.Context, code string) (Session, error) {
+// creates a long-lived, permanent session for them. The returned bool
+// reports whether this was the user's first-ever sign-in, in which case
+// their account was just pre-populated with the example invoices.
+func (s *Service) HandleGoogleCallback(ctx context.Context, code string) (Session, bool, error) {
 	idToken, err := s.exchangeCode(ctx, code)
 	if err != nil {
-		return Session{}, fmt.Errorf("google callback: %w", err)
+		return Session{}, false, fmt.Errorf("google callback: %w", err)
 	}
 
 	claims, err := s.verifyIDToken(ctx, idToken)
 	if err != nil {
-		return Session{}, fmt.Errorf("google callback: %w", err)
+		return Session{}, false, fmt.Errorf("google callback: %w", err)
 	}
 
-	user, err := s.repo.UpsertUserByGoogleSub(ctx, claims.Sub, claims.Email, claims.Name)
+	user, isNewUser, err := s.repo.UpsertUserByGoogleSub(ctx, claims.Sub, claims.Email, claims.Name)
 	if err != nil {
-		return Session{}, fmt.Errorf("google callback: %w", err)
+		return Session{}, false, fmt.Errorf("google callback: %w", err)
 	}
 
-	return s.repo.CreateSession(ctx, &user.ID, time.Now().Add(userSessionTTL))
+	if isNewUser {
+		if err := s.seeder.SeedExamples(ctx, Owner{UserID: &user.ID}); err != nil {
+			return Session{}, false, fmt.Errorf("google callback: %w", err)
+		}
+	}
+
+	session, err := s.repo.CreateSession(ctx, &user.ID, time.Now().Add(userSessionTTL))
+	if err != nil {
+		return Session{}, false, fmt.Errorf("google callback: %w", err)
+	}
+	return session, isNewUser, nil
 }
 
 // GetSession looks up a session by its bearer token, treating an expired
