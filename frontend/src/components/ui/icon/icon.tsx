@@ -15,6 +15,7 @@ import ChevronRight from '@/components/ui/icon/assets/chevron-right.svg';
 import CirclePlus from '@/components/ui/icon/assets/circle-plus.svg';
 import Moon from '@/components/ui/icon/assets/dm-moon.svg';
 import Sun from '@/components/ui/icon/assets/dm-sun.svg';
+import Google from '@/components/ui/icon/assets/google.svg';
 import MenuLogoBtn from '@/components/ui/icon/assets/menu-logo-btn.svg';
 import Trash from '@/components/ui/icon/assets/trash.svg';
 import { IIconProps } from '@/components/ui/icon/icon.types';
@@ -43,6 +44,9 @@ const Icon = ({ name, ...props }: IIconProps): JSX.Element => {
       break;
     case 'trash':
       ComponentToRender = Trash;
+      break;
+    case 'google':
+      ComponentToRender = Google;
       break;
     default:
       break;

@@ -30,18 +30,22 @@ const PreloadBanner = (): JSX.Element | null => {
   };
 
   return (
+    // Same max width as the invoice list below it, so the two edges line up.
     <Flex
       align="center"
-      className="mb-6 rounded-lg bg-blue-01 px-4 py-3 text-white md:px-6"
+      className="mx-auto mb-8 max-w-250 gap-x-4 rounded-lg bg-white px-6 py-4 drop-shadow-lg dark:bg-blue-03"
       justify="between"
       role="status"
     >
-      <Text tag="p" variant="body-alt">
-        {t('message')}
-      </Text>
+      <Flex align="center" gapX={3}>
+        <span className="h-2 w-2 shrink-0 rounded-full bg-green-05" aria-hidden />
+        <Text className="text-gray-07 dark:text-gray-05 text-[13px] leading-4.5" tag="p">
+          {t('message')}
+        </Text>
+      </Flex>
       <button
         aria-label={t('dismiss')}
-        className="cursor-pointer px-2 text-xl leading-none"
+        className="text-gray-06 hover:text-gray-08 shrink-0 cursor-pointer px-1 text-xl leading-none dark:hover:text-white"
         type="button"
         onClick={handleDismiss}
       >

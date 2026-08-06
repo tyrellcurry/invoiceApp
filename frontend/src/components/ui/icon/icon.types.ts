@@ -7,6 +7,7 @@ export interface IIconProps {
     | 'chevron-right'
     | 'chevron-down'
     | 'circle-plus'
-    | 'trash';
+    | 'trash'
+    | 'google';
   fill?: string;
 }

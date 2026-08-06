@@ -1,14 +1,27 @@
-export interface SplashScreenLabels {
+export interface SplashScreenFeature {
   title: string;
   description: string;
+}
+
+export interface SplashScreenLabels {
+  kicker: string;
+  title: string;
+  description: string;
+  features: SplashScreenFeature[];
   continueWithGoogle: string;
   continueAsGuest: string;
   guestWarning: string;
+  /** Credit line preceding the author link, e.g. "Made with ❤️ by". The space
+   *  before the link is added by the component, not carried in the string. */
+  madeWith: string;
+  authorName: string;
 }
 
 export interface ISplashScreenProps {
   labels: SplashScreenLabels;
   googleLoginUrl: string;
+  /** The author link target for the credit line in the footer. */
+  authorUrl: string;
   onContinueAsGuest: () => void;
   isContinuingAsGuest?: boolean;
 }
