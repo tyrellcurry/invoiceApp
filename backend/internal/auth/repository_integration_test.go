@@ -48,7 +48,7 @@ func TestPostgresRepositoryUpsertUserByGoogleSub(t *testing.T) {
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
 
-	created, isNew, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensenh@mail.com", "Jensen Huang")
+	created, isNew, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensenh@mail.com", "Jensen Huang", "https://avatar/1")
 	if err != nil {
 		t.Fatalf("first UpsertUserByGoogleSub() error = %v", err)
 	}
@@ -56,7 +56,7 @@ func TestPostgresRepositoryUpsertUserByGoogleSub(t *testing.T) {
 		t.Error("first UpsertUserByGoogleSub() isNew = false, want true")
 	}
 
-	updated, isNew, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensen.h@mail.com", "Jensen H.")
+	updated, isNew, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensen.h@mail.com", "Jensen H.", "https://avatar/2")
 	if err != nil {
 		t.Fatalf("second UpsertUserByGoogleSub() error = %v", err)
 	}
@@ -76,6 +76,9 @@ func TestPostgresRepositoryUpsertUserByGoogleSub(t *testing.T) {
 	}
 	if got.Email != "jensen.h@mail.com" {
 		t.Errorf("GetUser().Email = %q, want the updated value", got.Email)
+	}
+	if got.Picture != "https://avatar/2" {
+		t.Errorf("GetUser().Picture = %q, want the updated value", got.Picture)
 	}
 }
 
@@ -123,7 +126,7 @@ func TestPostgresRepositoryAuthenticatedSession(t *testing.T) {
 	repo := NewPostgresRepository(testDB)
 	ctx := context.Background()
 
-	user, _, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensenh@mail.com", "Jensen Huang")
+	user, _, err := repo.UpsertUserByGoogleSub(ctx, "google-sub-1", "jensenh@mail.com", "Jensen Huang", "https://avatar/1")
 	if err != nil {
 		t.Fatalf("UpsertUserByGoogleSub() error = %v", err)
 	}

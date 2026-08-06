@@ -10,6 +10,10 @@ type User struct {
 	GoogleSub string
 	Email     string
 	Name      string
+	// Picture is the avatar URL from Google's ID token claims. Empty when the
+	// account has no photo, in which case the frontend falls back to its
+	// bundled default.
+	Picture string
 }
 
 // Session is a bearer-token session. UserID is nil for a guest session

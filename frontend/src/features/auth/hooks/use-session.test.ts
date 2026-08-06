@@ -36,14 +36,18 @@ it('resolves to authenticated for a valid token with a user', async () => {
   setToken('user-token', new Date(Date.now() + 60_000).toISOString());
   vi.mocked(getMe).mockResolvedValue({
     authenticated: true,
-    user: { email: 'jensenh@mail.com', name: 'Jensen Huang' },
+    user: { email: 'jensenh@mail.com', name: 'Jensen Huang', picture: '' },
     expiresAt: null,
   });
 
   const { result } = renderHook(() => useSession());
 
   await waitFor(() => expect(result.current.status).toBe('authenticated'));
-  expect(result.current.user).toEqual({ email: 'jensenh@mail.com', name: 'Jensen Huang' });
+  expect(result.current.user).toEqual({
+    email: 'jensenh@mail.com',
+    name: 'Jensen Huang',
+    picture: '',
+  });
 });
 
 it('clears the token and goes anonymous when the server says not authenticated', async () => {

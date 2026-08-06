@@ -65,7 +65,7 @@ it('logging out returns to the splash screen', async () => {
   setToken('user-token', new Date(Date.now() + 60_000).toISOString());
   vi.mocked(getMe).mockResolvedValue({
     authenticated: true,
-    user: { email: 'jensenh@mail.com', name: 'Jensen Huang' },
+    user: { email: 'jensenh@mail.com', name: 'Jensen Huang', picture: '' },
     expiresAt: null,
   });
   vi.mocked(logout).mockResolvedValue(undefined);
@@ -73,7 +73,9 @@ it('logging out returns to the splash screen', async () => {
   renderGate();
   await waitFor(() => expect(screen.getByText('App content')).toBeInTheDocument());
 
-  fireEvent.click(screen.getByRole('button', { name: 'Log out' }));
+  // Logout lives behind the profile avatar's account menu.
+  fireEvent.click(screen.getByRole('button', { name: 'Account menu' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: 'Log out' }));
 
   await waitFor(() => expect(screen.getByText('Welcome to Invoice App')).toBeInTheDocument());
   expect(getToken()).toBeNull();

@@ -106,7 +106,7 @@ func (s *Service) HandleGoogleCallback(ctx context.Context, code string) (Sessio
 		return Session{}, false, fmt.Errorf("google callback: %w", err)
 	}
 
-	user, isNewUser, err := s.repo.UpsertUserByGoogleSub(ctx, claims.Sub, claims.Email, claims.Name)
+	user, isNewUser, err := s.repo.UpsertUserByGoogleSub(ctx, claims.Sub, claims.Email, claims.Name, claims.Picture)
 	if err != nil {
 		return Session{}, false, fmt.Errorf("google callback: %w", err)
 	}
@@ -195,10 +195,11 @@ func (s *Service) exchangeCode(ctx context.Context, code string) (string, error)
 
 // googleClaims is the subset of Google's tokeninfo response we need.
 type googleClaims struct {
-	Sub   string `json:"sub"`
-	Email string `json:"email"`
-	Name  string `json:"name"`
-	Aud   string `json:"aud"`
+	Sub     string `json:"sub"`
+	Email   string `json:"email"`
+	Name    string `json:"name"`
+	Picture string `json:"picture"`
+	Aud     string `json:"aud"`
 }
 
 // verifyIDToken asks Google to verify idToken's signature and decode its

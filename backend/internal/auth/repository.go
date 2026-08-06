@@ -21,7 +21,7 @@ type Repository interface {
 	// before, or updates their email/name (they can change on Google's
 	// side) and returns the existing row otherwise. The bool reports
 	// whether this call created the user (their first-ever sign-in).
-	UpsertUserByGoogleSub(ctx context.Context, googleSub, email, name string) (User, bool, error)
+	UpsertUserByGoogleSub(ctx context.Context, googleSub, email, name, picture string) (User, bool, error)
 	GetUser(ctx context.Context, id string) (User, error)
 	CreateSession(ctx context.Context, userID *string, expiresAt time.Time) (Session, error)
 	GetSession(ctx context.Context, id string) (Session, error)
@@ -43,16 +43,17 @@ func NewPostgresRepository(db *sql.DB) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
-func (r *PostgresRepository) UpsertUserByGoogleSub(ctx context.Context, googleSub, email, name string) (User, bool, error) {
+func (r *PostgresRepository) UpsertUserByGoogleSub(ctx context.Context, googleSub, email, name, picture string) (User, bool, error) {
 	var u User
 	var inserted bool
 	err := r.db.QueryRowContext(ctx, `
-		INSERT INTO users (google_sub, email, name)
-		VALUES ($1, $2, $3)
-		ON CONFLICT (google_sub) DO UPDATE SET email = EXCLUDED.email, name = EXCLUDED.name
-		RETURNING id, google_sub, email, name, (xmax = 0) AS inserted`,
-		googleSub, email, name,
-	).Scan(&u.ID, &u.GoogleSub, &u.Email, &u.Name, &inserted)
+		INSERT INTO users (google_sub, email, name, picture)
+		VALUES ($1, $2, $3, $4)
+		ON CONFLICT (google_sub) DO UPDATE SET
+			email = EXCLUDED.email, name = EXCLUDED.name, picture = EXCLUDED.picture
+		RETURNING id, google_sub, email, name, picture, (xmax = 0) AS inserted`,
+		googleSub, email, name, picture,
+	).Scan(&u.ID, &u.GoogleSub, &u.Email, &u.Name, &u.Picture, &inserted)
 	if err != nil {
 		return User{}, false, fmt.Errorf("upsert user: %w", err)
 	}
@@ -62,8 +63,8 @@ func (r *PostgresRepository) UpsertUserByGoogleSub(ctx context.Context, googleSu
 func (r *PostgresRepository) GetUser(ctx context.Context, id string) (User, error) {
 	var u User
 	err := r.db.QueryRowContext(ctx,
-		`SELECT id, google_sub, email, name FROM users WHERE id = $1`, id,
-	).Scan(&u.ID, &u.GoogleSub, &u.Email, &u.Name)
+		`SELECT id, google_sub, email, name, picture FROM users WHERE id = $1`, id,
+	).Scan(&u.ID, &u.GoogleSub, &u.Email, &u.Name, &u.Picture)
 	if errors.Is(err, sql.ErrNoRows) {
 		return User{}, ErrUserNotFound
 	}
