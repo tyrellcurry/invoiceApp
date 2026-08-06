@@ -25,10 +25,7 @@ import {
   InvoiceFormValues,
 } from '@/features/invoices/components/invoice-form-drawer/invoice-form-drawer.types';
 import { InvoiceStatus } from '@/features/invoices/types/invoice';
-import {
-  formatInvoiceAmount,
-  getCurrencySymbol,
-} from '@/features/invoices/utils/format-invoice-amount';
+import { formatCurrencyAmount } from '@/features/invoices/utils/format-invoice-amount';
 import { getLineItemTotal } from '@/features/invoices/utils/get-line-item-total';
 
 const inputClass =
@@ -71,7 +68,6 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
   } = props;
 
   const [values, setValues] = useState<InvoiceFormValues>(initialValues);
-  const currency = getCurrencySymbol(localeAmountDue);
 
   // Reset the form to the caller's values each time the drawer opens. Adjusting
   // state during render (vs. an effect) is React's recommended pattern for this.
@@ -348,14 +344,18 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
           <Text className="text-[18px] font-bold text-[#777f98] mt-12" tag={'p'}>
             {labels.itemList}
           </Text>
-          <Flex className="mt-4" direction="col" gapY={6}>
+          <Flex className="mt-4" direction="col" gapY={4}>
             {values.items.map((item, index) => (
-              <Flex align="end" className="flex-wrap md:flex-nowrap" gapX={4} gapY={4} key={index}>
-                <Field
-                  className="w-full md:flex-1"
-                  htmlFor={`item-name-${index}`}
-                  label={labels.itemName}
-                >
+              // Each item is its own card (light background, rounded) with its
+              // fields spread across two rows, rather than one cramped row of
+              // five controls competing for width.
+              <Flex
+                className="rounded-lg bg-gray-05b p-4 dark:bg-blue-04 md:p-5"
+                direction="col"
+                gapY={4}
+                key={index}
+              >
+                <Field htmlFor={`item-name-${index}`} label={labels.itemName}>
                   <input
                     className={inputClass}
                     id={`item-name-${index}`}
@@ -363,54 +363,72 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
                     onChange={(event) => setItem(index, 'name', event.target.value)}
                   />
                 </Field>
-                <Field className="w-16" htmlFor={`item-qty-${index}`} label={labels.quantity}>
-                  <input
-                    className={inputClass}
-                    id={`item-qty-${index}`}
-                    min={0}
-                    type="number"
-                    value={item.quantity}
-                    onChange={(event) => setItem(index, 'quantity', Number(event.target.value))}
-                  />
-                </Field>
-                <Field
-                  className="flex-1 md:w-25 md:flex-none"
-                  htmlFor={`item-price-${index}`}
-                  label={labels.price}
-                >
-                  <input
-                    className={inputClass}
-                    id={`item-price-${index}`}
-                    min={0}
-                    step="0.01"
-                    type="number"
-                    // A freshly added item's price is 0 internally (so its
-                    // total computes correctly before the user fills it in),
-                    // but showing a literal "0" reads like a real value the
-                    // user has to notice and delete. Blank invites typing.
-                    value={item.price || ''}
-                    onChange={(event) => setItem(index, 'price', Number(event.target.value))}
-                  />
-                </Field>
-                <Flex className="md:w-25" direction="col" gapY={2}>
-                  <Text
-                    className="text-[13px] font-medium text-gray-07 dark:text-gray-05"
-                    tag={'span'}
+                <Flex align="end" className="flex-wrap md:flex-nowrap" gapX={4} gapY={4}>
+                  <Field
+                    className="w-16 shrink-0"
+                    htmlFor={`item-qty-${index}`}
+                    label={labels.quantity}
                   >
-                    {labels.total}
-                  </Text>
-                  <Text className="font-bold text-gray-07b dark:text-gray-06 py-4" tag={'span'}>
-                    {`${currency} ${formatInvoiceAmount(getLineItemTotal(item.quantity, item.price), localeAmountDue)}`}
-                  </Text>
+                    <input
+                      className={inputClass}
+                      id={`item-qty-${index}`}
+                      min={0}
+                      type="number"
+                      value={item.quantity}
+                      onChange={(event) => setItem(index, 'quantity', Number(event.target.value))}
+                    />
+                  </Field>
+                  {/* Price and total are the two fields most likely to hold a
+                      long number, so they're the dominant, evenly-split
+                      flexible columns; quantity and delete stay small and fixed. */}
+                  <Field
+                    className="min-w-0 flex-1"
+                    htmlFor={`item-price-${index}`}
+                    label={labels.price}
+                  >
+                    <input
+                      className={inputClass}
+                      id={`item-price-${index}`}
+                      min={0}
+                      step="0.01"
+                      type="number"
+                      // A freshly added item's price is 0 internally (so its
+                      // total computes correctly before the user fills it in),
+                      // but showing a literal "0" reads like a real value the
+                      // user has to notice and delete. Blank invites typing.
+                      value={item.price || ''}
+                      onChange={(event) => setItem(index, 'price', Number(event.target.value))}
+                    />
+                  </Field>
+                  {/* min-w-0 overrides the flex item's default min-width:auto,
+                      which would otherwise force the row wider instead of
+                      letting a very long total wrap inside it. */}
+                  <Flex className="min-w-0 flex-1" direction="col" gapY={2}>
+                    <Text
+                      className="text-[13px] font-medium text-gray-07 dark:text-gray-05"
+                      tag={'span'}
+                    >
+                      {labels.total}
+                    </Text>
+                    <Text
+                      className="text-gray-07b dark:text-gray-06 py-4 font-bold break-words"
+                      tag={'span'}
+                    >
+                      {formatCurrencyAmount(
+                        getLineItemTotal(item.quantity, item.price),
+                        localeAmountDue
+                      )}
+                    </Text>
+                  </Flex>
+                  <Button
+                    aria-label={labels.removeItem}
+                    className="pb-5 text-gray-06 hover:text-red-08"
+                    iconLeft={'trash'}
+                    type="button"
+                    variant="custom"
+                    onClick={() => removeItem(index)}
+                  />
                 </Flex>
-                <Button
-                  aria-label={labels.removeItem}
-                  className="pb-5 text-gray-06 hover:text-red-08"
-                  iconLeft={'trash'}
-                  type="button"
-                  variant="custom"
-                  onClick={() => removeItem(index)}
-                />
               </Flex>
             ))}
             <Button
