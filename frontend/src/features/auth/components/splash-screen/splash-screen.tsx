@@ -31,57 +31,26 @@ const SplashScreen = (props: ISplashScreenProps): JSX.Element => {
     >
       <Flex align="center" className="w-full flex-1" direction="col" justify="center">
         <Flex
-          className="w-full max-w-160 overflow-hidden rounded-2xl bg-white drop-shadow-xl dark:bg-blue-03"
+          className="w-full max-w-120 overflow-hidden rounded-2xl bg-white drop-shadow-xl dark:bg-blue-03"
           direction="col"
         >
-          {/* Header band: the one place the brand purple carries the whole width. */}
           <Flex
             align="center"
-            className="bg-gray-09 px-8 py-10 text-center md:px-12 md:py-12"
+            className="bg-gray-09 px-8 py-10 text-center md:px-12"
             direction="col"
-            gapY={4}
+            gapY={3}
           >
-            <Text
-              className="text-blue-02 text-[13px] font-bold tracking-[0.2em] uppercase"
-              tag={'p'}
-            >
-              {labels.kicker}
-            </Text>
             {/* The shared `.text` class hardcodes text-align:left, so centering
                 has to be set explicitly rather than inherited from the band. */}
             <Text className="text-center text-white" tag={'h1'} variant="h1">
               {labels.title}
             </Text>
-            <Text className="text-gray-05 max-w-100 text-center leading-relaxed" tag={'p'}>
+            <Text className="text-gray-05 text-center leading-relaxed" tag={'p'}>
               {labels.description}
             </Text>
           </Flex>
 
           <Container className="px-8 py-10 md:px-12">
-            {/* What you get, so the page says something before asking for a sign-in. */}
-            <Flex as="ul" className="sm:flex-row sm:gap-x-8" direction="col" gapY={6}>
-              {labels.features.map((feature) => (
-                <Flex as="li" className="flex-1" direction="col" gapY={1.5} key={feature.title}>
-                  {/* Dot aligns to the first line, not the block's centre, so it
-                      stays put when a title wraps to two lines. */}
-                  <Flex align="start" gapX={2}>
-                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-blue-01" aria-hidden />
-                    <Text className="text-gray-08 font-bold dark:text-white" tag={'span'}>
-                      {feature.title}
-                    </Text>
-                  </Flex>
-                  <Text
-                    className="text-gray-07 dark:text-gray-05 text-[13px] leading-5"
-                    tag={'span'}
-                  >
-                    {feature.description}
-                  </Text>
-                </Flex>
-              ))}
-            </Flex>
-
-            <hr className="my-8 h-px border-0 bg-gray-05 dark:bg-blue-04" />
-
             <Flex direction="col" gapY={3}>
               {/* Google's branding guidelines: white surface, neutral border,
                   full-colour mark, and the wordmark left untranslated. */}

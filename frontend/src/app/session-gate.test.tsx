@@ -32,7 +32,7 @@ it('shows the splash screen when there is no session', async () => {
   renderGate();
 
   await waitFor(() =>
-    expect(screen.getByText('Invoicing without the busywork')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Invoice App' })).toBeInTheDocument()
   );
   expect(screen.queryByText('App content')).not.toBeInTheDocument();
 });
@@ -46,7 +46,7 @@ it('continuing as a guest reveals the app', async () => {
 
   renderGate();
   await waitFor(() =>
-    expect(screen.getByText('Invoicing without the busywork')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Invoice App' })).toBeInTheDocument()
   );
 
   fireEvent.click(screen.getByRole('button', { name: 'Continue without logging in' }));
@@ -82,24 +82,22 @@ it('logging out returns to the splash screen', async () => {
   fireEvent.click(screen.getByRole('menuitem', { name: 'Log out' }));
 
   await waitFor(() =>
-    expect(screen.getByText('Invoicing without the busywork')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Invoice App' })).toBeInTheDocument()
   );
   expect(getToken()).toBeNull();
 });
 
-it('renders the google button, feature copy and author credit on the splash screen', async () => {
+it('renders the title, description, google button and author credit on the splash screen', async () => {
   renderGate();
 
   await waitFor(() =>
-    expect(screen.getByText('Invoicing without the busywork')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Invoice App' })).toBeInTheDocument()
   );
+
+  expect(screen.getByText('Create and track invoices, draft to paid.')).toBeInTheDocument();
 
   const googleLink = screen.getByRole('link', { name: /continue with google/i });
   expect(googleLink).toHaveAttribute('href', expect.stringContaining('/auth/google/login'));
-
-  expect(screen.getByText('Build in seconds')).toBeInTheDocument();
-  expect(screen.getByText('Know where things stand')).toBeInTheDocument();
-  expect(screen.getByText('Start with examples')).toBeInTheDocument();
 
   const authorLink = screen.getByRole('link', { name: 'Tyrell Curry' });
   expect(authorLink).toHaveAttribute('href', 'https://github.com/tyrellcurry');

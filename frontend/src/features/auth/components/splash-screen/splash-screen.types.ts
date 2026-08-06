@@ -1,13 +1,6 @@
-export interface SplashScreenFeature {
-  title: string;
-  description: string;
-}
-
 export interface SplashScreenLabels {
-  kicker: string;
   title: string;
   description: string;
-  features: SplashScreenFeature[];
   continueWithGoogle: string;
   continueAsGuest: string;
   guestWarning: string;

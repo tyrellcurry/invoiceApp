@@ -7,14 +7,14 @@ import { expect, test } from '@playwright/test';
 test('shows the splash screen on a first visit with no session', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.getByText('Invoicing without the busywork')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Invoice App' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Continue with Google' })).toBeVisible();
   await expect(page.getByText(/deleted when your session ends/i)).toBeVisible();
 });
 
 test('continuing without logging in reveals the app', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByText('Invoicing without the busywork')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Invoice App' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Continue without logging in' }).click();
 
@@ -52,5 +52,5 @@ test('reloading with a stored session skips the splash screen', async ({ page })
   await page.reload();
 
   await expect(page.getByRole('heading', { name: 'Invoices' })).toBeVisible();
-  await expect(page.getByText('Invoicing without the busywork')).not.toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Invoice App' })).not.toBeVisible();
 });

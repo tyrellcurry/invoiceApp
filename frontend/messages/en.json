@@ -7,15 +7,8 @@
     "logout": "Log out"
   },
   "Splash": {
-    "kicker": "Invoice App",
-    "title": "Invoicing without the busywork",
-    "description": "Draft it, send it, get paid. Track every invoice from first draft to final payment in one place.",
-    "featureCreateTitle": "Build in seconds",
-    "featureCreateDescription": "Add line items and terms, and the totals and due dates work themselves out.",
-    "featureTrackTitle": "Know where things stand",
-    "featureTrackDescription": "Filter by draft, pending or paid to see what still needs chasing.",
-    "featureStartTitle": "Start with examples",
-    "featureStartDescription": "Your account comes preloaded with sample invoices, so nothing starts empty.",
+    "title": "Invoice App",
+    "description": "Create and track invoices, draft to paid.",
     "continueWithGoogle": "Continue with Google",
     "continueAsGuest": "Continue without logging in",
     "guestWarning": "Without an account, any invoices you create or edit will be deleted when your session ends.",
