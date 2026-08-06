@@ -8,6 +8,8 @@ export interface IMainMenuProps {
     profileImage?: string;
     profileImageAlt: string;
   };
+  /** Accessible name for the profile button that opens the account menu. */
+  accountMenuLabel?: string;
   darkmodeBtn?: {
     darkAria?: string;
     lightAria?: string;

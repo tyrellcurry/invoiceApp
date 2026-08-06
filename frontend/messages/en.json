@@ -1,6 +1,7 @@
 {
   "MainMenu": {
     "profileImageAlt": "Profile image",
+    "accountMenu": "Account menu",
     "switchToDark": "Switch to dark mode",
     "switchToLight": "Switch to light mode",
     "logout": "Log out"

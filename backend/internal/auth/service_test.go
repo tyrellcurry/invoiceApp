@@ -29,15 +29,15 @@ func newFakeRepository() *fakeRepository {
 	}
 }
 
-func (f *fakeRepository) UpsertUserByGoogleSub(_ context.Context, googleSub, email, name string) (User, bool, error) {
+func (f *fakeRepository) UpsertUserByGoogleSub(_ context.Context, googleSub, email, name, picture string) (User, bool, error) {
 	if u, ok := f.usersByGoogleSub[googleSub]; ok {
-		u.Email, u.Name = email, name
+		u.Email, u.Name, u.Picture = email, name, picture
 		f.usersByGoogleSub[googleSub] = u
 		f.usersByID[u.ID] = u
 		return u, false, nil
 	}
 	f.nextUserID++
-	u := User{ID: fmt.Sprintf("user-%d", f.nextUserID), GoogleSub: googleSub, Email: email, Name: name}
+	u := User{ID: fmt.Sprintf("user-%d", f.nextUserID), GoogleSub: googleSub, Email: email, Name: name, Picture: picture}
 	f.usersByGoogleSub[googleSub] = u
 	f.usersByID[u.ID] = u
 	return u, true, nil
@@ -145,7 +145,8 @@ func googleTestServer(t *testing.T, idToken string, claims googleClaims) *httpte
 func TestServiceHandleGoogleCallback(t *testing.T) {
 	t.Run("upserts the user and creates a session", func(t *testing.T) {
 		server := googleTestServer(t, "fake-id-token", googleClaims{
-			Sub: "google-sub-1", Email: "jensenh@mail.com", Name: "Jensen Huang", Aud: "client-id",
+			Sub: "google-sub-1", Email: "jensenh@mail.com", Name: "Jensen Huang",
+			Picture: "https://lh3.googleusercontent.com/a/avatar", Aud: "client-id",
 		})
 		defer server.Close()
 
@@ -171,6 +172,9 @@ func TestServiceHandleGoogleCallback(t *testing.T) {
 		}
 		if user.Email != "jensenh@mail.com" || user.GoogleSub != "google-sub-1" {
 			t.Errorf("user = %+v, want the claims from the id token", user)
+		}
+		if user.Picture != "https://lh3.googleusercontent.com/a/avatar" {
+			t.Errorf("Picture = %q, want the avatar URL from the id token", user.Picture)
 		}
 		if len(seeder.calls) != 1 || seeder.calls[0].UserID == nil || *seeder.calls[0].UserID != user.ID {
 			t.Errorf("seeder.calls = %+v, want a single call scoped to the new user", seeder.calls)

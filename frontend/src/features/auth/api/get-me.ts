@@ -3,6 +3,8 @@ import { apiRequest } from '@/lib/api-client';
 export interface MeUser {
   email: string;
   name: string;
+  /** Google avatar URL, or "" when the account has no photo. */
+  picture: string;
 }
 
 export interface Me {

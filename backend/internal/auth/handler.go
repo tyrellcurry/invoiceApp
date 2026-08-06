@@ -111,6 +111,8 @@ type meResponse struct {
 type meUser struct {
 	Email string `json:"email"`
 	Name  string `json:"name"`
+	// Picture is the Google avatar URL, or "" when the account has no photo.
+	Picture string `json:"picture"`
 }
 
 func (h *Handler) me(w http.ResponseWriter, r *http.Request) {
@@ -137,7 +139,7 @@ func (h *Handler) me(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "internal server error", http.StatusInternalServerError)
 			return
 		}
-		resp.User = &meUser{Email: user.Email, Name: user.Name}
+		resp.User = &meUser{Email: user.Email, Name: user.Name, Picture: user.Picture}
 	}
 	writeJSON(w, http.StatusOK, resp)
 }

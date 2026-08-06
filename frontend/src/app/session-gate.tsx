@@ -49,7 +49,7 @@ const SessionGate = (): JSX.Element | null => {
   }
 
   return (
-    <AppShell userEmail={user?.email} onLogout={() => void logout()}>
+    <AppShell userEmail={user?.email} userImage={user?.picture} onLogout={() => void logout()}>
       <PreloadBanner />
       <Outlet />
     </AppShell>
