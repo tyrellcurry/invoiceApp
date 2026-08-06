@@ -39,7 +39,7 @@ const labels: InvoiceFormLabels = {
   saveChanges: 'Save Changes',
   discard: 'Discard',
   saveAsDraft: 'Save as Draft',
-  saveAndSend: 'Save & Send',
+  saveAndSend: 'Save',
 };
 
 const paymentTermOptions: PaymentTermOption[] = [
@@ -100,5 +100,13 @@ export const NewInvoice: Story = {
   args: {
     mode: 'create',
     initialValues: emptyInvoiceFormValues(),
+  },
+};
+
+export const WithSubmitError: Story = {
+  args: {
+    mode: 'create',
+    initialValues: emptyInvoiceFormValues(),
+    error: "Couldn't save this invoice. Please try again.",
   },
 };

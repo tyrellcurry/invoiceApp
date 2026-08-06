@@ -27,3 +27,24 @@ test('creates an invoice as a draft from the list page', async ({ page }) => {
   // Back to just the 3 example invoices every fresh guest session is preloaded with.
   await expect(page.getByText('There are 3 total invoices')).toBeVisible();
 });
+
+test('a new item starts with a blank price, not a literal 0', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'New Invoice' }).click();
+  await visibleButton(page, '+ Add New Item').click();
+
+  await expect(page.locator('[id^="item-price-"]:visible')).toHaveValue('');
+});
+
+test('shows the save error inside the still-open drawer, not on the page', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'New Invoice' }).click();
+  // Leaving the required client name blank fails server-side validation.
+  await visibleButton(page, 'Save as Draft').click();
+
+  const drawer = page.getByRole('dialog', { name: 'New Invoice' });
+  await expect(drawer.getByText(/couldn't save this invoice/i)).toBeVisible();
+  await expect(drawer).toBeVisible();
+});

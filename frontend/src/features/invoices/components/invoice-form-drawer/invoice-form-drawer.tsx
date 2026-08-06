@@ -64,6 +64,7 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
     paymentTermOptions,
     localeAmountDue = 'en',
     labels,
+    error,
     onClose,
     onSubmit,
     onSaveDraft,
@@ -383,7 +384,11 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
                     min={0}
                     step="0.01"
                     type="number"
-                    value={item.price}
+                    // A freshly added item's price is 0 internally (so its
+                    // total computes correctly before the user fills it in),
+                    // but showing a literal "0" reads like a real value the
+                    // user has to notice and delete. Blank invites typing.
+                    value={item.price || ''}
                     onChange={(event) => setItem(index, 'price', Number(event.target.value))}
                   />
                 </Field>
@@ -420,6 +425,11 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
 
         {/* Footer */}
         <Container className="px-6 md:px-14 py-6 shadow-[0_-10px_10px_-10px_rgba(72,84,159,0.1)]">
+          {error && (
+            <Text className="text-red-08 mb-4 text-center text-[13px]" tag={'p'}>
+              {error}
+            </Text>
+          )}
           {mode === 'edit' ? (
             <Flex className="md:justify-end" gap={2}>
               <Button

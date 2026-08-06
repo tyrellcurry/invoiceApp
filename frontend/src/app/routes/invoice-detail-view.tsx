@@ -29,7 +29,11 @@ const InvoiceDetailView = ({
   const { labels: formLabels, paymentTermOptions } = useInvoiceFormLabels();
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  // Delete and mark-as-paid/revert failures aren't tied to an open drawer or
+  // dialog, so they render on the page. An edit failure happens while the
+  // drawer is still open, so it renders inside it instead (formError, below).
   const [actionError, setActionError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const formValues = useMemo(() => invoiceToFormValues(invoice), [invoice]);
 
@@ -40,13 +44,13 @@ const InvoiceDetailView = ({
   };
 
   const handleSubmit = async (values: InvoiceFormValues) => {
-    setActionError(null);
+    setFormError(null);
     try {
       await updateInvoice(invoice.id, values, values.status);
       setIsEditing(false);
       onInvoiceChange();
     } catch {
-      setActionError(tForm('submitError'));
+      setFormError(tForm('submitError'));
     }
   };
 
@@ -118,6 +122,7 @@ const InvoiceDetailView = ({
       )}
 
       <InvoiceFormDrawer
+        error={formError}
         initialValues={formValues}
         invoiceId={invoice.reference}
         labels={formLabels}
@@ -126,7 +131,7 @@ const InvoiceDetailView = ({
         paymentTermOptions={paymentTermOptions}
         onClose={() => {
           setIsEditing(false);
-          setActionError(null);
+          setFormError(null);
         }}
         onSubmit={(values) => void handleSubmit(values)}
       />
