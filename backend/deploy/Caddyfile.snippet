@@ -1,0 +1,10 @@
+# Append this block to your existing Caddyfile, then:
+#   sudo systemctl reload caddy
+#
+# Caddy handles the TLS certificate (Let's Encrypt) automatically the first
+# time it serves this host, as long as invoices-api.tyrellcurry.io already
+# resolves to this machine.
+
+invoices-api.tyrellcurry.io {
+	reverse_proxy localhost:8081
+}
