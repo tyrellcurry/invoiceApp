@@ -1,10 +1,14 @@
-# Append this block to your existing Caddyfile, then:
+# Append this block to your existing Caddyfile, as its own top-level site
+# block (a sibling of your tyrellcurry.io block, not nested inside it), then:
 #   sudo systemctl reload caddy
 #
 # Caddy handles the TLS certificate (Let's Encrypt) automatically the first
 # time it serves this host, as long as invoices-api.tyrellcurry.io already
 # resolves to this machine.
+#
+# Port 8082, not 8081: pi-webserver already owns 8080 and pi-metrics
+# already owns 8081 on this Pi.
 
 invoices-api.tyrellcurry.io {
-	reverse_proxy localhost:8081
+	reverse_proxy localhost:8082
 }
