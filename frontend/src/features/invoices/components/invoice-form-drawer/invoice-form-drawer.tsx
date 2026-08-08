@@ -373,7 +373,12 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
                       id={`item-qty-${index}`}
                       min={0}
                       type="number"
-                      value={item.quantity}
+                      // Backspacing to empty fires onChange with '', and
+                      // Number('') is 0, not NaN, so without this the
+                      // controlled value snaps straight back to a literal
+                      // "0" and the field never visibly clears. Same fix
+                      // already used for price, below.
+                      value={item.quantity || ''}
                       // appearance-none drops the spinner in Firefox and
                       // current Chrome/Safari; the two arbitrary-variant
                       // rules clear WebKit's older spin-button pseudo
