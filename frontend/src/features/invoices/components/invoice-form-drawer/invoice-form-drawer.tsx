@@ -365,16 +365,23 @@ const InvoiceFormDrawer = (props: IInvoiceFormDrawerProps): JSX.Element => {
                 </Field>
                 <Flex align="end" className="flex-wrap md:flex-nowrap" gapX={4} gapY={4}>
                   <Field
-                    className="w-16 shrink-0"
+                    className="w-20 shrink-0"
                     htmlFor={`item-qty-${index}`}
                     label={labels.quantity}
                   >
                     <input
-                      className={inputClass}
                       id={`item-qty-${index}`}
                       min={0}
                       type="number"
                       value={item.quantity}
+                      // appearance-none drops the spinner in Firefox and
+                      // current Chrome/Safari; the two arbitrary-variant
+                      // rules clear WebKit's older spin-button pseudo
+                      // elements for full coverage on older WebKit builds.
+                      className={classNames(
+                        inputClass,
+                        'appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none'
+                      )}
                       onChange={(event) => setItem(index, 'quantity', Number(event.target.value))}
                     />
                   </Field>
