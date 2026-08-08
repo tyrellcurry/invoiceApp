@@ -2,6 +2,8 @@
 
 A full-stack invoicing app: create, edit, and track invoices from draft through pending to paid. Built as a personal showcase of two things done properly: a [bulletproof-react](https://github.com/alan2207/bulletproof-react) frontend and a small, idiomatic Go backend, wired together with real authentication and tested end to end.
 
+**Live**: [invoice-app-tyrell-curry.vercel.app](https://invoice-app-tyrell-curry.vercel.app)
+
 <p align="center">
   <a href="./frontend/README.md">Frontend README</a> ·
   <a href="./backend/README.md">Backend README</a>
@@ -61,3 +63,12 @@ npm run storybook                  # component catalog
 ```
 
 Full details, including how each suite is structured, live in the [backend](./backend/README.md) and [frontend](./frontend/README.md) READMEs.
+
+## Deployment
+
+Split across two hosts, each free:
+
+- **Frontend**: [Vercel](https://vercel.com), connected directly to this repo. Every push to `develop` builds and deploys automatically, no custom CI step needed for it.
+- **Backend + Postgres**: a Raspberry Pi 5, self-hosted, alongside two other unrelated live projects on the same machine. Postgres runs in a dedicated Docker container; the Go binary runs as a systemd service; [Caddy](https://caddyserver.com) reverse-proxies to it and handles HTTPS automatically. A GitHub Actions workflow builds the binary for `linux/arm64`, joins the Pi's Tailscale network, and deploys it over SSH on every backend-related push to `develop`, the same pattern already used for the other two projects on that Pi.
+
+The actual deploy tooling (a one-time setup script, the systemd unit, the Postgres compose file, the Caddy config snippet) lives in [`backend/deploy/`](./backend/deploy/).
