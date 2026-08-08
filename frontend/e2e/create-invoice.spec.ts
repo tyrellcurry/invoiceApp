@@ -37,6 +37,20 @@ test('a new item starts with a blank price, not a literal 0', async ({ page }) =
   await expect(page.locator('[id^="item-price-"]:visible')).toHaveValue('');
 });
 
+test('clearing the quantity field leaves it empty, not stuck on 0', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'New Invoice' }).click();
+  await visibleButton(page, '+ Add New Item').click();
+
+  const qty = page.locator('[id^="item-qty-"]:visible');
+  await expect(qty).toHaveValue('1');
+
+  await qty.fill('');
+
+  await expect(qty).toHaveValue('');
+});
+
 test('shows the save error inside the still-open drawer, not on the page', async ({ page }) => {
   await page.goto('/');
 
