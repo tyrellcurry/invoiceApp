@@ -4,10 +4,8 @@ A full-stack invoicing app: create, edit, and track invoices from draft through 
 
 **Live**: [invoice-app-tyrell-curry.vercel.app](https://invoice-app-tyrell-curry.vercel.app)
 
-<p align="center">
-  <a href="./frontend/README.md">Frontend README</a> ·
-  <a href="./backend/README.md">Backend README</a>
-</p>
+<a href="./frontend/README.md">Frontend README</a>
+<a href="./backend/README.md">Backend README</a>
 
 ## What's here
 
