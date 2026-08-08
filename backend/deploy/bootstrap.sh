@@ -32,11 +32,29 @@ cp "$SCRIPT_DIR/docker-compose.yml" "$APP_DIR/docker-compose.yml"
 (cd "$APP_DIR" && docker compose up -d db)
 
 echo "==> Waiting for Postgres to be healthy"
+# `docker compose ps --format '{{.Health}}'` isn't reliable across compose
+# versions, it can silently return empty instead of erroring, which made
+# this loop spin the full timeout with no visible output and no clear
+# failure. `docker inspect` against the container's own ID is the direct,
+# well-documented way to read healthcheck state.
+container_id="$(cd "$APP_DIR" && docker compose ps -q db)"
+healthy=false
 for _ in $(seq 1 30); do
-  status="$(cd "$APP_DIR" && docker compose ps db --format '{{.Health}}')"
-  [ "$status" = "healthy" ] && break
+  status="$(docker inspect --format='{{.State.Health.Status}}' "$container_id" 2>/dev/null || echo "unknown")"
+  if [ "$status" = "healthy" ]; then
+    healthy=true
+    break
+  fi
+  printf '.'
   sleep 1
 done
+echo
+if [ "$healthy" != true ]; then
+  echo "==> Postgres did not report healthy within 30s (last status: $status)."
+  echo "    Check what's wrong with:"
+  echo "      docker compose -f $APP_DIR/docker-compose.yml logs db"
+  exit 1
+fi
 
 echo "==> Installing the systemd unit (enabled, not started yet)"
 sudo cp "$SCRIPT_DIR/invoice-api.service" /etc/systemd/system/invoice-api.service
