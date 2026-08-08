@@ -2,7 +2,9 @@ name: Deploy backend
 
 on:
   push:
-    branches: [develop]
+    # main is the release branch (see README.md#deployment); develop is
+    # where day-to-day work happens and doesn't deploy on its own.
+    branches: [main]
     paths:
       - 'backend/**'
       - 'go.work'
