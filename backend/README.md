@@ -71,3 +71,7 @@ Integration tests live alongside their package as `*_integration_test.go` behind
 ## Migrations
 
 New schema changes get a new numbered pair (`NNNNNN_name.up.sql` / `.down.sql`). Migrations are forward-only once applied to any shared environment: editing one that has already run is only safe against a throwaway local volume (`docker compose down -v`).
+
+## Deployment
+
+Live at `https://invoices-api.tyrellcurry.io`, self-hosted on a Raspberry Pi: Postgres in a dedicated Docker container, the binary as a systemd service, Caddy handling HTTPS in front. `deploy/` has the actual tooling, a one-time setup script, the systemd unit, the compose file, and a Caddy config snippet, deployed on every push to `develop` via a GitHub Actions workflow (`.github/workflows/deploy-backend.yml`) that builds for `linux/arm64` and deploys over Tailscale + SSH. See the root [README](../README.md#deployment) for the full picture, including the frontend's side of it.
