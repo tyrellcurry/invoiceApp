@@ -1,0 +1,89 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Invoice Component > renders correctly with data passed to props 1`] = `
+<div>
+  <div
+    class="flex flex-row items-center justify-between hidden md:flex py-4 px-6 bg-white drop-shadow-lg rounded-lg dark:bg-blue-03"
+  >
+    <div
+      class="flex flex-row gap-x-11"
+    >
+      <div
+        class="flex flex-row gap-x-11 w-64"
+      >
+        <p
+          class="text text--body text-gray-08 font-bold dark:text-white"
+        >
+          <span
+            class="text text--body text-gray-07"
+          >
+            #
+          </span>
+          RT3080
+        </p>
+        <p
+          class="text text--body text-gray-07 flex gap-1 whitespace-nowrap dark:text-gray-05"
+        >
+          <span
+            class="text text--body text-gray-06 dark:text-gray-05"
+          >
+            Due
+          </span>
+          Jan 1st, 2025
+        </p>
+      </div>
+      <p
+        class="text text--body text-gray-07b dark:text-white"
+      >
+        Jensen Huang
+      </p>
+    </div>
+    <div>
+      <div
+        class="flex flex-row items-center gap-x-2"
+      >
+        <p
+          class="text text--body text-gray-08 font-bold text-right dark:text-white"
+        >
+          <span
+            class="text text--body"
+          >
+            $
+          </span>
+          1,800.90
+        </p>
+        <div
+          class="w-37.5"
+        >
+          <div
+            class="flex flex-row items-center justify-center py-3.5 px-7.5 rounded-md leading-none self-center ml-auto w-36.25 bg-gray-09a dark:bg-gray-09b text-gray-09 dark:text-gray-05"
+          >
+            <span
+              class="text text--body font-bold text-center flex gap-x-1.5 items-center"
+            >
+              <div
+                class="w-2 h-2 rounded-full bg-gray-09 dark:bg-gray-05"
+              />
+              Draft
+            </span>
+          </div>
+        </div>
+        <svg
+          class="ml-3"
+          fill="none"
+          height="10"
+          viewBox="0 0 7 10"
+          width="7"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M1 1L5 5L1 9"
+            stroke="#7C5DFA"
+            stroke-width="2"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+`;

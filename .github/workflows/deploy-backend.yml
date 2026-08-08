@@ -1,0 +1,53 @@
+name: Deploy backend
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - 'backend/**'
+      - 'go.work'
+      - 'go.work.sum'
+      - '.github/workflows/deploy-backend.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+
+      - name: Build binary
+        working-directory: backend
+        run: GOOS=linux GOARCH=arm64 go build -o invoice-api .
+
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.PI_TAILSCALE_IP }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy binary
+        run: |
+          ssh -i ~/.ssh/deploy_key "${{ secrets.SSH_USER }}@${{ secrets.PI_TAILSCALE_IP }}" \
+            'mkdir -p /opt/invoiceapp/.deploy-tmp'
+          scp -i ~/.ssh/deploy_key backend/invoice-api \
+            "${{ secrets.SSH_USER }}@${{ secrets.PI_TAILSCALE_IP }}:/opt/invoiceapp/.deploy-tmp/"
+          ssh -i ~/.ssh/deploy_key "${{ secrets.SSH_USER }}@${{ secrets.PI_TAILSCALE_IP }}" '
+            set -e
+            cd /opt/invoiceapp
+            chmod +x .deploy-tmp/invoice-api
+            mv .deploy-tmp/invoice-api invoice-api
+            sudo systemctl restart invoice-api
+          '

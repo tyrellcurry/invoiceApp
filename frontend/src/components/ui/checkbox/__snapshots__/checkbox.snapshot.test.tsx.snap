@@ -1,0 +1,110 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Checkbox Component > renders correctly with a label 1`] = `
+<div>
+  <div
+    class="flex flex-row items-center gap-x-3.25"
+  >
+    <input
+      class="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 dark:bg-blue-03 border-2 border-blue-01 rounded-sm checked:bg-blue-01 dark:checked:bg-blue-01 checked:border-0 cursor-pointer"
+      id="checkbox-1"
+      type="checkbox"
+    />
+    <label
+      class="text text--body cursor-pointer font-bold select-none dark:text-white"
+      for="checkbox-1"
+    >
+      Test Label
+    </label>
+    <svg
+      class="
+      absolute
+      w-3.5 h-3.5 ml-0.5
+      hidden peer-checked:block pointer-events-none"
+      fill="none"
+      height="9"
+      viewBox="0 0 10 9"
+      width="10"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1.5 4.49976L3.62425 6.62402L8.96995 1.27832"
+        stroke="white"
+        stroke-width="2"
+      />
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`Checkbox Component > renders correctly without a label 1`] = `
+<div>
+  <div
+    class="flex flex-row items-center gap-x-3.25"
+  >
+    <input
+      class="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 dark:bg-blue-03 border-2 border-blue-01 rounded-sm checked:bg-blue-01 dark:checked:bg-blue-01 checked:border-0 cursor-pointer"
+      id="checkbox-2"
+      type="checkbox"
+    />
+    <label
+      class="text text--body cursor-pointer font-bold select-none dark:text-white"
+      for="checkbox-2"
+    />
+    <svg
+      class="
+      absolute
+      w-3.5 h-3.5 ml-0.5
+      hidden peer-checked:block pointer-events-none"
+      fill="none"
+      height="9"
+      viewBox="0 0 10 9"
+      width="10"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1.5 4.49976L3.62425 6.62402L8.96995 1.27832"
+        stroke="white"
+        stroke-width="2"
+      />
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`Checkbox Component > renders with custom class names 1`] = `
+<div>
+  <div
+    class="flex flex-row items-center gap-x-3.25"
+  >
+    <input
+      class="relative peer shrink-0 appearance-none w-5 h-5 bg-gray-05 dark:bg-blue-03 border-2 border-blue-01 rounded-sm checked:bg-blue-01 dark:checked:bg-blue-01 checked:border-0 cursor-pointer"
+      id="checkbox-3"
+      type="checkbox"
+    />
+    <label
+      class="text text--body cursor-pointer font-bold select-none dark:text-white"
+      for="checkbox-3"
+    >
+      Custom Class
+    </label>
+    <svg
+      class="
+      absolute
+      w-3.5 h-3.5 ml-0.5
+      hidden peer-checked:block pointer-events-none"
+      fill="none"
+      height="9"
+      viewBox="0 0 10 9"
+      width="10"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1.5 4.49976L3.62425 6.62402L8.96995 1.27832"
+        stroke="white"
+        stroke-width="2"
+      />
+    </svg>
+  </div>
+</div>
+`;

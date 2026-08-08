@@ -1,0 +1,4 @@
+.env
+# One-time Pi setup script. Already run on the Pi; not something git pull
+# needs to keep delivering updates to, so it's untracked going forward.
+deploy/bootstrap.sh

@@ -1,0 +1,27 @@
+@layer components {
+  .base {
+    @apply rounded-full py-4.5 px-6 text-[18px] font-bold leading-normal flex items-center w-fit;
+  }
+  .btn {
+    @apply cursor-pointer;
+    .icon {
+      @apply max-w-full;
+    }
+    /* Only the button's own label span, not nested content passed as children. */
+    & > span {
+      @apply w-full leading-none;
+    }
+  }
+  .btn--primary {
+    @apply text-white bg-blue-01 hover:bg-blue-02;
+  }
+  .btn--secondary {
+    @apply text-gray-07 bg-gray-05b hover:bg-gray-05;
+  }
+  .btn--dark {
+    @apply text-gray-06 bg-gray-09 hover:bg-gray-08;
+  }
+  .btn--danger {
+    @apply text-white bg-red-08 hover:bg-red-10;
+  }
+}

@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Grid Component > renders correctly 1`] = `
+<div>
+  <div
+    class="grid grid-cols-3 items-center gap-4"
+  >
+    content
+  </div>
+</div>
+`;

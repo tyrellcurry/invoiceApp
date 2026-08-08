@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Container Component > renders correctly 1`] = `
+<div>
+  <section
+    class="p-4"
+  >
+    content
+  </section>
+</div>
+`;

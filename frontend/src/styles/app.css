@@ -1,0 +1,20 @@
+/* Dependencies */
+@import './tailwind.css';
+
+/* Components */
+@import './ui/text.css';
+@import './ui/button.css';
+
+/* Font family for the Tailwind `sans` token (loaded via @fontsource-variable/lexend
+   in the app entry / Storybook preview), replacing next/font. */
+:root {
+  --font-lexend: 'Lexend Variable', sans-serif;
+}
+
+.storybook_dark {
+  @apply bg-gray-12;
+}
+
+.storybook_light {
+  @apply bg-neutral-11;
+}

@@ -1,0 +1,15 @@
+[Unit]
+Description=invoiceApp Go API
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/invoiceapp
+EnvironmentFile=/opt/invoiceapp/.env
+ExecStart=/opt/invoiceapp/invoice-api
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

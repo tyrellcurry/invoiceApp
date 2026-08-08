@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+
+/* Continue using the existing JS-based theme (colors, screens, darkMode) via
+   Tailwind v4's legacy config bridge. */
+@config '../../tailwind.config.ts';

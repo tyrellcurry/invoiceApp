@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RichText Component > renders correctly with HTML passed as a value 1`] = `
+<div>
+  <div
+    class="text text--rich"
+  >
+    <p>
+      Hello World
+    </p>
+  </div>
+</div>
+`;
+
+exports[`RichText Component > renders correctly with default props 1`] = `
+<div>
+  <div
+    class="text text--rich"
+  >
+    Hello, World!
+  </div>
+</div>
+`;

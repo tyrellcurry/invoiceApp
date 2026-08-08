@@ -1,0 +1,374 @@
+package invoice
+
+import (
+	"context"
+	"database/sql"
+	"errors"
+	"fmt"
+	"time"
+
+	"github.com/jackc/pgx/v5/pgconn"
+
+	"github.com/tyrellcurry/invoiceApp/internal/auth"
+)
+
+// ErrNotFound is returned when an invoice does not exist, or exists but
+// isn't owned by the requesting owner.
+var ErrNotFound = errors.New("invoice not found")
+
+// errDuplicateReference is returned by Create when the generated reference
+// collides with an existing one. The service retries with a new reference.
+var errDuplicateReference = errors.New("invoice reference already exists")
+
+const dateLayout = "2006-01-02"
+
+// Repository persists invoices. The service package depends on this
+// interface; PostgresRepository is its only implementation.
+type Repository interface {
+	List(ctx context.Context, owner auth.Owner) ([]Invoice, error)
+	Get(ctx context.Context, owner auth.Owner, id string) (Invoice, error)
+	Create(ctx context.Context, owner auth.Owner, inv Invoice) (Invoice, error)
+	Update(ctx context.Context, owner auth.Owner, inv Invoice) (Invoice, error)
+	Delete(ctx context.Context, owner auth.Owner, id string) error
+	UpdateStatus(ctx context.Context, owner auth.Owner, id string, status Status) (Invoice, error)
+}
+
+// PostgresRepository is the Postgres-backed Repository implementation.
+type PostgresRepository struct {
+	db *sql.DB
+}
+
+// NewPostgresRepository returns a Repository backed by db.
+func NewPostgresRepository(db *sql.DB) *PostgresRepository {
+	return &PostgresRepository{db: db}
+}
+
+const invoiceColumns = `
+	id, reference, status, description,
+	invoice_date, payment_terms, payment_due,
+	sender_street, sender_city, sender_postcode, sender_country,
+	client_name, client_email, client_street, client_city, client_postcode, client_country,
+	amount_due`
+
+// ownerColumn returns which column scopes ownership for owner (user_id for
+// an authenticated request, session_id for a guest one) and its value.
+func ownerColumn(owner auth.Owner) (column, value string) {
+	if owner.UserID != nil {
+		return "user_id", *owner.UserID
+	}
+	return "session_id", owner.SessionID
+}
+
+// List returns every invoice owned by owner, most recently created first.
+func (r *PostgresRepository) List(ctx context.Context, owner auth.Owner) ([]Invoice, error) {
+	column, value := ownerColumn(owner)
+	rows, err := r.db.QueryContext(ctx,
+		`SELECT `+invoiceColumns+` FROM invoices WHERE `+column+` = $1 ORDER BY created_at DESC`, value)
+	if err != nil {
+		return nil, fmt.Errorf("list invoices: %w", err)
+	}
+	defer rows.Close()
+
+	var invoices []Invoice
+	for rows.Next() {
+		inv, err := scanInvoice(rows)
+		if err != nil {
+			return nil, fmt.Errorf("list invoices: %w", err)
+		}
+		invoices = append(invoices, inv)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("list invoices: %w", err)
+	}
+
+	if err := attachItems(ctx, r.db, invoices); err != nil {
+		return nil, fmt.Errorf("list invoices: %w", err)
+	}
+	return invoices, nil
+}
+
+// Get returns the invoice with the given id owned by owner, or ErrNotFound.
+func (r *PostgresRepository) Get(ctx context.Context, owner auth.Owner, id string) (Invoice, error) {
+	column, value := ownerColumn(owner)
+	row := r.db.QueryRowContext(ctx,
+		`SELECT `+invoiceColumns+` FROM invoices WHERE id = $1 AND `+column+` = $2`, id, value)
+	inv, err := scanInvoice(row)
+	if errors.Is(err, sql.ErrNoRows) {
+		return Invoice{}, ErrNotFound
+	}
+	if err != nil {
+		return Invoice{}, fmt.Errorf("get invoice %s: %w", id, err)
+	}
+
+	items, err := itemsFor(ctx, r.db, inv.ID)
+	if err != nil {
+		return Invoice{}, fmt.Errorf("get invoice %s: %w", id, err)
+	}
+	inv.Items = items
+	return inv, nil
+}
+
+// Create inserts a new invoice and its items, owned by owner, in a single
+// transaction. On a unique reference collision it returns
+// errDuplicateReference for the caller to retry with a new reference.
+func (r *PostgresRepository) Create(ctx context.Context, owner auth.Owner, inv Invoice) (Invoice, error) {
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return Invoice{}, fmt.Errorf("create invoice: %w", err)
+	}
+	defer tx.Rollback()
+
+	userID, sessionID := ownerColumns(owner)
+	row := tx.QueryRowContext(ctx, `
+		INSERT INTO invoices (
+			reference, status, description,
+			invoice_date, payment_terms, payment_due,
+			sender_street, sender_city, sender_postcode, sender_country,
+			client_name, client_email, client_street, client_city, client_postcode, client_country,
+			amount_due, user_id, session_id
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
+		RETURNING id`,
+		inv.Reference, inv.Status, inv.Description,
+		nullableDate(inv.InvoiceDate), nullableInt(inv.PaymentTerms), nullableDate(inv.PaymentDue),
+		inv.SenderAddress.Street, inv.SenderAddress.City, inv.SenderAddress.PostCode, inv.SenderAddress.Country,
+		inv.ClientName, inv.ClientEmail, inv.ClientAddress.Street, inv.ClientAddress.City,
+		inv.ClientAddress.PostCode, inv.ClientAddress.Country,
+		inv.AmountDue, userID, sessionID,
+	)
+
+	var id string
+	if err := row.Scan(&id); err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) && pgErr.Code == "23505" {
+			return Invoice{}, errDuplicateReference
+		}
+		return Invoice{}, fmt.Errorf("create invoice: %w", err)
+	}
+	inv.ID = id
+
+	if err := insertItems(ctx, tx, inv.ID, inv.Items); err != nil {
+		return Invoice{}, fmt.Errorf("create invoice: %w", err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return Invoice{}, fmt.Errorf("create invoice: %w", err)
+	}
+	return inv, nil
+}
+
+// Update overwrites an invoice's editable fields (including its status) and
+// replaces its items, if it's owned by owner. Reference and id are not
+// touched here.
+func (r *PostgresRepository) Update(ctx context.Context, owner auth.Owner, inv Invoice) (Invoice, error) {
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return Invoice{}, fmt.Errorf("update invoice %s: %w", inv.ID, err)
+	}
+	defer tx.Rollback()
+
+	column, value := ownerColumn(owner)
+	res, err := tx.ExecContext(ctx, `
+		UPDATE invoices SET
+			description = $1,
+			invoice_date = $2, payment_terms = $3, payment_due = $4,
+			sender_street = $5, sender_city = $6, sender_postcode = $7, sender_country = $8,
+			client_name = $9, client_email = $10, client_street = $11, client_city = $12,
+			client_postcode = $13, client_country = $14,
+			amount_due = $15, status = $16
+		WHERE id = $17 AND `+column+` = $18`,
+		inv.Description,
+		nullableDate(inv.InvoiceDate), nullableInt(inv.PaymentTerms), nullableDate(inv.PaymentDue),
+		inv.SenderAddress.Street, inv.SenderAddress.City, inv.SenderAddress.PostCode, inv.SenderAddress.Country,
+		inv.ClientName, inv.ClientEmail, inv.ClientAddress.Street, inv.ClientAddress.City,
+		inv.ClientAddress.PostCode, inv.ClientAddress.Country,
+		inv.AmountDue, inv.Status, inv.ID, value,
+	)
+	if err != nil {
+		return Invoice{}, fmt.Errorf("update invoice %s: %w", inv.ID, err)
+	}
+	if n, err := res.RowsAffected(); err != nil {
+		return Invoice{}, fmt.Errorf("update invoice %s: %w", inv.ID, err)
+	} else if n == 0 {
+		return Invoice{}, ErrNotFound
+	}
+
+	if _, err := tx.ExecContext(ctx, `DELETE FROM invoice_items WHERE invoice_id = $1`, inv.ID); err != nil {
+		return Invoice{}, fmt.Errorf("update invoice %s: %w", inv.ID, err)
+	}
+	if err := insertItems(ctx, tx, inv.ID, inv.Items); err != nil {
+		return Invoice{}, fmt.Errorf("update invoice %s: %w", inv.ID, err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return Invoice{}, fmt.Errorf("update invoice %s: %w", inv.ID, err)
+	}
+	return r.Get(ctx, owner, inv.ID)
+}
+
+// Delete removes an invoice owned by owner (and its items, via ON DELETE CASCADE).
+func (r *PostgresRepository) Delete(ctx context.Context, owner auth.Owner, id string) error {
+	column, value := ownerColumn(owner)
+	res, err := r.db.ExecContext(ctx, `DELETE FROM invoices WHERE id = $1 AND `+column+` = $2`, id, value)
+	if err != nil {
+		return fmt.Errorf("delete invoice %s: %w", id, err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("delete invoice %s: %w", id, err)
+	}
+	if n == 0 {
+		return ErrNotFound
+	}
+	return nil
+}
+
+// UpdateStatus sets an owned invoice's status and returns the updated invoice.
+func (r *PostgresRepository) UpdateStatus(ctx context.Context, owner auth.Owner, id string, status Status) (Invoice, error) {
+	column, value := ownerColumn(owner)
+	res, err := r.db.ExecContext(ctx,
+		`UPDATE invoices SET status = $1 WHERE id = $2 AND `+column+` = $3`, status, id, value)
+	if err != nil {
+		return Invoice{}, fmt.Errorf("update invoice %s status: %w", id, err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return Invoice{}, fmt.Errorf("update invoice %s status: %w", id, err)
+	}
+	if n == 0 {
+		return Invoice{}, ErrNotFound
+	}
+	return r.Get(ctx, owner, id)
+}
+
+// scanner is satisfied by both *sql.Row and *sql.Rows.
+type scanner interface {
+	Scan(dest ...any) error
+}
+
+func scanInvoice(s scanner) (Invoice, error) {
+	var inv Invoice
+	var invoiceDate, paymentDue sql.NullTime
+	var paymentTerms sql.NullInt32
+
+	err := s.Scan(
+		&inv.ID, &inv.Reference, &inv.Status, &inv.Description,
+		&invoiceDate, &paymentTerms, &paymentDue,
+		&inv.SenderAddress.Street, &inv.SenderAddress.City, &inv.SenderAddress.PostCode, &inv.SenderAddress.Country,
+		&inv.ClientName, &inv.ClientEmail, &inv.ClientAddress.Street, &inv.ClientAddress.City,
+		&inv.ClientAddress.PostCode, &inv.ClientAddress.Country,
+		&inv.AmountDue,
+	)
+	if err != nil {
+		return Invoice{}, err
+	}
+
+	inv.InvoiceDate = fromNullDate(invoiceDate)
+	inv.PaymentDue = fromNullDate(paymentDue)
+	if paymentTerms.Valid {
+		v := int(paymentTerms.Int32)
+		inv.PaymentTerms = &v
+	}
+	inv.Items = []LineItem{}
+	return inv, nil
+}
+
+func itemsFor(ctx context.Context, db *sql.DB, invoiceID string) ([]LineItem, error) {
+	rows, err := db.QueryContext(ctx,
+		`SELECT name, quantity, price FROM invoice_items WHERE invoice_id = $1 ORDER BY sort_order`, invoiceID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	items := []LineItem{}
+	for rows.Next() {
+		var item LineItem
+		if err := rows.Scan(&item.Name, &item.Quantity, &item.Price); err != nil {
+			return nil, err
+		}
+		items = append(items, item)
+	}
+	return items, rows.Err()
+}
+
+// attachItems fetches items for every invoice in a single query and assigns
+// them back by invoice id, avoiding an N+1 query pattern for List.
+func attachItems(ctx context.Context, db *sql.DB, invoices []Invoice) error {
+	if len(invoices) == 0 {
+		return nil
+	}
+
+	ids := make([]string, len(invoices))
+	byID := make(map[string]int, len(invoices))
+	for i, inv := range invoices {
+		ids[i] = inv.ID
+		byID[inv.ID] = i
+	}
+
+	rows, err := db.QueryContext(ctx,
+		`SELECT invoice_id, name, quantity, price FROM invoice_items WHERE invoice_id = ANY($1) ORDER BY invoice_id, sort_order`,
+		ids)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var invoiceID string
+		var item LineItem
+		if err := rows.Scan(&invoiceID, &item.Name, &item.Quantity, &item.Price); err != nil {
+			return err
+		}
+		idx := byID[invoiceID]
+		invoices[idx].Items = append(invoices[idx].Items, item)
+	}
+	return rows.Err()
+}
+
+func insertItems(ctx context.Context, tx *sql.Tx, invoiceID string, items []LineItem) error {
+	for i, item := range items {
+		_, err := tx.ExecContext(ctx,
+			`INSERT INTO invoice_items (invoice_id, sort_order, name, quantity, price) VALUES ($1, $2, $3, $4, $5)`,
+			invoiceID, i+1, item.Name, item.Quantity, item.Price,
+		)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// ownerColumns returns the (user_id, session_id) values to insert for owner:
+// exactly one is set, matching whichever ownerColumn would filter on.
+func ownerColumns(owner auth.Owner) (userID, sessionID sql.NullString) {
+	if owner.UserID != nil {
+		return sql.NullString{String: *owner.UserID, Valid: true}, sql.NullString{}
+	}
+	return sql.NullString{}, sql.NullString{String: owner.SessionID, Valid: true}
+}
+
+func nullableDate(d *string) sql.NullTime {
+	if d == nil {
+		return sql.NullTime{}
+	}
+	t, err := time.Parse(dateLayout, *d)
+	if err != nil {
+		return sql.NullTime{}
+	}
+	return sql.NullTime{Time: t, Valid: true}
+}
+
+func fromNullDate(t sql.NullTime) *string {
+	if !t.Valid {
+		return nil
+	}
+	s := t.Time.Format(dateLayout)
+	return &s
+}
+
+func nullableInt(i *int) sql.NullInt32 {
+	if i == nil {
+		return sql.NullInt32{}
+	}
+	return sql.NullInt32{Int32: int32(*i), Valid: true}
+}

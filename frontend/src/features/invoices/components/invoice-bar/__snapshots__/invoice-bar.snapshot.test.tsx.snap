@@ -1,0 +1,101 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Invoice Bar Component > renders correctly with filled props 1`] = `
+<div>
+  <menu
+    class="flex flex-row items-center justify-between flex-wrap gap-y-6 md:flex-nowrap md:gap-y-0"
+    data-testid="snapshot"
+  >
+    <div>
+      <h2
+        class="text text--h2 text-gray-08 dark:text-white"
+      >
+        Invoice
+      </h2>
+      <p
+        class="text text--body text-gray-06 dark:text-white"
+      >
+        <span
+          class="block md:hidden"
+        >
+          total-mob
+        </span>
+        <span
+          class="hidden md:block"
+        >
+          total-desktop
+        </span>
+      </p>
+    </div>
+    <div
+      class="contents md:flex md:items-center md:gap-x-10"
+    >
+      <div
+        class="grid items-center relative order-3 w-full justify-items-start md:order-0 md:w-auto md:justify-items-center"
+      >
+        <button
+          class="btn btn--custom flex items-center gap-x-3 font-bold text-xl dark:text-gray-05"
+        >
+          <span>
+            <span
+              class="block md:hidden"
+            >
+              filter-mob
+            </span>
+            <span
+              class="hidden md:block"
+            >
+              filter-desktop
+            </span>
+          </span>
+          <svg
+            class="icon w-4 md:w-5 h-auto"
+            fill="none"
+            viewBox="0 0 10 7"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9 1L5 5L1 1"
+              stroke="#7C5DFA"
+              stroke-width="2"
+            />
+          </svg>
+        </button>
+      </div>
+      <button
+        class="btn base btn--primary order-2 p-1.5 md:order-0 md:p-2 gap-x-2 items-center pr-3.75 text-xl md:text-lg"
+      >
+        <svg
+          class="icon min-w-8 min-h-8 max-h-8 max-h-8"
+          fill="none"
+          viewBox="0 0 32 32"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="16"
+            cy="16"
+            fill="white"
+            r="16"
+          />
+          <path
+            d="M17.3131 21.0229V17.3131H21.0229V14.7328H17.3131V11.0229H14.7328V14.7328H11.0229V17.3131H14.7328V21.0229H17.3131Z"
+            fill="#9277FF"
+          />
+        </svg>
+        <span>
+          <span
+            class="block md:hidden"
+          >
+            new-mob
+          </span>
+          <span
+            class="hidden md:block"
+          >
+            new-desktop
+          </span>
+        </span>
+      </button>
+    </div>
+  </menu>
+</div>
+`;
